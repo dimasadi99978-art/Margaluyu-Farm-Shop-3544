@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Margaluyu Farm 354 - Contact</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas font yang readable -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        /* Tema hijau alami untuk selaras dengan desain farm */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f8e7;
+            color: #2e7d32;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Medsos responsivitas dengan animasi */
+        .medsos {
+            background: #06474a;
+            padding: 10px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .medsos ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        .medsos ul li {
+            margin: 0 15px;
+        }
+
+        .medsos ul li a {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .medsos ul li a:hover {
+            transform: rotate(360deg);
+        }
+
+        /* Section Contact - Baru dengan form dan kartu tambahan */
+        .contact-section {
+            padding: 44px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            position: relative;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(46, 125, 50, 0.6);
+            z-index: 1;
+        }
+
+        .contact-section h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            animation: slideUp 0.8s ease-out;
+            cursor: pointer;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .contact-card i {
+            font-size: 2.5rem;
+            color: #4caf50;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .contact-card:hover i {
+            color: #2e7d32;
+        }
+
+        .contact-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-card p {
+            margin: 0;
+        }
+
+        .contact-card a {
+            color: #2e7d32;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-card a:hover {
+            color: #4caf50;
+        }
+
+        /* Form Kontak Baru */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 40px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-form h4 {
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .contact-form button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: #2e7d32;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Footer responsivitas dengan animasi */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #06474a;
+            color: rgb(185, 160, 16);
+            animation: fadeIn 1s ease-in;
+        }
+
+        /* Animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Media Queries untuk Responsivitas */
+        @media (max-width: 768px) {
+            .contact-section {
+                padding: 30px 10px;
+            }
+            .contact-section h3 {
+                font-size: 1.6rem;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .contact-card {
+                padding: 15px;
+            }
+            .contact-form {
+                padding: 20px;
+                margin: 20px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-section h3 {
+                font-size: 1.4rem;
+            }
+            .contact-card {
+                padding: 12px;
+                border-radius: 10px;
+            }
+            .contact-card i {
+                font-size: 1.8rem;
+            }
+            .contact-card h4 {
+                font-size: 1.1rem;
+            }
+            .contact-form input,
+            .contact-form textarea {
+                padding: 8px;
+            }
+            .contact-form button {
+                padding: 8px 16px;
+            }
+        }
+
+        /* Perbaikan untuk menu aktif: Warna disamakan ke hijau tua (#06474A) agar konsisten dengan isi hamburger bar */
+        li.active a {
+            color: white !important;
+            background-color: #06474A !important; /* Hijau tua untuk background menu aktif */
+        }
+
+        /* Override untuk menghilangkan animasi di semua device (HP dan laptop) tanpa merusak kode asli */
+        /* Nonaktifkan animasi pada medsos */
+        .medsos {
+            animation: none !important;
+        }
+        /* Nonaktifkan transform pada hover medsos */
+        .medsos ul li a:hover {
+            transform: none !important;
+        }
+        /* Nonaktifkan animasi pada contact-section h3 */
+        .contact-section h3 {
+            animation: none !important;
+        }
+        /* Nonaktifkan animasi pada contact-card */
+        .contact-card {
+            animation: none !important;
+        }
+        /* Nonaktifkan transform pada hover contact-card */
+        .contact-card:hover {
+            transform: none !important;
+        }
+        /* Nonaktifkan transition color pada contact-card i hover */
+        .contact-card:hover i {
+            transition: none !important;
+        }
+        /* Nonaktifkan animasi pada contact-form */
+        .contact-form {
+            animation: none !important;
+        }
+        /* Nonaktifkan box-shadow pada button hover */
+        .contact-form button:hover {
+            box-shadow: none !important;
+        }
+        /* Nonaktifkan animasi pada footer */
+        footer {
+            animation: none !important;
+        }
+        /* Nonaktifkan transition pada contact-card a hover */
+        .contact-card a:hover {
+            transition: none !important;
+        }
+        /* Nonaktifkan transition pada contact-card hover */
+        .contact-card:hover {
+            transition: none !important;
+        }
+        /* Nonaktifkan transition pada button hover */
+        .contact-form button:hover {
+            transition: none !important;
+        }
+        
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Header - Sama persis seperti di halaman Media Library -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li class="active"><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content - Konten Baru -->
+    <main>
+        <section class="contact-section">
+            <div class="container">
+                <h3>HUBUNGI KAMI</h3>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            <h4>WhatsApp</h4>
+                            <p>Klik di sini untuk bertanya.</p>
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                            <h4>Instagram</h4>
+                            <p>Ikuti kami di Instagram</p>
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-phone"></i>
+                        <h4>Telepon</h4>
+                        <p>0895635067289</p>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h4>Alamat</h4>
+                        <p>Margaluyu Farm 354, Surabaya, Jawa Timur</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <!-- JavaScript untuk Form -->
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Terima kasih! Pesan Anda telah dikirim. Kami akan segera menghubungi Anda.');
+            this.reset();
+        });
+    </script>
+</body>
+
+</html>

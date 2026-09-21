@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Pesanan - Margaluyu Farm</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f9f2;
+            color: #2c3e2f;
+            margin: 0;
+            padding: 30px 16px 80px;
+        }
+
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #06474a;
+            font-size: 1.6em;
+        }
+
+        .login-box {
+            max-width: 360px;
+            margin: 80px auto;
+            background: #fff;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfe3d3;
+            border-radius: 8px;
+            margin: 14px 0;
+            box-sizing: border-box;
+        }
+
+        .login-box button,
+        .refresh-btn {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-box button:hover,
+        .refresh-btn:hover {
+            background: #06474a;
+        }
+
+        .login-error {
+            color: #b3261e;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        #adminPanel {
+            display: none;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .order-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .order-card .top-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .order-id {
+            font-weight: 800;
+            color: #06474a;
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-Dikonfirmasi {
+            background: #999;
+        }
+
+        .status-Dikemas {
+            background: #d98c2b;
+        }
+
+        .status-Dikirim {
+            background: #2f80c9;
+        }
+
+        .status-Selesai {
+            background: #27ae60;
+        }
+
+        .order-detail {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-buttons button {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #cfe3d3;
+            background: #f7fbf7;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #06474a;
+        }
+
+        .status-buttons button:hover {
+            background: #eaf7ee;
+        }
+
+        .status-buttons button.active-status {
+            background: #06474a;
+            color: #fff;
+            border-color: #06474a;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #777;
+            padding: 40px 0;
+        }
+
+        .config-warning {
+            background: #fff8e1;
+            border: 1px solid #f0d878;
+            color: #7a5c00;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="login-box" id="loginBox">
+            <h1 style="font-size:1.3em;">Admin Pesanan</h1>
+            <p>Masukkan kata sandi admin untuk melihat dan mengelola pesanan.</p>
+            <input type="password" id="passwordInput" placeholder="Kata sandi admin">
+            <div class="login-error" id="loginError">Kata sandi salah.</div>
+            <button id="loginBtn">Masuk</button>
+        </div>
+
+        <div id="adminPanel">
+            <div class="toolbar">
+                <h1>Daftar Pesanan</h1>
+                <button class="refresh-btn" id="refreshBtn">Muat Ulang</button>
+            </div>
+            <input type="text" id="searchInput" placeholder="Cari nama, nomor HP, atau nomor pesanan..."
+                style="width:100%;padding:12px 14px;border:1px solid #cfe3d3;border-radius:10px;margin-bottom:18px;box-sizing:border-box;">
+            <div id="configWarning" class="config-warning" style="display:none;">
+                Penyimpanan pesanan bersama belum terhubung. Pastikan Environment Variables Vercel untuk ORDERS_MASTER_KEY dan ORDERS_BIN_ID sudah diatur.
+            </div>
+            <div id="ordersList"></div>
+        </div>
+    </div>
+
+    <script src="orders-config.js"></script>
+    <script src="orders-store.js"></script>
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function () {
+            const val = document.getElementById('passwordInput').value;
+            if (val === ADMIN_PASSWORD) {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadOrders();
+                setInterval(loadOrders, 30000); // auto-refresh tiap 30 detik
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        document.getElementById('passwordInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') document.getElementById('loginBtn').click();
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', loadOrders);
+
+        let allOrders = [];
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            renderList(this.value.trim().toLowerCase());
+        });
+
+        function renderList(keyword) {
+            const listEl = document.getElementById('ordersList');
+            let shown = allOrders;
+
+            if (keyword) {
+                const normalizedKeyword = OrdersStore.normalizePhone(keyword);
+                shown = allOrders.filter(o =>
+                    ((o && o.orderId) || '').toLowerCase().includes(keyword) ||
+                    ((o && o.nama) || '').toLowerCase().includes(keyword) ||
+                    (normalizedKeyword && OrdersStore.normalizePhone((o && o.telepon) || '').includes(normalizedKeyword))
+                );
+            }
+
+            if (!shown.length) {
+                listEl.innerHTML = '<p class="empty-msg">' +
+                    (keyword ? 'Tidak ada pesanan yang cocok dengan pencarian.' : 'Belum ada pesanan masuk.') +
+                    '</p>';
+                return;
+            }
+
+            try {
+                listEl.innerHTML = shown.map(order => renderOrderCard(order)).join('');
+            } catch (e) {
+                listEl.innerHTML = '<p class="empty-msg" style="color:#b3261e;">Terjadi kesalahan saat menampilkan sebagian data: ' + e.message + '<br>Buka Console browser (F12) untuk detail lengkap.</p>';
+                console.error('Gagal render daftar pesanan:', e, allOrders);
+                return;
+            }
+
+            document.querySelectorAll('[data-action="update-status"]').forEach(btn => {
+                btn.addEventListener('click', async function () {
+                    const orderId = this.dataset.orderId;
+                    const newStatus = this.dataset.status;
+                    this.disabled = true;
+                    await OrdersStore.updateStatus(orderId, newStatus);
+                    loadOrders();
+                });
+            });
+        }
+
+        async function loadOrders() {
+            const listEl = document.getElementById('ordersList');
+            if (!allOrders.length) {
+                listEl.innerHTML = '<p class="empty-msg">Memuat data pesanan...</p>';
+            }
+
+            const configWarning = document.getElementById('configWarning');
+
+            try {
+                const { data, online, error } = await OrdersStore.load();
+                // Saring entri yang tidak valid/rusak (misal data lama tanpa orderId) agar tidak mengganggu tampilan
+                const valid = (data || []).filter(o => o && typeof o === 'object');
+                allOrders = [...valid].reverse();
+
+                if (!OrdersStore.isConfigured()) {
+                    configWarning.textContent = 'Penyimpanan pesanan bersama belum terhubung. Pastikan Environment Variables Vercel untuk ORDERS_MASTER_KEY dan ORDERS_BIN_ID sudah diatur.';
+                    configWarning.style.display = 'block';
+                } else if (!online) {
+                    configWarning.textContent = 'Gagal terhubung ke server penyimpanan bersama' + (error ? (': ' + error) : '') + '. Daftar di bawah ini adalah data cadangan dari perangkat ini, bisa jadi tidak lengkap/terbaru.';
+                    configWarning.style.display = 'block';
+                } else {
+                    configWarning.style.display = 'none';
+                }
+
+                renderList(document.getElementById('searchInput').value.trim().toLowerCase());
+            } catch (e) {
+                listEl.innerHTML = '<p class="empty-msg" style="color:#b3261e;">Gagal memuat data: ' + e.message + '<br>Buka Console browser (F12) untuk detail lengkap.</p>';
+                console.error('Gagal memuat pesanan:', e);
+            }
+        }
+
+        function renderOrderCard(order) {
+            order = order || {};
+            const orderId = order.orderId || '(tanpa nomor)';
+            const status = OrdersStore.STATUS_STEPS.includes(order.status) ? order.status : OrdersStore.STATUS_STEPS[0];
+            const steps = OrdersStore.STATUS_STEPS;
+            const buttons = steps.map(s => {
+                const isActive = s === status;
+                return `<button data-action="update-status" data-order-id="${orderId}" data-status="${s}"
+                    class="${isActive ? 'active-status' : ''}" ${isActive ? 'disabled' : ''}>${s}</button>`;
+            }).join('');
+
+            const buktiHtml = order.buktiPembayaran
+                ? `<div style="margin-top:8px;">
+                        <a href="${order.buktiPembayaran}" target="_blank">
+                            <img src="${order.buktiPembayaran}" alt="Bukti pembayaran"
+                                style="max-width:120px;border-radius:8px;border:1px solid #cfe3d3;display:block;">
+                        </a>
+                        <span style="font-size:0.8em;color:#888;">Klik gambar untuk memperbesar</span>
+                   </div>`
+                : '';
+
+            const newBadge = status === 'Dikonfirmasi'
+                ? '<span style="background:#e74c3c;color:#fff;font-size:0.72em;padding:2px 8px;border-radius:10px;margin-left:8px;">PESANAN BARU</span>'
+                : '';
+
+            return `
+                <div class="order-card">
+                    <div class="top-row">
+                        <span class="order-id">${orderId}${newBadge}</span>
+                        <span class="status-tag status-${status}">${status}</span>
+                    </div>
+                    <div class="order-detail">
+                        <strong>${order.nama || '-'}</strong> — ${order.telepon || '-'}<br>
+                        ${order.alamat || '-'}<br>
+                        Produk: ${order.produk || '-'} x${order.jumlah || '-'} · ${order.langganan || '-'}<br>
+                        Pembayaran: ${order.metodePembayaran || '-'}${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${order.tanggal || '-'}
+                        ${order.pesan ? '<br>Catatan: ' + order.pesan : ''}
+                        ${buktiHtml}
+                    </div>
+                    <div class="status-buttons">${buttons}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

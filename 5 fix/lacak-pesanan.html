@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lacak Pesanan - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f7faf7;
+        }
+
+        .track-section {
+            padding: 60px 0 80px;
+            min-height: 60vh;
+        }
+
+        .track-box {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            padding: 32px 28px;
+        }
+
+        .track-box h2 {
+            font-family: 'Fredoka One', cursive;
+            font-weight: 400;
+            color: #06474a;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.7em;
+        }
+
+        .track-box .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 26px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: 13px 14px;
+            border: 1.4px solid #cde6d3;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .search-row button {
+            padding: 13px 22px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .search-row button:hover {
+            background: #06474a;
+        }
+
+        .hint {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .error-msg {
+            display: none;
+            background: #fdecea;
+            border: 1px solid #f5c2c0;
+            color: #b3261e;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 16px;
+        }
+
+        .order-list {
+            margin-top: 20px;
+        }
+
+        .order-list-title {
+            font-weight: 700;
+            color: #06474a;
+            margin-bottom: 10px;
+        }
+
+        .order-pick {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: #f7fbf7;
+            border: 1.4px solid #cde6d3;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 0.92em;
+            color: #06474a;
+        }
+
+        .order-pick:hover {
+            background: #eaf7ee;
+            border-color: #27ae60;
+        }
+
+        .order-pick .pick-id {
+            font-weight: 800;
+        }
+
+        .order-pick .pick-meta {
+            color: #5c7a63;
+            font-size: 0.9em;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 26px;
+        }
+
+        /* ---------- Struk / Invoice ---------- */
+        .order-summary {
+            width: 100%;
+            max-width: 72mm;
+            box-sizing: border-box;
+            margin: 0 auto 26px;
+            background: #fff;
+            border: 1.5px dashed #cde6d3;
+            border-radius: 8px;
+            padding: 12px 10px;
+            font-size: 12px;
+            line-height: 1.35;
+            color: #444;
+        }
+
+        .order-summary .invoice-head {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .order-summary .invoice-brand {
+            font-weight: 800;
+            color: #1f4b2c;
+            font-size: 1.15em;
+        }
+
+        .order-summary .invoice-sub {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .order-summary .invoice-id {
+            text-align: center;
+            font-weight: 700;
+            color: #2f9b5d;
+            margin: 10px 0 14px;
+            letter-spacing: 0.5px;
+            overflow-wrap: anywhere;
+        }
+
+        .order-summary .invoice-row {
+            display: grid;
+            grid-template-columns: minmax(0, 34%) minmax(0, 66%);
+            align-items: start;
+            gap: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 0.92em;
+            color: #444;
+            padding: 3px 0;
+        }
+
+        .order-summary .invoice-row span {
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .order-summary .invoice-row span:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .order-summary .invoice-total {
+            font-size: 1.1em;
+        }
+
+        .order-summary .invoice-total span {
+            color: #1f4b2c !important;
+            font-weight: 800 !important;
+        }
+
+        .order-summary hr {
+            border: none;
+            border-top: 1px dashed #ddd;
+            margin: 10px 0;
+        }
+
+        /* Stepper ala Shopee/Lazada */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 30px 0 10px;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 6%;
+            right: 6%;
+            height: 4px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .stepper .progress-line {
+            position: absolute;
+            top: 18px;
+            left: 6%;
+            height: 4px;
+            background: #27ae60;
+            z-index: 1;
+            transition: width 0.4s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            text-align: center;
+        }
+
+        .step .dot {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .step.done .dot {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .step.current .dot {
+            background: #06474a;
+            color: #fff;
+            box-shadow: 0 0 0 5px rgba(6, 71, 74, 0.15);
+        }
+
+        .step .label {
+            font-size: 0.82em;
+            color: #666;
+            max-width: 90px;
+            margin: 0 auto;
+        }
+
+        .step.done .label,
+        .step.current .label {
+            color: #06474a;
+            font-weight: 600;
+        }
+
+        .status-note {
+            text-align: center;
+            margin-top: 26px;
+            padding: 14px;
+            background: #eaf7ee;
+            border-radius: 10px;
+            color: #227a48;
+            font-weight: 600;
+        }
+
+        .print-btn {
+            display: block;
+            margin: 20px auto 0;
+            background: #06474a;
+            color: #fff;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .print-btn:hover {
+            background: #27ae60;
+        }
+
+        @media print {
+            @page {
+                size: 80mm auto;
+                margin: 0;
+            }
+
+            html, body {
+                width: 80mm;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .order-summary, .order-summary * {
+                visibility: visible;
+            }
+
+            .order-summary {
+                position: absolute;
+                top: 0;
+                left: 4mm;
+                width: 72mm;
+                max-width: 72mm;
+                margin: 0;
+                padding: 8px 6px;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                font-size: 11px;
+            }
+
+            .order-summary .invoice-brand { font-size: 14px; }
+            .order-summary .invoice-sub { font-size: 10px; }
+            .order-summary .invoice-id { margin: 7px 0 9px; }
+            .order-summary .invoice-row { font-size: 10.5px; }
+            .order-summary .invoice-total { font-size: 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .step .label {
+                font-size: 0.7em;
+                max-width: 70px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li class="active"><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="track-section">
+        <div class="container">
+            <div class="track-box">
+                <h2>Lacak Pesanan</h2>
+                <p class="subtitle">Masukkan nomor pesanan atau nomor HP yang Anda gunakan saat memesan.</p>
+
+                <div class="search-row">
+                    <input type="text" id="orderIdInput" placeholder="Contoh: MF-260914-1234 atau 0812xxxxxxx">
+                    <button id="trackBtn"><i class="fas fa-search"></i> Lacak</button>
+                </div>
+                <p class="hint">Lupa nomor pesanan? Masukkan saja nomor HP Anda untuk melihat seluruh pesanan atas
+                    nomor tersebut.</p>
+
+                <div class="error-msg" id="errorMsg"></div>
+
+                <div class="order-list" id="orderList"></div>
+
+                <div class="result-box" id="resultBox">
+                    <div class="order-summary" id="orderSummary"></div>
+
+                    <div class="stepper" id="stepper">
+                        <div class="progress-line" id="progressLine" style="width:0%;"></div>
+                        <div class="step" data-step="0">
+                            <div class="dot"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="label">Dikonfirmasi</div>
+                        </div>
+                        <div class="step" data-step="1">
+                            <div class="dot"><i class="fas fa-box"></i></div>
+                            <div class="label">Dikemas</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="dot"><i class="fas fa-truck"></i></div>
+                            <div class="label">Dikirim</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="dot"><i class="fas fa-house-user"></i></div>
+                            <div class="label">Selesai</div>
+                        </div>
+                    </div>
+
+                    <div class="status-note" id="statusNote"></div>
+                    <button class="print-btn" id="printBtn"><i class="fas fa-print"></i> Cetak Struk</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <script src="orders-config.js"></script>
+    <script src="orders-store.js"></script>
+    <script>
+        const STATUS_LABELS = {
+            'Dikonfirmasi': 'Pesanan Anda telah dikonfirmasi dan sedang menunggu diproses.',
+            'Dikemas': 'Pesanan Anda sedang dikemas oleh tim kami.',
+            'Dikirim': 'Pesanan Anda sedang dalam perjalanan menuju alamat Anda.',
+            'Selesai': 'Pesanan telah diterima. Terima kasih telah berbelanja di Margaluyu Farm!'
+        };
+
+        function renderResult(order) {
+            const stepIndex = OrdersStore.STATUS_STEPS.indexOf(order.status);
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((el, i) => {
+                el.classList.remove('done', 'current');
+                if (i < stepIndex) el.classList.add('done');
+                else if (i === stepIndex) el.classList.add('current');
+            });
+
+            const progressPercent = stepIndex <= 0 ? 0 : (stepIndex / (OrdersStore.STATUS_STEPS.length - 1)) * 88;
+            document.getElementById('progressLine').style.width = progressPercent + '%';
+
+            document.getElementById('orderSummary').innerHTML = `
+                <div class="invoice-head">
+                    <div class="invoice-brand">Margaluyu Farm</div>
+                    <div class="invoice-sub">Struk Pesanan</div>
+                </div>
+                <div class="invoice-id">${order.orderId || '-'}</div>
+                <div class="invoice-row"><span>Tanggal</span><span>${order.tanggal || '-'}</span></div>
+                <div class="invoice-row"><span>Nama</span><span>${order.nama || '-'}</span></div>
+                <div class="invoice-row"><span>No. HP</span><span>${order.telepon || '-'}</span></div>
+                <div class="invoice-row"><span>Alamat</span><span>${order.alamat || '-'}</span></div>
+                <hr>
+                <div class="invoice-row"><span>${order.produk || '-'}</span><span>${order.jumlah || '-'}</span></div>
+                <hr>
+                <div class="invoice-row invoice-total"><span>Total</span><span>${order.totalHarga ? 'Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : 'Rp 0'}</span></div>
+                <div class="invoice-row"><span>Pembayaran</span><span>${order.metodePembayaran || '-'}</span></div>
+                <div class="invoice-row"><span>Status</span><span>${order.status || 'Dikonfirmasi'}</span></div>
+            `;
+
+            document.getElementById('statusNote').textContent = STATUS_LABELS[order.status] || order.status;
+            document.getElementById('resultBox').style.display = 'block';
+        }
+
+        async function trackOrder() {
+            const keyword = document.getElementById('orderIdInput').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const resultBox = document.getElementById('resultBox');
+            const orderList = document.getElementById('orderList');
+            errorMsg.style.display = 'none';
+            resultBox.style.display = 'none';
+            orderList.innerHTML = '';
+
+            if (!keyword) {
+                errorMsg.textContent = 'Mohon masukkan nomor pesanan atau nomor HP Anda terlebih dahulu.';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const trackBtn = document.getElementById('trackBtn');
+            trackBtn.disabled = true;
+            trackBtn.textContent = 'Mencari...';
+
+            // Deteksi otomatis: jika diawali "MF-" anggap nomor pesanan, selain itu anggap nomor HP
+            const looksLikeOrderId = /^mf-/i.test(keyword);
+
+            try {
+                if (looksLikeOrderId) {
+                    const { order, online, error } = await OrdersStore.findById(keyword);
+                    resetButton();
+                    if (!order) {
+                        showNotFound(online, error);
+                        return;
+                    }
+                    renderResult(order);
+                } else {
+                    const { orders, online, error } = await OrdersStore.findByPhone(keyword);
+                    resetButton();
+                    if (!orders.length) {
+                        showNotFound(online, error);
+                        return;
+                    }
+                    if (orders.length === 1) {
+                        renderResult(orders[0]);
+                    } else {
+                        renderOrderPicker(orders);
+                    }
+                }
+            } catch (e) {
+                console.error('Gagal melacak pesanan:', e);
+                resetButton();
+                showNotFound(false, e && e.message ? e.message : String(e));
+            }
+
+            function resetButton() {
+                trackBtn.disabled = false;
+                trackBtn.innerHTML = '<i class="fas fa-search"></i> Lacak';
+            }
+
+            function showNotFound(online, error) {
+                let diag = '';
+                if (online === false) {
+                    diag = '<br><br><strong>Info teknis:</strong> Gagal terhubung ke server penyimpanan bersama' +
+                        (error ? (' (' + error + ')') : '') +
+                        '. Pencarian hanya memeriksa data di perangkat ini. Mohon screenshot pesan ini untuk dilaporkan.';
+                } else if (!OrdersStore.isConfigured()) {
+                    diag = '<br><br><strong>Info teknis:</strong> Penyimpanan bersama (orders-config.js) belum dikonfigurasi di situs ini, sehingga hanya pesanan dari perangkat ini yang bisa ditemukan.';
+                }
+                errorMsg.innerHTML = 'Data pesanan tidak ditemukan. Mohon periksa kembali nomor pesanan atau nomor HP yang Anda masukkan. ' +
+                    'Jika masih mengalami kendala, silakan hubungi kami melalui ' +
+                    '<a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20lupa%20nomor%20pesanan%20saya" target="_blank" style="color:#b3261e;text-decoration:underline;">WhatsApp</a>.' +
+                    diag;
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // Jika satu nomor HP punya beberapa pesanan, tampilkan daftar untuk dipilih
+        function renderOrderPicker(orders) {
+            const orderList = document.getElementById('orderList');
+            let html = '<div class="order-list-title">Ditemukan ' + orders.length + ' pesanan. Silakan pilih salah satu:</div>';
+            orders.forEach((o, i) => {
+                html += `<button class="order-pick" data-index="${i}">
+                            <span class="pick-id">${o.orderId}</span> — ${o.status}<br>
+                            <span class="pick-meta">${o.produk} x${o.jumlah} · ${o.tanggal}</span>
+                         </button>`;
+            });
+            orderList.innerHTML = html;
+
+            orderList.querySelectorAll('.order-pick').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    renderResult(orders[parseInt(this.dataset.index, 10)]);
+                    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+        }
+
+        document.getElementById('trackBtn').addEventListener('click', trackOrder);
+        document.getElementById('printBtn').addEventListener('click', function () {
+            window.print();
+        });
+        document.getElementById('orderIdInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') trackOrder();
+        });
+
+        // Jika dibuka dari link konfirmasi pesanan (?id=...), langsung lacak otomatis
+        window.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const idFromUrl = params.get('id');
+            if (idFromUrl) {
+                document.getElementById('orderIdInput').value = idFromUrl;
+                trackOrder();
+            }
+        });
+    </script>
+</body>
+
+</html>

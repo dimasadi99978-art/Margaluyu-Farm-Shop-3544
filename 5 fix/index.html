@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Margaluyu Farm 354</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Reset dan Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #06474a 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* Mencegah scroll horizontal */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Medsos */
+        .medsos {
+            background: #06474a;
+            padding: 10px 0;
+        }
+
+        .medsos ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .medsos a {
+            color: #fff;
+            font-size: 24px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .medsos a:hover {
+            transform: scale(1.2);
+            color: #27ae60;
+        }
+
+        /* Header - samakan dengan halaman lain (hamburger) */
+        header {
+            background: #ffffff;
+            padding: 14px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            position: relative;
+        }
+
+        header h1 a {
+            color: #06474a;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header ul {
+            list-style: none;
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            top: var(--header-h, 132px);
+            right: 16px;
+            width: 260px;
+            max-width: 82vw;
+            max-height: min(70vh, calc(100vh - var(--header-h, 132px) - 16px));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #fff;
+            border: 1px solid #e6e9f0;
+            border-radius: 12px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+            padding: 8px 0;
+            gap: 4px;
+            z-index: 1000;
+        }
+
+        header ul li a {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 8px;
+            color: #06474a;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        header ul li a:hover,
+        header ul li a:focus {
+            background-color: #06474a;
+            color: #fff;
+        }
+
+        .active {
+            background-color: #06474a;
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        /* Perbaikan untuk menu aktif agar teks terlihat saat hamburger dibuka */
+        li.active a {
+            color: #fff !important;
+        }
+
+        .nav-toggle {
+            display: none;
+        }
+
+        /* Samakan hamburger HOME dengan halaman lain (tanpa kotak) */
+        header .nav-toggle-label {
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+
+        /* Garis hamburger */
+        header .nav-toggle-label span {
+            width: 20px;
+            height: 2px;
+            background-color: #06474a;
+            margin: 4px 0;
+            display: block;
+        }
+
+        .nav-toggle-label span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #06474a;
+            border-radius: 10px;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .nav-toggle:checked+.nav-toggle-label span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .nav-toggle:checked+.nav-toggle-label span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle:checked+.nav-toggle-label span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        .nav-toggle:checked+.nav-toggle-label+ul {
+            display: flex;
+        }
+
+        @media (max-width: 980px) {
+            header .container {
+                padding: 10px 0;
+            }
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('img/foto-produk-susu.jpg') no-repeat center 30%/cover;
+            /* Ganti dengan gambar peternakan Anda */
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner h2 {
+            color: #fff;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .banner .cta-button {
+            margin-top: 40px;
+            /* Ditingkatkan dari 20px untuk jarak lebih besar */
+            padding: 12px 24px;
+            background: #27ae60;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            animation: bounceIn 1.5s ease-out 0.5s both;
+            /* Animasi baru: tombol muncul dengan bounce */
+        }
+
+        .banner .cta-button:hover {
+            background: #2c3e50;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Inovasi: Animasi background bergerak untuk banner */
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(39, 174, 96, 0.1), rgba(6, 71, 74, 0.1));
+            animation: backgroundShift 10s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+
+            0%,
+            100% {
+                transform: translateX(0) translateY(0);
+            }
+
+            25% {
+                transform: translateX(-10px) translateY(-10px);
+            }
+
+            50% {
+                transform: translateX(10px) translateY(10px);
+            }
+
+            75% {
+                transform: translateX(-5px) translateY(5px);
+            }
+        }
+
+        /* About */
+        .about {
+            padding: 50px 0;
+            background: #fff;
+        }
+
+        .about h3 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #27ae60;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            animation: slideInFromLeft 1s ease-out;
+            /* Animasi baru: judul slide in */
+        }
+
+        .about .content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .about .content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about .text {
+            flex: 1;
+            animation: fadeInText 1s ease-out 0.5s both;
+            /* Animasi baru: teks fade in dengan delay */
+        }
+
+        .about .image {
+            flex: 1;
+            text-align: center;
+            animation: zoomIn 1s ease-out 0.7s both;
+            /* Animasi baru: gambar zoom in */
+        }
+
+        .about .image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Services */
+        .services {
+            padding: 50px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .services h3 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #27ae60;
+            animation: typing 2s steps(12, end), blink-caret 0.75s step-end infinite;
+            /* Animasi baru: typing effect */
+            overflow: hidden;
+            border-right: 2px solid #27ae60;
+            white-space: nowrap;
+            width: fit-content;
+            margin: 0 auto 40px;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: #27ae60;
+            }
+        }
+
+        .services .box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* Diperbaiki: dari 4 menjadi 3 agar sejajar di tengah */
+            gap: 20px;
+            justify-items: center;
+            /* Inovasi: menjaga kotak sejajar di tengah */
+        }
+
+        .services .col-4 {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: staggerFadeIn 0.8s ease-out both;
+            /* Animasi stagger untuk boxes */
+        }
+
+        .services .col-4:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .services .col-4:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .services .col-4:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes staggerFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .services .col-4:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .services .icon {
+            font-size: 40px;
+            color: #27ae60;
+            margin-bottom: 15px;
+            animation: wiggle 2s infinite;
+            /* Animasi baru: ikon wiggle */
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+        .services h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #27ae60;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            animation: fadeInUp 1s ease-out;
+            /* Animasi fade in untuk footer */
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+            .banner {
+                height: 42vh;
+                min-height: 260px;
+            }
+
+            .banner h2 {
+                font-size: 32px;
+                line-height: 1.3;
+                padding: 0 16px;
+            }
+
+            .banner .cta-button {
+                margin-top: 28px;
+            }
+
+            .about .content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .services .box {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .banner h2 {
+                font-size: 24px;
+            }
+
+            .banner .cta-button {
+                margin-top: 22px;
+                padding: 11px 22px;
+                font-size: 16px;
+            }
+
+            .services .box {
+                grid-template-columns: 1fr;
+            }
+
+            .about h3,
+            .services h3 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                position: relative;
+            }
+
+            header .nav-toggle-label {
+                position: absolute;
+                right: 16px;
+                transform: translateX(-6px);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Pastikan animasi hamburger tetap berfungsi */
+            .nav-toggle:checked+.nav-toggle-label+ul {
+                display: flex;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="nav-fix.js" defer></script>
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li class="active"><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div>
+            <h2>WELCOME TO MARGALUYU FARM</h2>
+            <a href="product.html" class="cta-button">Lihat Produk Kami</a>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about">
+        <div class="container">
+            <h3>ABOUT US</h3>
+            <div class="content">
+                <div class="text" style="text-align: justify;">
+                    <p style="margin-bottom: 1em;"><strong>Margaluyu Farm</strong> adalah nama yang kami gunakan untuk usaha peternakan
+                        sapi dan kambing yang kami jalankan.</p>
+
+                    <p style="margin-bottom: 1em;">Nama <strong>“Margaluyu”</strong> kami pilih sebagai satu kesatuan. Dalam bahasa
+                        Sunda, <em>margaluyu</em> berkaitan dengan jalan atau cara untuk mencapai keadaan yang luyu, yaitu sesuai
+                        dan selaras. Bagi kami, nama ini menjadi doa agar setiap langkah dalam menjalankan usaha tetap
+                        berada di jalan yang baik dan membawa manfaat.</p>
+
+                    <p style="margin-bottom: 1em;">Kata <strong>“Farm”</strong> berarti peternakan. Oleh karena itu, <strong> Margaluyu Farm</strong>
+                        menjadi nama yang mewakili usaha peternakan yang kami jalankan.</p>
+
+                    <p style="margin-bottom: 1em;">Logo Margaluyu Farm menggunakan <strong>siluet sapi dan kambing</strong> sebagai
+                        bagian dari identitas usaha. Keduanya menjadi bagian dari logo karena sapi dan kambing merupakan
+                        ternak yang kami pelihara. Salah satunya adalah kambing Saanen yang kami pelihara sebagai
+                        penghasil susu. Jika ingin mengenal lebih jauh tentang kambing Saanen yang kami pelihara, Anda
+                        dapat membacanya melalui halaman <a href="Pengenalan Kambing Saanen.html"
+                            style="color:#27ae60; font-weight:600;">pengenalan kambing Saanen</a> kami.</p>
+                </div>
+                <div class="image">
+                    <img src="Logo MF.jpg" alt="Margaluyu Farm Logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services">
+        <div class="container">
+            <h3>OUR SERVICES</h3>
+            <div class="box">
+                <div class="col-4">
+                    <div class="icon"><i class="fas fa-glass-whiskey"></i></div>
+                    <h4>Susu Murni</h4>
+                    <p>Susu kambing Saanen 100% murni tanpa bahan tambahan.</p>
+                </div>
+                <div class="col-4">
+                    <div class="icon"><i class="fas fa-truck"></i></div>
+                    <h4>Pengiriman Segar</h4>
+                    <p>Susu dikirim dalam kondisi dingin untuk membantu menjaga kesegaran dan kualitasnya selama perjalanan.</p>
+                </div>
+                <div class="col-4">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <h4>Layanan Pelanggan</h4>
+                    <p>Kami menerima pertanyaan, pesanan, dan masukan dari pelanggan melalui layanan yang tersedia di Margaluyu Farm.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <!-- JavaScript untuk Animasi Scroll -->
+    <script>
+        // Animasi fade-in untuk section about
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
+        observer.observe(document.querySelector('.about .content'));
+    </script>
+</body>
+
+</html>

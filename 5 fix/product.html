@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Produk Kami - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas font yang readable -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <!-- Tambahan CSS untuk inovasi: animasi dan layout fokus produk tunggal -->
+    <style>
+        .product-detail {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .product-image img:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .product-banner {
+                padding: 28px 16px;
+            }
+
+            .product-banner h2 {
+                font-size: 1.6em;
+            }
+
+            .product-banner p {
+                font-size: 1em;
+            }
+
+            .product-image img {
+                max-height: 340px;
+                width: auto;
+                max-width: 100%;
+                margin: 0 auto;
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-banner h2 {
+                font-size: 1.3em;
+            }
+
+            .product-image img {
+                max-height: 260px;
+            }
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .product-info h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .product-info p {
+            font-family: 'Roboto', sans-serif;
+            color: #666;
+            line-height: 1.6;
+            text-align: justify; /* Menambahkan justify untuk paragraf di .product-info agar rata kanan/kiri */
+        }
+
+        .price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #28a745;
+            margin: 15px 0;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-buy:hover {
+            background: linear-gradient(135deg, #218838, #17a2b8);
+            transform: translateY(-2px);
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .benefits-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .benefits-list li::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .product-banner {
+            background: linear-gradient(135deg, #0e0d0d, #145756);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .product-banner h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5em;
+        }
+
+        .product-banner p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2em;
+        }
+
+        .highlight {
+            background: #ebcd6c;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a;
+            /* Hijau tua */
+            color: white;
+            /* Pastikan teks putih untuk kontras */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li class="active"><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- banner produk inovatif -->
+    <section class="product-banner">
+        <div class="container">
+            <h2>Produk Unggulan Kami</h2>
+            <p>Susu Saanen Segar – Nutrisi Alami untuk Hidup Sehat</p>
+            <div class=>
+                <i class="fas fa-leaf"></i> 100% Murni tanpa tambahan bahan lainnya
+            </div>
+        </div>
+    </section>
+
+    <!-- detail produk -->
+    <section class="produk">
+        <div class="container">
+            <div class="product-detail">
+                <div class="product-image">
+                    <img src="FLYER NEW.jpg" alt="Susu Saanen 500ml">
+                </div>
+                <div class="product-info">
+                    <h3>Susu Saanen 500ml</h3>
+                    <p>Susu segar dari kambing Saanen yang kaya nutrisi dan lebih mudah dicerna, sehingga cocok untuk
+                        dinikmati oleh berbagai kelompok usia. Kesegarannya bisa langsung Anda rasakan dari Margaluyu
+                        Farm.</p>
+                    <div class="price">Harga: Rp 20.000 / Botol</div>
+                    <p><strong>Ukuran:</strong> 500 ml per botol</p>
+                    <p><strong>Ketersediaan:</strong> Stok Tersedia – Pesan Sekarang!</p>
+                    <button class="btn-buy" onclick="window.location.href='order sekarang.html'">Beli Sekarang</button>
+                    <ul class="benefits-list">
+                        <li>Kaya protein tinggi untuk energi dan kekuatan otot</li>
+                        <li>Mengandung vitamin dan mineral alami</li>
+                        <li>Mendukung kesehatan tulang dan pencernaan</li>
+                        <li>Bebas pengawet, 100% alami</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <p><i class="fas fa-truck"></i> Nikmati gratis ongkir untuk area Surabaya Timur dan sekitarnya tanpa
+                    minimal pembelian. Yuk, pesan sekarang!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small> Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+</body>
+
+</html>

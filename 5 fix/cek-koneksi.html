@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cek Koneksi Penyimpanan - Margaluyu Farm</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f9f2;
+            color: #2c3e2f;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 30px 18px 80px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #06474a;
+            font-size: 1.5em;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        button {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background: #06474a;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .log {
+            background: #1e1e1e;
+            color: #e6e6e6;
+            border-radius: 10px;
+            padding: 16px;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-top: 18px;
+            min-height: 80px;
+        }
+
+        .ok {
+            color: #6ee7a0;
+        }
+
+        .fail {
+            color: #ff8a80;
+        }
+
+        .info {
+            color: #8ecaff;
+        }
+
+        .note {
+            background: #fff8e1;
+            border: 1px solid #f0d878;
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.92em;
+            color: #6b5300;
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <h1>Cek Koneksi Penyimpanan Bersama</h1>
+    <p>Halaman ini menguji apakah website benar-benar bisa membaca dan menyimpan data ke server bersama
+        (jsonbin). Gunakan ini untuk mengetahui penyebab pasti jika pesanan atau testimoni tidak tersimpan.</p>
+
+    <div class="card">
+        <button id="runBtn">Jalankan Pengujian</button>
+        <div class="log" id="log">Klik tombol di atas untuk memulai pengujian...</div>
+    </div>
+
+    <div class="card">
+        <button id="listOrdersBtn">Tampilkan Semua Nomor Pesanan &amp; HP Tersimpan</button>
+        <div class="log" id="ordersLog">Klik tombol di atas untuk melihat isi data pesanan...</div>
+    </div>
+
+    <div class="note">
+        <strong>Cara membaca hasil:</strong> jika semua baris bertanda <strong>BERHASIL</strong>, berarti
+        penyimpanan sudah berfungsi dan pesanan baru akan tersimpan dengan benar. Jika ada yang
+        <strong>GAGAL</strong>, salin seluruh isi kotak hitam di atas dan kirimkan agar bisa ditelusuri
+        penyebabnya.
+    </div>
+
+    <script src="testimoni-config.js"></script>
+    <script src="orders-config.js"></script>
+    <script>
+        const logEl = document.getElementById('log');
+
+        function log(msg, cls) {
+            const span = document.createElement('span');
+            if (cls) span.className = cls;
+            span.textContent = msg + '\n';
+            logEl.appendChild(span);
+        }
+
+        async function testBin(label, masterKey, binId) {
+            log('\n=== ' + label + ' ===', 'info');
+
+            if (!masterKey || !binId) {
+                log('GAGAL: Master Key atau Bin ID masih kosong di file konfigurasi.', 'fail');
+                return;
+            }
+
+            log('Bin ID: ' + binId, 'info');
+
+            // --- Uji BACA ---
+            let existing = null;
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    headers: { 'X-Master-Key': masterKey },
+                    cache: 'no-store'
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log('GAGAL BACA (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                    return;
+                }
+                const json = JSON.parse(bodyText);
+                existing = json.record;
+                const bentuk = Array.isArray(existing) ? 'array' : (typeof existing);
+                const jumlah = Array.isArray(existing) ? existing.length
+                    : (existing && Array.isArray(existing.items) ? existing.items.length : '-');
+                log('BERHASIL BACA. Bentuk data: ' + bentuk + ', jumlah entri: ' + jumlah, 'ok');
+            } catch (e) {
+                log('GAGAL BACA (kesalahan jaringan): ' + e.message, 'fail');
+                return;
+            }
+
+            // --- Uji TULIS (format objek) ---
+            let daftar = Array.isArray(existing) ? existing
+                : (existing && Array.isArray(existing.items) ? existing.items : []);
+
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': masterKey
+                    },
+                    body: JSON.stringify({ items: daftar })
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log('GAGAL TULIS format objek (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                } else {
+                    log('BERHASIL TULIS dengan format objek { items: [...] }.', 'ok');
+                    log('Data lama tetap aman, jumlah entri tidak berubah: ' + daftar.length, 'info');
+                    return;
+                }
+            } catch (e) {
+                log('GAGAL TULIS (kesalahan jaringan): ' + e.message, 'fail');
+                return;
+            }
+
+            // --- Jika format objek gagal, coba format array ---
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': masterKey
+                    },
+                    body: JSON.stringify(daftar)
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log('GAGAL TULIS format array juga (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                } else {
+                    log('BERHASIL TULIS dengan format array. (Artinya kode perlu memakai format array.)', 'ok');
+                }
+            } catch (e) {
+                log('GAGAL TULIS format array (kesalahan jaringan): ' + e.message, 'fail');
+            }
+        }
+
+        document.getElementById('runBtn').addEventListener('click', async function () {
+            this.disabled = true;
+            logEl.innerHTML = '';
+            log('Memulai pengujian...', 'info');
+
+            await testBin('PENYIMPANAN TESTIMONI',
+                typeof TESTIMONI_MASTER_KEY !== 'undefined' ? TESTIMONI_MASTER_KEY : '',
+                typeof TESTIMONI_BIN_ID !== 'undefined' ? TESTIMONI_BIN_ID : '');
+
+            await testBin('PENYIMPANAN PESANAN',
+                typeof ORDERS_MASTER_KEY !== 'undefined' ? ORDERS_MASTER_KEY : '',
+                typeof ORDERS_BIN_ID !== 'undefined' ? ORDERS_BIN_ID : '');
+
+            log('\nPengujian selesai.', 'info');
+            this.disabled = false;
+        });
+        document.getElementById('listOrdersBtn').addEventListener('click', async function () {
+            const logEl2 = document.getElementById('ordersLog');
+            logEl2.innerHTML = '';
+            const btn = this;
+            btn.disabled = true;
+
+            function log2(msg, cls) {
+                const span = document.createElement('span');
+                if (cls) span.className = cls;
+                span.textContent = msg + '\n';
+                logEl2.appendChild(span);
+            }
+
+            const masterKey = typeof ORDERS_MASTER_KEY !== 'undefined' ? ORDERS_MASTER_KEY : '';
+            const binId = typeof ORDERS_BIN_ID !== 'undefined' ? ORDERS_BIN_ID : '';
+
+            if (!masterKey || !binId) {
+                log2('GAGAL: orders-config.js belum terisi.', 'fail');
+                btn.disabled = false;
+                return;
+            }
+
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    headers: { 'X-Master-Key': masterKey },
+                    cache: 'no-store'
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log2('GAGAL (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                    btn.disabled = false;
+                    return;
+                }
+                const json = JSON.parse(bodyText);
+                const record = json.record;
+                const list = Array.isArray(record) ? record : (record && Array.isArray(record.items) ? record.items : []);
+
+                if (!list.length) {
+                    log2('Tidak ada satu pun pesanan tersimpan di server.', 'fail');
+                    btn.disabled = false;
+                    return;
+                }
+
+                log2('Ditemukan ' + list.length + ' pesanan:\n', 'ok');
+                list.forEach((o, i) => {
+                    const orderId = (o && o.orderId) || '(tanpa nomor pesanan!)';
+                    const telepon = (o && o.telepon) || '(tanpa nomor HP!)';
+                    const nama = (o && o.nama) || '(tanpa nama)';
+                    const status = (o && o.status) || '(tanpa status)';
+                    log2(`${i + 1}. Order ID: "${orderId}" | HP: "${telepon}" | Nama: ${nama} | Status: ${status}`, 'info');
+                });
+            } catch (e) {
+                log2('GAGAL (kesalahan jaringan): ' + e.message, 'fail');
+            }
+            btn.disabled = false;
+        });
+    </script>
+</body>
+
+</html>

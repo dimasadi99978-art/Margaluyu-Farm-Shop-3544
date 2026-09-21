@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cara Konsumsi Susu Saanen - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas font yang readable dan inovasi dengan font playful -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <!-- Inovasi: Tambah animasi CSS sederhana untuk elemen interaktif -->
+    <style>
+        .step-item:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        .warning-box {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+            }
+        }
+
+        /* Animasi fade-in untuk section utama */
+        .fade-in {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animasi slide-up untuk grid */
+        .slide-up {
+            animation: slideUp 1s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animasi bounce untuk ikon */
+        .bounce-icon {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Animasi rotate untuk ikon di banner */
+        .rotate-icon {
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsivitas untuk card agar tertata rapi pada HP */
+        @media (max-width: 768px) {
+            .nutrient-item, .benefit-item {
+                width: 100%; /* Satu card per baris untuk lebar penuh */
+                padding: 20px; /* Tingkatkan padding untuk ruang lebih */
+                margin-bottom: 15px; /* Jarak antar card */
+                font-size: 1em; /* Tingkatkan ukuran font sedikit untuk readability */
+                box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+            }
+            .nutrient-grid, .benefit-list {
+                display: flex;
+                flex-direction: column; /* Susun vertikal */
+                gap: 15px; /* Jarak antar item */
+            }
+            .benefit-item {
+                display: flex;
+                flex-direction: column; /* Ikon di atas, teks di bawah */
+                align-items: center; /* Pusatkan ikon */
+            }
+            .benefit-icon {
+                margin-bottom: 10px; /* Jarak ikon ke teks */
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a; /* Hijau tua */
+            color: white; /* Pastikan teks putih untuk kontras */
+        }
+
+        /* Justify teks untuk paragraf di kandungan dan manfaat, dengan kontrol spasi untuk menghindari spasi berlebih */
+        .kandungan p, .manfaat p, .nutrient-item p, .benefit-text p {
+            text-align: justify;
+            word-spacing: -0.05em; /* Mengurangi spasi antar kata sedikit untuk menghindari spasi berlebih */
+            hyphens: auto; /* Mengaktifkan hyphenation untuk memotong kata panjang, mengurangi spasi berlebih */
+            word-break: break-word; /* Memungkinkan pemotongan kata jika diperlukan */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li class="active"><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- banner kreatif dengan inovasi warna hijau gelap sesuai web -->
+    <section class="banner-health fade-in"
+        style="max-height: 300px; padding: 20px 0; background: linear-gradient(to right, #2E8B57, #3CB371);">
+        <div class="container">
+            <div class="banner-content"
+                style="font-size: 0.9em; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                <h2 class="main-title">CARA PENYAJIAN</h2>
+                <h3 class="sub-title">SUSU SAANEN</h3>
+                <p class="health-tag">Panduan Aman & Sehat Berdasarkan Ilmu Kesehatan</p>
+                <div class="health-icons">
+                    <i class="fas fa-glass-whiskey rotate-icon"></i>
+                    <i class="fas fa-utensils bounce-icon"></i>
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- cara konsumsi -->
+    <section class="kandungan fade-in">
+        <div class="container">
+            <h3>Panduan Menyajikan Susu Saanen dengan Aman</h3>
+            <p>Susu Saanen dari Margaluyu Farm dirancang untuk kemudahan konsumsi. Ikuti panduan berikut berdasarkan
+                rekomendasi kesehatan dari sumber seperti FDA dan studi nutrisi untuk hasil terbaik.</p>
+
+            <!-- Inovasi: Grid langkah-langkah dengan ikon animasi -->
+            <div class="nutrient-grid slide-up">
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-snowflake bounce-icon"></i>
+                    <h4>Cara Mencairkan Susu Beku</h4>
+                    <p>Jika susu dalam keadaan beku di botol, rendam botol dalam air hangat (tidak panas) selama 10-15
+                        menit hingga cair sepenuhnya. Jangan gunakan microwave langsung untuk menghindari perubahan
+                        nutrisi. Kocok perlahan sebelum minum. (Sumber: Rekomendasi penyimpanan susu dari USDA).</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-fire bounce-icon"></i>
+                    <h4>Cara Merebus untuk Sajian Hangat</h4>
+                    <p>Tuangkan susu ke dalam panci stainless steel, panaskan dengan api kecil sambil diaduk perlahan
+                        hingga suhu 60-70°C (jangan sampai mendidih). Sajikan hangat untuk rasa yang lebih nikmat.
+                        Hindari merebus berulang untuk menjaga nutrisi. (Berdasarkan studi pemanasan susu dari Journal
+                        of Food Science).</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-box bounce-icon"></i>
+                    <h4>Cara Penyimpanan Agar Tahan Lama</h4>
+                    <p>Simpan di kulkas (2-4°C) tanggal kadaluarsa hingga 7 hari. Jika ingin lebih lama, bekukan
+                        di freezer (-18°C) hingga 3 bulan. Pastikan botol tertutup rapat untuk mencegah kontaminasi.
+                        (Rekomendasi dari WHO untuk penyimpanan produk susu).
+                        Tidak disarankan menyimpan susu pada suhu ruang (sekitar 25–30 °C), karena pada kondisi tersebut
+                        susu hanya bertahan sekitar 2 jam sebelum kualitasnya menurun. Oleh karena itu, segera simpan
+                        susu di dalam kulkas atau alat pendingin
+                        lainnya.</p>
+                </div>
+            </div>
+
+            <!-- Tambahan: Cara Penyajian dan Kombinasi untuk Meningkatkan Kenikmatan -->
+            <h3>Panduan Penyajian dan Kombinasi Susu Saanen</h3>
+            <p>Berikut beberapa cara menyajikan susu Saanen. Kombinasi dengan bahan alami seperti madu, jahe, kopi, atau
+                bahan lain hanyalah pilihan untuk menambah kenikmatan sesuai selera. Berikut ide kreatif yang sehat dan
+                mudah dicoba:</p>
+            <div class="nutrient-grid slide-up">
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-coffee bounce-icon"></i>
+                    <h4>Dicampur dengan Kopi</h4>
+                    <p>Campurkan susu Saanen hangat dengan kopi instan atau espresso untuk membuat latte yang sehat dan
+                        energik. Tambahkan sedikit gula atau pemanis alami jika diinginkan. Nikmati sebagai minuman pagi
+                        untuk boost energi.</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-tint bounce-icon"></i>
+                    <h4>Dicampur dengan Madu</h4>
+                    <p>Tambahkan 1-2 sendok teh madu ke dalam susu hangat untuk rasa manis alami dan manfaat kesehatan
+                        seperti meningkatkan imunitas. Aduk rata dan sajikan sebagai minuman penenang sebelum tidur.</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-ginger bounce-icon"></i>
+                    <h4>Dicampur dengan Jahe</h4>
+                    <p>Rebus jahe segar (parut atau iris tipis) bersama susu Saanen untuk minuman hangat yang
+                        menghangatkan tubuh dan membantu meningkatkan imunitas. Tambahkan sedikit kayu manis untuk aroma
+                        yang lebih nikmat.</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-leaf bounce-icon"></i>
+                    <h4>Dicampur dengan Teh Hijau atau Herbal</h4>
+                    <p>Campur susu dengan teh hijau atau herbal seperti chamomile untuk minuman sehat yang kaya
+                        antioksidan. Sajikan dingin atau hangat sesuai selera.</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-apple-alt bounce-icon"></i>
+                    <h4>Dicampur dengan Buah Segar</h4>
+                    <p>Blender susu Saanen dengan buah seperti pisang, stroberi, atau mangga untuk smoothie yang segar
+                        dan bergizi. Tambahkan es batu untuk versi dingin.</p>
+                </div>
+                <div class="nutrient-item step-item">
+                    <i class="fas fa-cookie-bite bounce-icon"></i>
+                    <h4>Dicampur dengan Coklat atau Kakao</h4>
+                    <p>Tambahkan bubuk coklat atau kakao ke susu hangat, aduk rata, dan nikmati sebagai hot chocolate
+                        yang sehat. Gunakan coklat hitam untuk manfaat antioksidan tambahan.</p>
+                </div>
+            </div>
+            <p>Pastikan bahan tambahan yang digunakan segar dan bermutu untuk hasil terbaik. Jika Anda memiliki
+                alergi atau kondisi kesehatan tertentu, konsultasikan dengan dokter sebelum mencoba kombinasi baru.</p>
+        </div>
+    </section>
+
+    <!-- siapa yang boleh dan tidak boleh -->
+    <section class="manfaat fade-in">
+        <div class="container">
+            <h3>Siapa yang Boleh Minum Susu Kambing Saanen?</h3>
+            <p>Susu Saanen aman dikonsumsi oleh berbagai kelompok usia, namun ada pengecualian berdasarkan kondisi
+                kesehatan.</p>
+
+            <div class="benefit-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-users bounce-icon"></i></div>
+                    <div class="benefit-text">
+                        <h4>Boleh Diminum Oleh Semua Orang</h4>
+                        <p>Cocok untuk bayi (setelah 6 bulan), anak-anak, remaja, dewasa, dan lansia. Rendah laktosa
+                            membuatnya toleran untuk banyak orang. Ideal sebagai alternatif susu sapi. (Sumber: Studi
+                            nutrisi dari European Journal of Clinical Nutrition).</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-exclamation-triangle bounce-icon"></i></div>
+                    <div class="benefit-text">
+                        <h4>Tidak Boleh untuk Orang dengan Kondisi Tertentu</h4>
+                        <p>Tidak dianjurkan dikonsumsi oleh orang yang memiliki alergi terhadap protein susu kambing,
+                            bayi di bawah usia 12 bulan, individu dengan sistem kekebalan tubuh lemah, serta penderita
+                            intoleransi laktosa berat (meskipun kadarnya lebih rendah, tetap disarankan berkonsultasi
+                            terlebih dahulu). Produk ini juga tidak disarankan bagi penderita fenilketonuria karena
+                            mengandung fenilalanin. Hindari konsumsi jika memiliki riwayat reaksi alergi terhadap susu.
+                            (Berdasarkan pedoman alergi dari American Academy of Allergy, Asthma & Immunology/AAAAI).
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Inovasi: Kotak peringatan animasi -->
+            <div class="warning-box">
+                <i class="fas fa-info-circle"></i> <strong>Peringatan:</strong> Jika Anda memiliki kondisi kesehatan
+                seperti diabetes atau penyakit jantung, konsultasikan dengan dokter sebelum mengonsumsi. Susu ini bukan
+                pengganti obat medis.
+            </div>
+            <p>Disarankan mengonsumsi 1–2 gelas per hari. Sumber: Studi ilmiah dari PubMed (pubmed.ncbi.nlm.nih.gov).
+                Untuk informasi lebih lanjut, silakan hubungi kami melalui WhatsApp.</p>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small> Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+</body>
+
+</html>

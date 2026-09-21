@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Sekarang - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- Palette & Base ---------- */
+        :root {
+            --green-deep: #1f4b2c;
+            --green-soft: #eef6f0;
+            --green-accent: #2f9b5d;
+            --card-shadow: 0 16px 32px rgba(6, 71, 74, 0.14);
+            --radius-lg: 26px;
+            --radius-sm: 14px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #f6fff6 0%, #eaf5ee 38%, #e3eee7 70%);
+            color: var(--green-deep);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(76, 175, 80, 0.08), transparent 40%, rgba(6, 71, 74, 0.06));
+            z-index: -1;
+        }
+
+        /* ---------- Layout Section ---------- */
+        .order-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 52px 18px 64px;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 249, 242, 0.9));
+        }
+
+        .order-section .container {
+            width: 100%;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .order-container {
+            width: 100%;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 36px 34px 42px;
+            background: linear-gradient(150deg, #ffffff 0%, #f8fbf9 55%, #f3f9f5 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow), 0 2px 10px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .order-container::after {
+            content: '';
+            position: absolute;
+            top: -24px;
+            right: -38px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(47, 155, 93, 0.16) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+
+        /* ---------- Header ---------- */
+        .order-header {
+            text-align: center;
+            margin: 0 auto 36px;
+            max-width: 760px;
+        }
+
+        .order-header .icon-farm {
+            font-size: 3em;
+            color: var(--green-accent);
+            margin-bottom: 10px;
+        }
+
+        .order-header h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: var(--green-deep);
+            margin-bottom: 12px;
+            letter-spacing: -0.4px;
+        }
+
+        .order-header p {
+            font-size: 1.02rem;
+            color: #3f5f46;
+            font-weight: 400;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.55;
+        }
+
+        /* ---------- Hamburger Menu Fixes ---------- */
+        /* Menghapus sumber icon daun (background-image, SVG, font icon, atau pseudo-element) di belakang hamburger menu */
+        .nav-toggle-label,
+        .nav-toggle-label::before,
+        .nav-toggle-label::after,
+        .nav-toggle-label span,
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            background-image: none !important;
+            content: none !important;
+        }
+
+        /* ---------- Form ---------- */
+        /* Form langsung menempel pada order-container */
+        .order-container form {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: 700;
+            color: var(--green-deep);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label::before {
+            content: "\f06c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: var(--green-accent);
+            font-size: 1.05em;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 15px 14px;
+            border: 1.4px solid #cde6d3;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background: #f7fbf7;
+            transition: all 0.22s ease;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--green-accent);
+            box-shadow: 0 8px 18px rgba(47, 155, 93, 0.14);
+            background: #eef7ef;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        select {
+            cursor: pointer;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232f9b5d"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 40px;
+        }
+
+        .btn-submit {
+            padding: 17px;
+            background: linear-gradient(115deg, #2f8c4d, #43b070);
+            border: none;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1.08rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+            box-shadow: 0 12px 26px rgba(47, 140, 77, 0.22);
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(47, 140, 77, 0.26);
+            filter: brightness(1.02);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 10px 20px rgba(47, 140, 77, 0.2);
+        }
+
+        /* ---------- Responsive Tweaks ---------- */
+        @media (max-width: 1024px) {
+            .order-container {
+                padding: 30px 24px 34px;
+            }
+
+            .order-container form {
+                width: 100%;
+                max-width: 100%;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .order-section {
+                padding: 32px 12px 46px;
+            }
+
+            .order-container {
+                padding: 24px 18px 30px;
+                border-radius: 22px;
+            }
+
+            .order-header {
+                max-width: 100%;
+            }
+
+            .order-container form {
+                width: 100%;
+                max-width: 100%;
+                gap: 14px;
+                padding: 0;
+            }
+
+            .order-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .order-header p {
+                font-size: 0.98rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-section {
+                padding: 26px 10px 36px;
+            }
+
+            .order-container {
+                padding: 20px 14px 26px;
+                border-radius: 18px;
+            }
+
+            .order-container form {
+                width: 100%;
+                max-width: 100%;
+                gap: 12px;
+            }
+
+            label {
+                font-size: 0.97rem;
+            }
+
+            input,
+            select,
+            textarea {
+                padding: 13px;
+                font-size: 0.98rem;
+            }
+
+            .btn-submit {
+                font-size: 1.02rem;
+                padding: 15px;
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a; /* Hijau tua */
+            color: white; /* Pastikan teks putih untuk kontras */
+        }
+
+        /* ---------- Metode Pembayaran ---------- */
+        .payment-options {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 160px;
+            display: flex !important;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border: 1.4px solid #cde6d3;
+            border-radius: var(--radius-sm);
+            background: #f7fbf7;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--green-deep);
+            transition: all 0.2s ease;
+        }
+
+        .payment-option:has(input:checked) {
+            border-color: var(--green-accent);
+            background: #eaf7ee;
+            box-shadow: 0 6px 14px rgba(47, 155, 93, 0.15);
+        }
+
+        .payment-option input {
+            width: auto;
+            padding: 0;
+            accent-color: var(--green-accent);
+        }
+
+        .payment-option::before {
+            content: none;
+        }
+
+        .qris-box {
+            text-align: center;
+            padding: 24px 18px;
+            background: #f7fbf7;
+            border: 1.4px dashed var(--green-accent);
+            border-radius: var(--radius-sm);
+        }
+
+        .qris-title {
+            font-weight: 700;
+            color: var(--green-deep);
+            margin-bottom: 14px;
+        }
+
+        .qris-total {
+            display: inline-block;
+            background: var(--green-deep);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.25em;
+            padding: 8px 22px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+        }
+
+        .qris-image {
+            width: 100%;
+            max-width: 260px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 14px;
+        }
+
+        .qris-note {
+            font-size: 0.92rem;
+            color: #3f5f46;
+            max-width: 420px;
+            margin: 0 auto 16px;
+            line-height: 1.5;
+        }
+
+        .qris-wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            background: #25d366;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: transform 0.15s ease;
+        }
+
+        .qris-wa-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ---------- Konfirmasi Pesanan ---------- */
+        .order-confirm {
+            display: none;
+            text-align: center;
+            padding: 10px 4px 4px;
+        }
+
+        .order-confirm .icon-check {
+            font-size: 3em;
+            color: var(--green-accent);
+            margin-bottom: 10px;
+        }
+
+        .order-confirm h3 {
+            color: var(--green-deep);
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .order-confirm .order-id-box {
+            display: inline-block;
+            background: #eaf7ee;
+            border: 1.4px dashed var(--green-accent);
+            border-radius: 12px;
+            padding: 10px 22px;
+            font-weight: 800;
+            font-size: 1.2em;
+            color: var(--green-deep);
+            margin: 14px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .order-confirm p {
+            color: #3f5f46;
+            max-width: 480px;
+            margin: 0 auto 18px;
+        }
+
+        .order-confirm .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .order-confirm .confirm-buttons a {
+            padding: 12px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .btn-track {
+            background: var(--green-accent);
+            color: #fff;
+        }
+
+        .btn-wa-proof {
+            background: #25d366;
+            color: #fff;
+        }
+
+        /* ---------- Struk / Invoice ---------- */
+        .invoice-box {
+            width: 100%;
+            max-width: 72mm;
+            box-sizing: border-box;
+            margin: 20px auto;
+            background: #fff;
+            border: 1.5px dashed #cde6d3;
+            border-radius: 8px;
+            padding: 12px 10px;
+            font-size: 12px;
+            line-height: 1.35;
+            color: #444;
+            text-align: left;
+        }
+
+        .invoice-box .invoice-head {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .invoice-box .invoice-brand {
+            font-weight: 800;
+            color: var(--green-deep);
+            font-size: 1.15em;
+        }
+
+        .invoice-box .invoice-sub {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .invoice-box .invoice-id {
+            text-align: center;
+            font-weight: 700;
+            color: var(--green-accent);
+            margin: 10px 0 14px;
+            letter-spacing: 0.5px;
+            overflow-wrap: anywhere;
+        }
+
+        .invoice-box .invoice-row {
+            display: grid;
+            grid-template-columns: minmax(0, 34%) minmax(0, 66%);
+            align-items: start;
+            gap: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 0.92em;
+            color: #444;
+            padding: 3px 0;
+        }
+
+        .invoice-box .invoice-row span {
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .invoice-box .invoice-row span:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .invoice-box .invoice-total {
+            font-size: 1.1em;
+        }
+
+        .invoice-box .invoice-total span {
+            color: var(--green-deep) !important;
+            font-weight: 800 !important;
+        }
+
+        .invoice-box hr {
+            border: none;
+            border-top: 1px dashed #ddd;
+            margin: 10px 0;
+        }
+
+        @media print {
+            @page {
+                size: 80mm auto;
+                margin: 0;
+            }
+
+            html, body {
+                width: 80mm !important;
+                min-width: 80mm !important;
+                max-width: 80mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+                overflow: visible !important;
+            }
+
+            body * {
+                visibility: hidden !important;
+            }
+
+            .invoice-box,
+            .invoice-box * {
+                visibility: visible !important;
+            }
+
+            .invoice-box {
+                position: absolute !important;
+                top: 0 !important;
+                left: 4mm !important;
+                width: 72mm !important;
+                min-width: 72mm !important;
+                max-width: 72mm !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 8px 6px !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                font-size: 11px !important;
+                line-height: 1.35 !important;
+                overflow: visible !important;
+            }
+
+            .invoice-box .invoice-brand { font-size: 14px !important; }
+            .invoice-box .invoice-sub { font-size: 10px !important; }
+            .invoice-box .invoice-id { margin: 7px 0 9px !important; }
+            .invoice-box .invoice-row { font-size: 10.5px !important; }
+            .invoice-box .invoice-total { font-size: 12px !important; }
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li class="active"><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Konten utama: Formulir Pemesanan -->
+    <section class="order-section">
+        <div class="container">
+            <div class="order-container">
+                <div class="order-header" id="orderHeader">
+                    <div class="icon-farm"><i class="fas fa-seedling"></i></div> <!-- Ikon unik untuk farm -->
+                    <h2>Order Sekarang</h2>
+                    <p>Isi formulir di bawah ini untuk memesan produk susu kambing Saanen kami. Setiap pesanan akan
+                        mendapat nomor pesanan yang bisa dilacak statusnya kapan saja.</p>
+</div>
+                <form id="orderForm">
+                    <div class="form-group" data-tooltip="Masukkan nama lengkap Anda">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" placeholder="Contoh: Fulan" required>
+                    </div>
+                    <div class="form-group" data-tooltip="Nomor untuk WhatsApp">
+                        <label for="telepon">No. HP</label>
+                        <input type="tel" id="telepon" name="telepon" placeholder="Contoh: 081234567890" required>
+                    </div>
+                    <div class="form-group" data-tooltip="Alamat pengiriman lengkap">
+                        <label for="alamat">Alamat Lengkap</label>
+                        <input type="text" id="alamat" name="alamat"
+                            placeholder="Contoh: Jl. Sudirman No. 354, Surabaya" required>
+                    </div>
+                    <div class="form-group" data-tooltip="Pilih produk yang diinginkan">
+                        <label for="produk">Produk</label>
+                        <select id="produk" name="produk" required>
+                            <option value="">Pilih produk</option>
+                            <option value="Susu Kambing Saanen 500ml" data-price="20000">Susu Kambing Saanen 500ml - Rp 20.000</option>
+                            <!-- Tambahkan produk lain jika ada, sertakan data-price agar total QRIS terhitung otomatis -->
+                        </select>
+                    </div>
+                    <div class="form-group" data-tooltip="Jumlah unit yang dipesan">
+                        <label for="jumlah">Jumlah</label>
+                        <input type="number" id="jumlah" name="jumlah" placeholder="Contoh: 5" min="1" required>
+                    </div>
+                    <div class="form-group" data-tooltip="Catatan tambahan (opsional)">
+                        <label for="pesan">Pesan Tambahan</label>
+                        <textarea id="pesan" name="pesan"
+                            placeholder="Misalnya: Kirim pagi hari, atau permintaan khusus"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Metode Pembayaran</label>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="pembayaran" value="COD" checked>
+                                <span><i class="fas fa-hand-holding-usd"></i> COD (Bayar di Tempat)</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="pembayaran" value="QRIS">
+                                <span><i class="fas fa-qrcode"></i> QRIS</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="qris-box" id="qrisBox" style="display:none;">
+                        <p class="qris-title">Pindai kode QRIS di bawah ini untuk membayar</p>
+                        <div class="qris-total" id="qrisTotal">Total: Rp 0</div>
+                        <img src="qris.jpg" alt="Kode QRIS Margaluyu Farm" class="qris-image">
+                        <div class="form-group" style="text-align:left;">
+                            <label for="buktiPembayaran">Unggah Bukti Pembayaran</label>
+                            <input type="file" id="buktiPembayaran" name="buktiPembayaran" accept="image/*">
+                        </div>
+                        <p class="qris-note">Mohon diperhatikan, QRIS ini bersifat statis sehingga nominalnya belum
+                            terisi otomatis saat dipindai. Setelah memindai, kami mohon kesediaan Anda untuk
+                            mengetikkan sendiri jumlah yang tertera pada Total di atas, agar pembayaran sesuai
+                            dengan pesanan Anda. Bukti pembayaran akan otomatis terkirim bersama pesanan Anda saat
+                            menekan tombol "Buat Pesanan" di bawah ini.</p>
+                    </div>
+
+                    <button type="submit" class="btn-submit"><i class="fas fa-check-circle"></i> Buat Pesanan</button>
+                </form>
+
+                <div class="order-confirm" id="orderConfirm">
+                    <div class="icon-check"><i class="fas fa-check-circle"></i></div>
+                    <h3>Pesanan Berhasil Dibuat!</h3>
+                    <p>Simpan nomor pesanan berikut untuk melacak status pesanan Anda kapan saja. Apabila nomor ini
+                        terlupa, Anda tetap dapat melacaknya menggunakan nomor HP yang Anda isikan tadi.</p>
+
+                    <div class="invoice-box" id="invoiceBox">
+                        <div class="invoice-head">
+                            <div class="invoice-brand">Margaluyu Farm</div>
+                            <div class="invoice-sub">Struk Pesanan</div>
+                        </div>
+                        <div class="invoice-id" id="invOrderId">MF-000000-0000</div>
+                        <div class="invoice-row"><span>Tanggal</span><span id="invTanggal">-</span></div>
+                        <div class="invoice-row"><span>Nama</span><span id="invNama">-</span></div>
+                        <div class="invoice-row"><span>No. HP</span><span id="invTelepon">-</span></div>
+                        <div class="invoice-row"><span>Alamat</span><span id="invAlamat">-</span></div>
+                        <hr>
+                        <div class="invoice-row"><span id="invProdukNama">-</span><span id="invJumlah">-</span></div>
+<hr>
+                        <div class="invoice-row invoice-total"><span>Total</span><span id="invTotal">Rp 0</span></div>
+                        <div class="invoice-row"><span>Pembayaran</span><span id="invPembayaran">-</span></div>
+                        <div class="invoice-row"><span>Status</span><span id="invStatus">Dikonfirmasi</span></div>
+                    </div>
+
+                    <p id="confirmPaymentNote"></p>
+                    <div class="confirm-buttons">
+                        <a href="#" id="btnTrackOrder" class="btn-track"><i class="fas fa-truck"></i> Lacak Pesanan
+                            Saya</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small> Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <script src="orders-config.js"></script>
+    <script src="orders-store.js"></script>
+    <script>
+        // Tampilkan/sembunyikan kotak QRIS sesuai metode pembayaran yang dipilih
+        const paymentRadios = document.querySelectorAll('input[name="pembayaran"]');
+        const qrisBox = document.getElementById('qrisBox');
+        const buktiInput = document.getElementById('buktiPembayaran');
+        const produkSelect = document.getElementById('produk');
+        const jumlahInput = document.getElementById('jumlah');
+        const qrisTotalEl = document.getElementById('qrisTotal');
+
+        function formatRupiah(n) {
+            return 'Rp ' + n.toLocaleString('id-ID');
+        }
+
+        function hitungTotal() {
+            const selectedOption = produkSelect.options[produkSelect.selectedIndex];
+            const harga = selectedOption ? parseInt(selectedOption.dataset.price || '0', 10) : 0;
+            const jumlah = parseInt(jumlahInput.value || '0', 10);
+            const total = (harga > 0 && jumlah > 0) ? harga * jumlah : 0;
+            qrisTotalEl.textContent = 'Total: ' + formatRupiah(total);
+            return total;
+        }
+
+        function toggleQris() {
+            const selected = document.querySelector('input[name="pembayaran"]:checked').value;
+            qrisBox.style.display = (selected === 'QRIS') ? 'block' : 'none';
+            buktiInput.required = (selected === 'QRIS');
+            if (selected === 'QRIS') hitungTotal();
+        }
+        paymentRadios.forEach(r => r.addEventListener('change', toggleQris));
+        produkSelect.addEventListener('change', hitungTotal);
+        jumlahInput.addEventListener('input', hitungTotal);
+        toggleQris();
+
+        // Kompres gambar bukti pembayaran di browser secara bertahap sampai ukurannya cukup kecil,
+        // agar tidak melebihi batas ukuran penyimpanan gratis di jsonbin (±100KB per data).
+        function compressImageOnce(file, maxDimension, quality) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        let { width, height } = img;
+                        if (width > height && width > maxDimension) {
+                            height = Math.round(height * (maxDimension / width));
+                            width = maxDimension;
+                        } else if (height > maxDimension) {
+                            width = Math.round(width * (maxDimension / height));
+                            height = maxDimension;
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function compressImage(file) {
+            // Target maksimal ±35KB (dalam base64) per foto, dicoba bertahap dari kualitas terbaik.
+            const targetChars = 35 * 1024 * 1.37; // perkiraan panjang string base64 untuk ±35KB biner
+            const attempts = [
+                { maxDimension: 700, quality: 0.55 },
+                { maxDimension: 500, quality: 0.45 },
+                { maxDimension: 400, quality: 0.35 },
+                { maxDimension: 320, quality: 0.3 },
+                { maxDimension: 260, quality: 0.25 }
+            ];
+            let result = null;
+            for (const attempt of attempts) {
+                result = await compressImageOnce(file, attempt.maxDimension, attempt.quality);
+                if (result.length <= targetChars) break;
+            }
+            return result;
+        }
+
+        // JavaScript untuk menangani pengiriman formulir pesanan
+        document.getElementById('orderForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Mencegah submit default
+
+            // Ambil nilai dari form
+            const nama = document.getElementById('nama').value.trim();
+            const telepon = document.getElementById('telepon').value.trim();
+            const alamat = document.getElementById('alamat').value.trim();
+            const produk = document.getElementById('produk').value;
+            const jumlah = document.getElementById('jumlah').value;
+const pesan = document.getElementById('pesan').value.trim();
+            const pembayaran = document.querySelector('input[name="pembayaran"]:checked').value;
+
+            // Validasi sederhana
+            if (!nama || !telepon || !alamat || !produk || !jumlah) {
+                alert('Harap isi semua field yang wajib!');
+                return;
+            }
+            if (pembayaran === 'QRIS' && (!buktiInput.files || !buktiInput.files[0])) {
+                alert('Harap unggah bukti pembayaran QRIS terlebih dahulu!');
+                return;
+            }
+
+            const submitBtn = document.querySelector('#orderForm .btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Memproses...';
+
+            // Kompres bukti pembayaran agar tetap kecil saat dikirim bersama data pesanan
+            let buktiPembayaran = null;
+            let buktiTerlaluBesar = false;
+            if (pembayaran === 'QRIS' && buktiInput.files[0]) {
+                try {
+                    const compressed = await compressImage(buktiInput.files[0]);
+                    // Batas aman mutlak (±60KB) agar tidak melebihi kuota penyimpanan gratis.
+                    // Jika masih kebesaran setelah dikompres maksimal, jangan disertakan agar pesanan tetap tersimpan.
+                    if (compressed.length <= 60 * 1024 * 1.37) {
+                        buktiPembayaran = compressed;
+                    } else {
+                        buktiTerlaluBesar = true;
+                        console.warn('Bukti pembayaran tidak disertakan karena ukurannya masih terlalu besar setelah dikompres.');
+                    }
+                } catch (e) {
+                    console.warn('Gagal memproses bukti pembayaran:', e);
+                    buktiTerlaluBesar = true;
+                }
+            }
+
+            const totalHarga = hitungTotal();
+
+            // Simpan data pesanan ke penyimpanan bersama agar dapat dilihat admin dan dilacak pelanggan.
+            // Bukti pembayaran saat ini disimpan dalam bentuk terkompresi; bukti lama
+            // akan dibersihkan otomatis setelah 90 hari dari pesanan yang sudah Selesai.
+            let result;
+            try {
+                result = await OrdersStore.add({
+                    nama, telepon, alamat, produk, jumlah, pesan,
+                    metodePembayaran: pembayaran,
+                    totalHarga: totalHarga,
+                    buktiPembayaran: buktiPembayaran
+                });
+            } catch (e) {
+                console.error('Gagal menyimpan pesanan:', e);
+                alert('Pesanan belum berhasil disimpan. Silakan coba lagi.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Pesan Sekarang';
+                return;
+            }
+
+            if (!result || !result.orderId) {
+                alert('Pesanan belum berhasil dibuat. Silakan coba lagi.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Pesan Sekarang';
+                return;
+            }
+
+            const orderId = result.orderId;
+
+            // Sembunyikan judul & form, tampilkan konfirmasi saja
+            document.getElementById('orderHeader').style.display = 'none';
+            document.getElementById('orderForm').style.display = 'none';
+            document.getElementById('btnTrackOrder').href = 'lacak-pesanan.html?id=' + encodeURIComponent(orderId);
+
+            // Isi struk/invoice
+            document.getElementById('invOrderId').textContent = orderId;
+            document.getElementById('invTanggal').textContent = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('invNama').textContent = nama;
+            document.getElementById('invTelepon').textContent = telepon;
+            document.getElementById('invAlamat').textContent = alamat;
+            document.getElementById('invProdukNama').textContent = produk;
+            document.getElementById('invJumlah').textContent = 'x' + jumlah;
+            document.getElementById('invTotal').textContent = totalHarga > 0 ? formatRupiah(totalHarga) : '-';
+            document.getElementById('invPembayaran').textContent = pembayaran;
+
+            const noteEl = document.getElementById('confirmPaymentNote');
+            let noteText = '';
+            if (pembayaran === 'QRIS') {
+                if (buktiTerlaluBesar) {
+                    noteText = 'Pesanan Anda sudah kami terima. Namun foto bukti pembayaran terlalu besar untuk terkirim otomatis — mohon kirimkan ulang melalui WhatsApp kami dengan menyebutkan nomor pesanan ini.';
+                } else {
+                    noteText = 'Bukti pembayaran Anda sudah kami terima. Pesanan akan segera kami verifikasi dan proses.';
+                }
+            } else {
+                noteText = 'Pesanan Anda akan kami konfirmasi dan siapkan. Pembayaran dilakukan saat barang sampai (COD).';
+            }
+
+            if (!result.online) {
+                console.warn('Detail kegagalan sinkronisasi ke server bersama:', result.error);
+                noteText += ' Pastikan nomor pesanan ini tetap tersimpan. Untuk mencetak struk, silakan buka halaman Lacak Pesanan.';
+            } else {
+                noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
+            }
+            noteEl.textContent = noteText;
+
+            document.getElementById('orderConfirm').style.display = 'block';
+            document.getElementById('orderConfirm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+    </script>
+
+</body>
+
+</html>
