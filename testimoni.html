@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Margaluyu Farm 354 - Testimoni Produk Susu Saanen</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* ===== BANNER SECTION ===== */
+        .testimoni-banner {
+            height: 40vh;
+            background: linear-gradient(135deg, #4CAF50 0%, #06474a 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .testimoni-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .banner-content h2 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-content p {
+            font-size: 1.2em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* ===== TESTIMONI SECTION ===== */
+        .testimoni-section {
+            background: #f4f4f4;
+            padding: 60px 0;
+        }
+
+        .testimoni-section h3 {
+            text-align: center;
+            color: #06474a;
+            margin-bottom: 40px;
+            font-size: 2em;
+        }
+
+        .testimoni-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .testimoni-slides {
+            display: flex;
+            width: 400%;
+            /* 4 slides */
+            transition: transform 0.5s ease;
+        }
+
+        .testimoni-slide {
+            width: 25%;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .testimoni-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .testimoni-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .customer-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: #06474a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5em;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #06474a;
+        }
+
+        .customer-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .change-photo-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #FFC300;
+            color: #06474a;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .change-photo-btn:hover {
+            background: #FFD700;
+        }
+
+        .bukti-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .rating {
+            color: #FFC300;
+            font-size: 1.15em;
+            margin: 8px 0;
+        }
+
+        .bukti-penerimaan {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .bukti-penerimaan h5 {
+            font-size: 1em;
+            color: #06474a;
+            margin-bottom: 10px;
+        }
+
+        .bukti-photo {
+            width: 100%;
+            max-width: 150px;
+            height: 100px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .bukti-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bukti-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* ===== SLIDER NAVIGATION ===== */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .slider-nav:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .dots {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #06474a;
+        }
+
+        .dot:hover {
+            background: #4CAF50;
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-section {
+            background: #ededed;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .video-section h3 {
+            color: #06474a;
+            margin-bottom: 20px;
+        }
+
+        .video-section iframe {
+            width: 80%;
+            max-width: 560px;
+            height: 315px;
+            border-radius: 10px;
+        }
+
+        /* ===== DYNAMIC TESTIMONI STYLING ===== */
+        .dynamic-testimoni-item {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 16px 18px;
+            margin: 14px 0;
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .dynamic-testimoni-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .dynamic-testimoni-item h3 {
+            color: #06474a;
+            margin-bottom: 6px;
+            font-size: 1.1em;
+        }
+
+        .dynamic-testimoni-item p {
+            color: #333;
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+
+        .dynamic-testimoni-item small {
+            color: #666;
+            font-style: italic;
+            font-size: 0.82em;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 480px) {
+            .testimoni-banner {
+                height: 24vh;
+                min-height: 150px;
+            }
+
+            .testimoni-slides {
+                width: 400%;
+            }
+
+            .testimoni-slide {
+                width: 25%;
+                padding: 10px;
+            }
+
+            .testimoni-card {
+                padding: 15px;
+            }
+
+            .customer-photo {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25em;
+            }
+
+            .bukti-photo {
+                max-width: 100px;
+                height: 70px;
+            }
+
+            .testimoni-banner h2 {
+                font-size: 1.4em;
+            }
+
+            .banner-content p {
+                font-size: 0.9em;
+            }
+
+            .video-section iframe {
+                width: 90%;
+                height: 200px;
+            }
+
+            .dynamic-testimoni-item {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .testimoni-banner {
+                height: 28vh;
+                min-height: 170px;
+            }
+
+            .testimoni-slides {
+                width: 400%;
+            }
+
+            .testimoni-slide {
+                width: 25%;
+                padding: 15px;
+            }
+
+            .testimoni-card {
+                padding: 18px;
+            }
+
+            .customer-photo {
+                width: 56px;
+                height: 56px;
+                font-size: 1.4em;
+            }
+
+            .bukti-photo {
+                max-width: 120px;
+                height: 80px;
+            }
+
+            .testimoni-banner h2 {
+                font-size: 1.6em;
+            }
+
+            .banner-content p {
+                font-size: 0.95em;
+            }
+
+            .video-section iframe {
+                width: 90%;
+                height: 250px;
+            }
+
+            .dynamic-testimoni-item {
+                padding: 18px;
+                margin: 18px 0;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .testimoni-slides {
+                width: 400%;
+            }
+
+            .testimoni-slide {
+                width: 25%;
+                padding: 20px;
+            }
+
+            .testimoni-card {
+                padding: 20px;
+            }
+
+            .customer-photo {
+                width: 80px;
+                height: 80px;
+                font-size: 2em;
+            }
+
+            .bukti-photo {
+                max-width: 140px;
+                height: 95px;
+            }
+
+            .testimoni-banner h2 {
+                font-size: 2.8em;
+            }
+
+            .banner-content p {
+                font-size: 1.2em;
+            }
+
+            .video-section iframe {
+                width: 85%;
+                height: 300px;
+            }
+
+            .dynamic-testimoni-item {
+                padding: 20px;
+                margin: 20px 0;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .testimoni-slides {
+                width: 400%;
+            }
+
+            .testimoni-slide {
+                width: 25%;
+                padding: 20px;
+            }
+
+            .testimoni-card {
+                padding: 20px;
+            }
+
+            .customer-photo {
+                width: 80px;
+                height: 80px;
+                font-size: 2em;
+            }
+
+            .bukti-photo {
+                max-width: 150px;
+                height: 100px;
+            }
+
+            .testimoni-banner h2 {
+                font-size: 3em;
+            }
+
+            .banner-content p {
+                font-size: 1.2em;
+            }
+
+            .video-section iframe {
+                width: 80%;
+                height: 315px;
+            }
+
+            .dynamic-testimoni-item {
+                padding: 20px;
+                margin: 20px 0;
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a; /* Hijau tua */
+            color: white; /* Pastikan teks putih untuk kontras */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+   <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li class="active"><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ===== BANNER ===== -->
+    <section class="testimoni-banner">
+        <div class="banner-content">
+            <h2>Testimoni Produk Susu Saanen</h2>
+            <p>Ulasan Pelanggan terhadap Produk Alami Kami</p>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONI SECTION ===== -->
+    <section class="testimoni-section">
+        <div class="container">
+            <h3>Apa Kata Mereka?</h3>
+            <div class="testimoni-slider">
+                <button class="slider-nav prev" onclick="prevSlide()">&#10094;</button>
+                <div class="testimoni-slides" id="testimoniSlides">
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 15 Januari 2025</div>
+                            <h4>Bu Siti, Surabaya</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Anak saya yang alergi susu sapi sekarang bisa minum susu lagi. Rasanya enak, dan bau
+                                prengusnya hampir tidak terasa."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 22 Februari 2025</div>
+                            <h4>Pak Ahmad, Surabaya</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Biasanya kurang cocok dengan susu kambing, tapi yang ini enak dan mudah diminum. Tidak
+                                bikin enek"</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 10 Maret 2025</div>
+                            <h4>Ibu Rina, Surabaya</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Susu ini membantu menjaga daya tahan tubuh keluarga saya. Rasanya enak, bau prengusnya
+                                minim, dan cocok untuk semua usia. Terima kasih, Margaluyu Farm."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 5 April 2025</div>
+                            <h4>Bapak Joko, Gresik</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Produk susu Saanen dari Margaluyu Farm benar-benar terasa asli dan segar. Sudah lama
+                                saya mencari susu murni seperti ini. Sangat saya rekomendasikan."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 18 Mei 2025</div>
+                            <h4>Ibu Maya, Lamongan</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Saya minum susu Saanen ini setiap hari dan badan terasa lebih segar serta berenergi.
+                                Terima kasih, Margaluyu Farm."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 12 Juni 2025</div>
+                            <h4>Pak Budi, Jombang</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Sebagai atlet, susu ini membantu pemulihan otot saya setelah latihan. Nutrisinya alami,
+                                tanpa tambahan bahan kimia, sehingga cocok untuk gaya hidup sehat."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 5 Januari 2026</div>
+                            <h4>Bu Ani, Sidoarjo</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Anak-anak saya sangat menyukai rasa susu ini. Teksturnya lebih creamy dan tidak membuat
+                                perut kembung seperti susu pada umumnya. Amal sholih pertahankan kualitasnya."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                    <div class="testimoni-slide">
+                        <div class="testimoni-card">
+                            <div class="customer-photo">
+                                <i class="fas fa-user"></i>
+                                <button class="change-photo-btn" onclick="changePhoto(this)">+</button>
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                            </div>
+                            <div class="bukti-label">Bukti Penerimaan: 20 Januari 2026</div>
+                            <h4>Bapak Eko, Surabaya</h4>
+                            <div class="rating">★★★★★</div>
+                            <p>"Saya sudah memesan beberapa kali. Susu Saanen dari Margaluyu Farm selalu dalam keadaan
+                                segar saat dikirim. Pelayanan kepada pelanggan juga ramah."</p>
+                            <div class="bukti-penerimaan"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-nav next" onclick="nextSlide()">&#10095;</button>
+            </div>
+            <div class="dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+                <span class="dot" onclick="currentSlide(7)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DYNAMIC TESTIMONI SECTION ===== -->
+    <section class="testimoni-section" style="background: #e8f5e8;">
+        <div class="container">
+            <h3>Testimoni Terbaru</h3>
+            <div id="dynamicTestimonials">
+                <p style="text-align:center;color:#666;">Memuat testimoni...</p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Tambahkan ini ke bagian CSS Anda untuk memperbaiki tombol navigasi dan slider */
+        .slider-nav {
+            z-index: 10;
+            /* Pastikan tombol di atas elemen lain */
+        }
+
+        .testimoni-slides {
+            width: 800%;
+            /* Untuk 8 slides */
+            transition: transform 0.5s ease;
+            display: flex;
+            /* Pastikan flexbox */
+        }
+
+        .testimoni-slide {
+            flex: 0 0 12.5%;
+            /* 100% / 8, menggunakan flex untuk menghindari overflow */
+            box-sizing: border-box;
+            /* Agar padding tidak menyebabkan overflow */
+        }
+
+        /* Responsive updates */
+        @media (max-width: 480px) {
+            .testimoni-slides {
+                width: 800%;
+            }
+
+            .testimoni-slide {
+                flex: 0 0 12.5%;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .testimoni-slides {
+                width: 800%;
+            }
+
+            .testimoni-slide {
+                flex: 0 0 12.5%;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .testimoni-slides {
+                width: 800%;
+            }
+
+            .testimoni-slide {
+                flex: 0 0 12.5%;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .testimoni-slides {
+                width: 800%;
+            }
+
+            .testimoni-slide {
+                flex: 0 0 12.5%;
+            }
+        }
+    </style>
+
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.testimoni-slide');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+
+        function showSlides(n) {
+            if (n >= totalSlides) { slideIndex = 0; }
+            if (n < 0) { slideIndex = totalSlides - 1; }
+            const offset = -slideIndex * (100 / totalSlides);
+            document.getElementById('testimoniSlides').style.transform = `translateX(${offset}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[slideIndex].classList.add('active');
+        }
+
+        function nextSlide() {
+            slideIndex++;
+            showSlides(slideIndex);
+        }
+
+        function prevSlide() {
+            slideIndex--;
+            showSlides(slideIndex);
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            showSlides(slideIndex);
+        }
+
+        // Auto slide (optional, remove if not wanted)
+        setInterval(() => {
+            nextSlide();
+        }, 5000); // Change slide every 5 seconds
+
+        // Initialize
+        showSlides(slideIndex);
+    </script>
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <script src="testimoni.js"></script>
+</body>
+
+</html>

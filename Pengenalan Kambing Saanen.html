@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pengenalan Kambing Saanen - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background: #fbfdfb;
+        }
+
+        /* Banner */
+        .goat-banner {
+            background: linear-gradient(135deg, #06474a, #27ae60);
+            color: #fff;
+            text-align: center;
+            padding: 44px 20px;
+        }
+
+        .goat-banner h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .goat-banner p {
+            font-size: 1em;
+            max-width: 620px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Intro dengan foto */
+        .goat-intro {
+            padding: 40px 0;
+        }
+
+        .goat-intro .grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .goat-intro .photo {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .goat-intro .photo img {
+            width: 100%;
+            max-width: 380px;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            margin: 0 auto;
+            display: block;
+        }
+
+        .goat-intro .text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .goat-intro h3 {
+            color: #06474a;
+            font-size: 1.7em;
+            margin-bottom: 14px;
+        }
+
+        .goat-intro p {
+            margin-bottom: 14px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #f0f9f2;
+            border-radius: 10px;
+            padding: 14px 18px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stat-box .num {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #27ae60;
+            display: block;
+        }
+
+        .stat-box .label {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Kenapa Kami Pilih Saanen */
+        .why-section {
+            background: #f0f9f2;
+            padding: 40px 0;
+        }
+
+        .why-section h3 {
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            color: #06474a;
+            font-size: 1.7em;
+            margin-bottom: 36px;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .why-card {
+            background: #fff;
+            padding: 26px 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .why-card .icon {
+            font-size: 30px;
+            color: #27ae60;
+            margin-bottom: 12px;
+        }
+
+        .why-card h4 {
+            color: #06474a;
+            margin-bottom: 8px;
+        }
+
+        .why-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Perawatan transparan */
+        .care-section {
+            padding: 40px 0;
+        }
+
+        .care-section h3 {
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            color: #06474a;
+            font-size: 1.7em;
+            margin-bottom: 12px;
+        }
+
+        .care-section .lead {
+            text-align: center;
+            color: #666;
+            max-width: 620px;
+            margin: 0 auto 40px;
+        }
+
+        .care-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .care-step {
+            text-align: center;
+            padding: 20px 14px;
+        }
+
+        .care-step .num-circle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #06474a;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 14px;
+        }
+
+        .care-step h4 {
+            color: #06474a;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .care-step p {
+            color: #666;
+            font-size: 0.92em;
+            line-height: 1.55;
+        }
+
+        /* Fakta menarik */
+        .facts-section {
+            background: #fff8e1;
+            padding: 36px 0;
+        }
+
+        .facts-section h3 {
+            font-family: 'Fredoka One', cursive;
+            text-align: center;
+            color: #06474a;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+        }
+
+        .facts-list {
+            list-style: none;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .facts-list li {
+            background: #fff;
+            margin-bottom: 12px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+            color: #444;
+        }
+
+        /* CTA */
+        .goat-cta {
+            background: linear-gradient(135deg, #27ae60, #06474a);
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .goat-cta h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+        }
+
+        .goat-cta p {
+            max-width: 560px;
+            margin: 0 auto 24px;
+            opacity: 0.95;
+        }
+
+        .goat-cta .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .goat-cta a {
+            padding: 13px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .goat-cta a:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary-cta {
+            background: #fff;
+            color: #06474a;
+        }
+
+        .btn-outline-cta {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .goat-banner {
+                padding: 32px 18px;
+            }
+
+            .goat-banner h2 {
+                font-size: 1.4em;
+                line-height: 1.3;
+            }
+
+            .goat-banner p {
+                font-size: 0.92em;
+            }
+
+            .goat-intro .photo img {
+                max-width: 280px;
+                max-height: 220px;
+            }
+
+            .why-section, .care-section, .facts-section, .goat-intro {
+                padding: 28px 0;
+            }
+
+            .goat-cta {
+                padding: 28px 16px;
+            }
+
+            .goat-cta h3 {
+                font-size: 1.2em;
+            }
+
+            .goat-cta .cta-buttons {
+                flex-direction: column;
+            }
+
+            .goat-cta .cta-buttons a {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .care-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .goat-intro .grid {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .care-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .goat-banner h2 {
+                font-size: 1.2em;
+            }
+
+            .goat-intro .photo img {
+                max-width: 220px;
+                max-height: 180px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li class="active"><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section class="goat-banner">
+        <h2>Mengenal Kambing Saanen</h2>
+        <p>Sebelum membahas produk susunya, mari mengenal terlebih dahulu jenis kambing yang menghasilkannya. Inilah
+            kambing perah andalan Margaluyu Farm sejak kami mulai memproduksi susu.</p>
+    </section>
+
+    <!-- Intro & Ciri Fisik -->
+    <section class="goat-intro">
+        <div class="container">
+            <div class="grid">
+                <div class="photo">
+                    <img src="kambing saanen.jpg" alt="Kambing Saanen di Margaluyu Farm">
+                </div>
+                <div class="text">
+                    <h3>Ras Kambing Perah dari Pegunungan Alpen</h3>
+                    <p>Kambing Saanen berasal dari lembah Saanen di pegunungan Alpen, Swiss. Sejak abad ke-19, ras ini
+                        dikembangkan secara khusus sebagai kambing perah karena produksi susunya yang tinggi dan
+                        konsisten sepanjang masa laktasi.</p>
+                    <p>Ciri paling mudah dikenali dari kambing Saanen adalah bulunya yang putih bersih, telinga
+                        yang tegak menghadap ke depan, serta tubuh yang besar dan tegap dibandingkan kambing lokal
+                        pada umumnya. Sifatnya juga tenang dan mudah beradaptasi, sehingga cocok dirawat secara
+                        intensif di kandang keluarga seperti milik kami.</p>
+                    <div class="stat-row">
+                        <div class="stat-box">
+                            <span class="num">70-85 kg</span>
+                            <span class="label">Berat betina dewasa</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="num">3-5 L</span>
+                            <span class="label">Produksi susu/hari</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="num">±10 bln</span>
+                            <span class="label">Masa laktasi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kenapa Margaluyu Farm Memilih Saanen -->
+    <section class="why-section">
+        <div class="container">
+            <h3>Kenapa Margaluyu Farm Memilih Saanen?</h3>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="icon"><i class="fas fa-heart"></i></div>
+                    <h4>Lanjutan dari Usaha Keluarga</h4>
+                    <p>Setelah bertahun-tahun merawat sapi dan kambing untuk kebutuhan kurban serta akikah, kami
+                        ingin mengembangkan produk yang dapat dinikmati pelanggan setiap hari, bukan hanya pada
+                        musim tertentu.</p>
+                </div>
+                <div class="why-card">
+                    <div class="icon"><i class="fas fa-tint"></i></div>
+                    <h4>Susu yang Lebih Ramah di Perut</h4>
+                    <p>Kambing Saanen dikenal menghasilkan susu dengan aroma dan tekstur yang lebih ringan
+                        dibandingkan susu kambing pada umumnya, sehingga lebih mudah diterima oleh mereka yang baru
+                        pertama kali mencobanya.</p>
+                </div>
+                <div class="why-card">
+                    <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h4>Cocok Dirawat Skala Keluarga</h4>
+                    <p>Sifatnya yang tenang membuat kambing ini dapat kami rawat secara langsung, sehingga kami
+                        mengetahui dengan pasti kondisi setiap kambing beserta kualitas susunya setiap hari.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fakta Menarik -->
+    <section class="facts-section">
+        <div class="container">
+            <h3>Fakta Menarik Tentang Kambing Saanen</h3>
+            <ul class="facts-list">
+                <li>Saanen dijuluki "ratu kambing perah" karena volume produksi susunya yang tinggi dibandingkan
+                    ras kambing lain.</li>
+                <li>Warna bulunya yang putih polos berfungsi memantulkan panas, sehingga membuatnya tahan terhadap
+                    cuaca yang cukup terik.</li>
+                <li>Kambing ini dikenal jinak dan mudah dekat dengan manusia, termasuk anak-anak yang turut membantu
+                    di kandang.</li>
+                <li>Semakin sering diperah secara rutin dan telaten, produksi susu Saanen justru cenderung semakin
+                    stabil.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="goat-cta">
+        <h3>Sudah Mengenal Kambingnya, Saatnya Mencoba Susunya</h3>
+        <p>Tersedia pula paket langganan mingguan dengan harga lebih hemat.</p>
+        <div class="cta-buttons">
+            <a href="order sekarang.html" class="btn-primary-cta">Pesan / Berlangganan Sekarang</a>
+            <a href="Pengenalan susu saanen.html" class="btn-outline-cta">Baca Informasi Susu Saanen</a>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+</body>
+
+</html>

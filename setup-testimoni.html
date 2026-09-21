@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setup Penyimpanan Bersama - Margaluyu Farm</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f9f2;
+            color: #2c3e2f;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #06474a;
+            font-size: 1.6em;
+        }
+
+        .step {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .step h3 {
+            margin-top: 0;
+            color: #06474a;
+        }
+
+        a {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfe3d3;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-top: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 14px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #06474a;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 18px;
+            background: #eafbee;
+            border: 1px solid #a9e5b8;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-box code {
+            display: block;
+            background: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            word-break: break-all;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            background: #06474a;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .error-box {
+            display: none;
+            margin-top: 14px;
+            background: #fdecea;
+            border: 1px solid #f5c2c0;
+            color: #b3261e;
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .error-box.show {
+            display: block;
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <h1>Setup Penyimpanan Testimoni & Pesanan</h1>
+    <p>Halaman ini hanya perlu dibuka <strong>satu kali</strong> untuk membuat tempat penyimpanan testimoni dan
+        pesanan yang bisa dilihat semua pengunjung web. Setelah selesai, halaman ini boleh diabaikan atau
+        dihapus.</p>
+
+    <div class="step">
+        <h3>Langkah 1 — Ambil Master Key</h3>
+        <p>Buka <a href="https://jsonbin.io" target="_blank">jsonbin.io</a>, daftar akun gratis, lalu buka menu
+            <strong>API Keys</strong> dan salin <strong>X-Master-Key</strong> Anda. Tempel di bawah ini.</p>
+        <input type="text" id="masterKeyInput" placeholder="Tempel X-Master-Key di sini"
+            value="$2a$10$X0ip421qot.S.LRG6NImjOPINvtIZDClGj92HMwchCB8MnXfR60Ge">
+    </div>
+
+    <div class="step">
+        <h3>Langkah 2 — Buat Penyimpanan</h3>
+        <p>Klik tombol di bawah ini untuk membuat tempat penyimpanan testimoni baru (hanya sekali saja, jangan
+            diklik berkali-kali agar tidak membuat banyak penyimpanan kosong).</p>
+        <button id="createBtn">Buat Penyimpanan Baru</button>
+
+        <div class="result-box" id="resultBox">
+            <p><strong>Berhasil dibuat!</strong> Salin dua nilai ini ke file <code>testimoni-config.js</code>:</p>
+            <p>TESTIMONI_MASTER_KEY:</p>
+            <code id="outMasterKey"></code>
+            <p>TESTIMONI_BIN_ID:</p>
+            <code id="outBinId"></code>
+            <button class="copy-btn" id="copyBtn">Salin Kode untuk testimoni-config.js</button>
+        </div>
+
+        <div class="error-box" id="errorBox"></div>
+    </div>
+
+    <div class="step">
+        <h3>Langkah 3 — Buat Penyimpanan Pesanan (untuk Lacak Pesanan)</h3>
+        <p>Gunakan Master Key yang sama untuk membuat satu penyimpanan lagi, khusus untuk data pesanan.</p>
+        <button id="createOrdersBtn">Buat Penyimpanan Pesanan</button>
+
+        <div class="result-box" id="resultBoxOrders">
+            <p><strong>Berhasil dibuat!</strong> Salin dua nilai ini ke file <code>orders-config.js</code>:</p>
+            <p>ORDERS_MASTER_KEY:</p>
+            <code id="outMasterKeyOrders"></code>
+            <p>ORDERS_BIN_ID:</p>
+            <code id="outBinIdOrders"></code>
+            <button class="copy-btn" id="copyBtnOrders">Salin Kode untuk orders-config.js</button>
+        </div>
+
+        <div class="error-box" id="errorBoxOrders"></div>
+    </div>
+
+    <div class="step">
+        <h3>Langkah 4 — Selesai</h3>
+        <p>Buka file <code>testimoni-config.js</code> dan <code>orders-config.js</code>, tempelkan nilai-nilai di
+            atas ke masing-masing file, simpan, lalu upload ulang folder web ini ke hosting Anda. Jangan lupa juga
+            ganti <code>ADMIN_PASSWORD</code> di <code>orders-config.js</code> dengan kata sandi milik Anda sendiri
+            sebelum meng-upload, supaya halaman <code>admin-pesanan.html</code> hanya bisa dibuka oleh Anda.</p>
+    </div>
+
+    <script>
+        document.getElementById('createBtn').addEventListener('click', async function () {
+            const key = document.getElementById('masterKeyInput').value.trim();
+            const errorBox = document.getElementById('errorBox');
+            const resultBox = document.getElementById('resultBox');
+            errorBox.classList.remove('show');
+            resultBox.classList.remove('show');
+
+            if (!key) {
+                errorBox.textContent = 'Mohon isi Master Key terlebih dahulu.';
+                errorBox.classList.add('show');
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Membuat...';
+
+            try {
+                const res = await fetch('https://api.jsonbin.io/v3/b', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': key,
+                        'X-Bin-Name': 'Margaluyu Farm - Testimoni'
+                    },
+                    body: JSON.stringify({ items: [] })
+                });
+
+                if (!res.ok) {
+                    let serverMsg = '';
+                    try {
+                        const errJson = await res.json();
+                        serverMsg = errJson.message ? ' Pesan server: ' + errJson.message : '';
+                    } catch (parseErr) { /* abaikan jika respons bukan JSON */ }
+                    throw new Error('Gagal membuat penyimpanan (status ' + res.status + ').' + serverMsg + ' Periksa kembali Master Key Anda.');
+                }
+
+                const json = await res.json();
+                const binId = json.metadata && json.metadata.id;
+                if (!binId) throw new Error('Respons tidak sesuai dugaan, coba lagi.');
+
+                document.getElementById('outMasterKey').textContent = key;
+                document.getElementById('outBinId').textContent = binId;
+                resultBox.classList.add('show');
+
+                document.getElementById('copyBtn').onclick = function () {
+                    const code = `const TESTIMONI_MASTER_KEY = "${key}";\nconst TESTIMONI_BIN_ID = "${binId}";`;
+                    navigator.clipboard.writeText(code).then(() => {
+                        this.textContent = 'Tersalin!';
+                        setTimeout(() => { this.textContent = 'Salin Kode untuk testimoni-config.js'; }, 2000);
+                    });
+                };
+            } catch (e) {
+                errorBox.textContent = e.message || 'Terjadi kesalahan. Coba lagi.';
+                errorBox.classList.add('show');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Buat Penyimpanan Baru';
+            }
+        });
+
+        document.getElementById('createOrdersBtn').addEventListener('click', async function () {
+            const key = document.getElementById('masterKeyInput').value.trim();
+            const errorBox = document.getElementById('errorBoxOrders');
+            const resultBox = document.getElementById('resultBoxOrders');
+            errorBox.classList.remove('show');
+            resultBox.classList.remove('show');
+
+            if (!key) {
+                errorBox.textContent = 'Mohon isi Master Key di Langkah 1 terlebih dahulu.';
+                errorBox.classList.add('show');
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Membuat...';
+
+            try {
+                const res = await fetch('https://api.jsonbin.io/v3/b', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': key,
+                        'X-Bin-Name': 'Margaluyu Farm - Pesanan'
+                    },
+                    body: JSON.stringify({ items: [] })
+                });
+
+                if (!res.ok) {
+                    let serverMsg = '';
+                    try {
+                        const errJson = await res.json();
+                        serverMsg = errJson.message ? ' Pesan server: ' + errJson.message : '';
+                    } catch (parseErr) { /* abaikan jika respons bukan JSON */ }
+                    throw new Error('Gagal membuat penyimpanan (status ' + res.status + ').' + serverMsg + ' Periksa kembali Master Key Anda.');
+                }
+
+                const json = await res.json();
+                const binId = json.metadata && json.metadata.id;
+                if (!binId) throw new Error('Respons tidak sesuai dugaan, coba lagi.');
+
+                document.getElementById('outMasterKeyOrders').textContent = key;
+                document.getElementById('outBinIdOrders').textContent = binId;
+                resultBox.classList.add('show');
+
+                document.getElementById('copyBtnOrders').onclick = function () {
+                    const code = `const ORDERS_MASTER_KEY = "${key}";\nconst ORDERS_BIN_ID = "${binId}";\nconst ADMIN_PASSWORD = "GANTI_DENGAN_KATA_SANDI_ANDA";`;
+                    navigator.clipboard.writeText(code).then(() => {
+                        this.textContent = 'Tersalin!';
+                        setTimeout(() => { this.textContent = 'Salin Kode untuk orders-config.js'; }, 2000);
+                    });
+                };
+            } catch (e) {
+                errorBox.textContent = e.message || 'Terjadi kesalahan. Coba lagi.';
+                errorBox.classList.add('show');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Buat Penyimpanan Pesanan';
+            }
+        });
+    </script>
+</body>
+
+</html>

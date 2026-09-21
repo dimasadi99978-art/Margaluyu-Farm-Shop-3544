@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Margaluyu Farm 354 - Media Library Susu Saanen</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Konsistensi dengan warna dan gaya web utama */
+        :root {
+            --primary-green: #4CAF50;
+            --primary-blue: #2196F3;
+            --accent-cream: #FFF8DC;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Banner Media Library dengan efek parallax dan inovasi animasi partikel */
+        .media-banner {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            color: white;
+            text-align: center;
+            padding: 48px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(0);
+            z-index: -1;
+        }
+
+        .media-banner h2 {
+            font-size: clamp(24px, 4vw, 34px);
+            animation: fadeInDown 1s ease;
+        }
+
+        .media-banner p {
+            font-size: clamp(14px, 2vw, 17px);
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Galeri Media dengan grid responsif dan efek hover inovatif */
+        .media-gallery {
+            background: var(--accent-cream);
+            padding: 60px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .media-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .media-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        .media-item:hover img {
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        .media-item video {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .media-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover .media-overlay {
+            transform: translateY(0);
+        }
+
+        .media-overlay h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .media-overlay p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+
+        /* Filter Kategori dengan inovasi toggle animasi */
+        .filter-buttons {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        /* Lightbox Inovatif untuk tampilan media penuh */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox img,
+        .lightbox video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+            .media-banner {
+                padding: 32px 18px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .media-item {
+                margin: 10px;
+            }
+
+            /* Perbaikan untuk HP: Overlay selalu terlihat tanpa perlu tap/hover */
+            .media-overlay {
+                transform: translateY(0);
+            }
+
+            .media-item:hover .media-overlay {
+                transform: translateY(0);
+                /* Tetap terlihat, tidak berubah saat hover */
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a; /* Hijau tua */
+            color: white; /* Pastikan teks putih untuk kontras */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li class="active"><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- banner media library -->
+    <section class="media-banner">
+        <h2>Media Library Susu Saanen</h2>
+        <p>Jelajahi galeri visual Margaluyu Farm serta temukan inspirasi dari produk susu kambing Saanen kami.</p>
+    </section>
+
+    <!-- galeri media dengan filter -->
+    <section class="media-gallery">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="produk">Produk</button>
+                <button class="filter-btn" data-filter="proses">Proses Produksi</button>
+                <button class="filter-btn" data-filter="peternakan">Peternakan</button>
+            </div>
+            <div class="gallery-grid">
+                <!-- Item 1: Gambar Produk -->
+                <div class="media-item" data-category="produk">
+                    <img src="SUSU DALAM FREEZER.jpeg" alt="Susu Saanen Botol">
+                    <div class="media-overlay">
+                        <h4>Susu Saanen 500 ml</h4>
+                        <p>Botol susu segar siap konsumsi.</p>
+                    </div>
+                </div>
+                <!-- Item 3: Gambar Peternakan -->
+                <div class="media-item" data-category="peternakan">
+                    <img src="kambing saanen.jpg" alt="Kambing Saanen di Peternakan">
+                    <div class="media-overlay">
+                        <h4>Kambing Saanen</h4>
+                        <p>Ras kambing yang menghasilkan susu.</p>
+                    </div>
+                </div>
+                <!-- Item 4: Gambar Produk Lain -->
+                <div class="media-item" data-category="produk">
+                    <img src="proses pengiriman susu.jpeg" alt="Variasi Produk Susu">
+                    <div class="media-overlay">
+                        <h4>Susu Siap Antar</h4>
+                        <p>Kondisi Susu Sebelum Dikirim.</p>
+                    </div>
+                </div>
+
+                <!-- Item 6: Gambar Proses -->
+                <div class="media-item" data-category="proses">
+                    <img src="proses pengemasan susu.jpeg" alt="Pengemasan Susu">
+                    <div class="media-overlay">
+                        <h4>Proses Pengemasan</h4>
+                        <p>Proses akhir sebelum distribusi.</p>
+                    </div>
+                </div>
+                <!-- Tambahkan lebih banyak item sesuai kebutuhan -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox untuk tampilan media penuh -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close">&times;</button>
+            <img id="lightbox-img" src="" alt="">
+            <video id="lightbox-video" controls style="display: none;">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <!-- JavaScript untuk filter dan lightbox -->
+    <script>
+        // Filter galeri
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const mediaItems = document.querySelectorAll('.media-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                mediaItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxVideo = document.getElementById('lightbox-video');
+        const lightboxClose = document.querySelector('.lightbox-close');
+
+        mediaItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const video = item.querySelector('video');
+                if (img) {
+                    lightboxImg.src = img.src;
+                    lightboxImg.style.display = 'block';
+                    lightboxVideo.style.display = 'none';
+                } else if (video) {
+                    lightboxVideo.querySelector('source').src = video.querySelector('source').src;
+                    lightboxVideo.load();
+                    lightboxVideo.style.display = 'block';
+                    lightboxImg.style.display = 'none';
+                }
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>

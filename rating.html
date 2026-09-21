@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Penilaian Produk - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Konsistensi dengan warna web utama dan inovasi */
+        :root {
+            --primary-green: #4CAF50;
+            --primary-blue: #2196F3;
+            --accent-cream: #FFF8DC;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --star-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--accent-cream), #e8f5e8);
+            color: #2e7d32;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/><circle cx="20" cy="30" r="1.5" fill="%23ffffff" opacity="0.05"/><circle cx="80" cy="70" r="1" fill="%23ffffff" opacity="0.08"/></svg>') repeat;
+            z-index: -1;
+            animation: floatParticles 20s infinite linear;
+        }
+
+        @keyframes floatParticles {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+
+        /* Banner dengan parallax dan animasi */
+        .rating-banner {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            color: white;
+            text-align: center;
+            padding: 44px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rating-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(0);
+            z-index: -1;
+        }
+
+        .rating-banner h2 {
+            animation: fadeInDown 1s ease;
+        }
+
+        .rating-banner p {
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Container formulir dengan bentuk unik */
+        .rating-section {
+            padding: 50px 0;
+        }
+
+        .rating-section .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 16px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+        }
+
+        .rating-container {
+            width: 100%;
+            max-width: 780px;
+            margin: 32px auto;
+            padding: 26px 24px 32px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%);
+            position: relative;
+            overflow: hidden;
+            animation: containerReveal 1.5s ease-out;
+            box-sizing: border-box;
+        }
+
+        .rating-container::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes containerReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.9) rotate(-2deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        /* Header formulir */
+        .rating-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .rating-header h2 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            animation: textWave 2s ease-in-out infinite;
+        }
+
+        @keyframes textWave {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            25% {
+                transform: translateY(-5px);
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            75% {
+                transform: translateY(5px);
+            }
+        }
+
+        .rating-header .icon-rating {
+            font-size: 3.5em;
+            color: var(--star-gold);
+            margin-bottom: 10px;
+            animation: bounceIcon 2s infinite;
+        }
+
+        @keyframes bounceIcon {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .rating-header p {
+            font-size: 1.2em;
+            color: #558b2f;
+        }
+
+        /* Formulir */
+        .rating-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            animation: staggerIn 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes staggerIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) rotateX(10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+        }
+
+        label::before {
+            content: '\f005';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        input {
+            padding: 12px 14px;
+            border: 2px solid #c8e6c9;
+            border-radius: 12px;
+            font-size: 0.95em;
+            transition: all 0.4s ease;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            background: var(--accent-cream);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Tata letak khusus grup rating: icon di atas, teks lalu deret bintang */
+        .rating-group {
+            align-items: center;
+        }
+
+        .rating-group label {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .rating-group label::before {
+            display: inline-block;
+            margin-right: 0;
+            margin-bottom: 6px;
+            font-size: 1.4em;
+        }
+
+        .rating-group .star-rating {
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Panel bintang lebih menarik & konsisten */
+        .star-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding: 16px 22px;
+            background: radial-gradient(circle at 30% 30%, #fff5d9 0%, #f4f8ff 60%, #eef3ff 100%);
+            border: 1px solid #e4e8f1;
+            border-radius: 18px;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+        }
+
+        .star-rating:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+        }
+
+        .star-rating::before {
+            content: none;
+        }
+
+        .star-rating::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 70% 40%, rgba(255, 215, 0, 0.18), transparent 55%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        textarea {
+            padding: 12px 14px;
+            border: 2px solid #c8e6c9;
+            border-radius: 12px;
+            font-size: 0.95em;
+            transition: all 0.4s ease;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            background: var(--accent-cream);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        /* Rating bintang */
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2.35em;
+            color: #ccd3e1;
+            cursor: pointer;
+            transition: color 0.28s ease, transform 0.2s ease, filter 0.2s ease;
+            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+        }
+
+        .star-rating input:checked~label,
+        .star-rating label:hover,
+        .star-rating label:hover~label {
+            color: var(--star-gold);
+            animation: starGlow 0.5s ease;
+            transform: translateY(-2px) scale(1.04);
+            filter: drop-shadow(0 10px 18px rgba(255, 193, 7, 0.35));
+        }
+
+        @keyframes starGlow {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Tombol submit */
+        .btn-submit {
+            padding: 14px;
+            background: linear-gradient(45deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 18px auto 6px;
+            box-shadow: 0 10px 30px var(--shadow);
+            width: 100%;
+            max-width: 520px;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        /* Overlay animasi terima kasih */
+        .thank-you-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(2px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.35s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        body.thankyou-open {
+            overflow: hidden;
+        }
+
+        .thank-you-content {
+            background: linear-gradient(135deg, #f7fff3, #e7ffe7);
+            padding: 32px 30px 28px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16);
+            animation: zoomIn 0.45s ease;
+            max-width: 420px;
+            width: min(90vw, 420px);
+            margin: 0 auto;
+        }
+
+        .thank-you-content h3 {
+            color: var(--primary-green);
+            font-size: 1.9em;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .thank-you-content p {
+            font-size: 1.05em;
+            color: #2e7d32;
+            line-height: 1.5;
+            margin: 0 auto 6px;
+            max-width: 340px;
+        }
+
+        .thank-you-content .icon-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #e3f8e6;
+            border: 2px solid #b6e4bf;
+            font-size: 2.6em;
+            color: var(--primary-green);
+            margin-bottom: 16px;
+            animation: checkBounce 1s infinite;
+        }
+
+        @keyframes checkBounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsivitas */
+        @media (max-width: 768px) {
+            .rating-container {
+                margin: 30px 20px;
+                padding: 25px 18px 28px;
+                clip-path: none;
+                border-radius: 20px;
+            }
+
+            .rating-header h2 {
+                font-size: 2em;
+            }
+
+            .btn-submit {
+                max-width: 100%;
+                margin: 28px auto 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rating-container {
+                margin: 20px 10px;
+                padding: 20px;
+            }
+
+            .rating-header h2 {
+                font-size: 1.8em;
+            }
+
+            input,
+            textarea {
+                padding: 12px;
+                font-size: 0.8em;
+            }
+
+            .star-rating label {
+                font-size: 1.5em;
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a; /* Hijau tua */
+            color: white; /* Pastikan teks putih untuk kontras */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li class="active"><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- banner -->
+    <section class="rating-banner">
+        <h2>Rating & Kritik/Saran</h2>
+        <p>Bagikan penilaian, kritik, atau saran Anda terhadap produk Susu Saanen kami. Masukan Anda akan langsung
+            tampil di halaman Testimoni.</p>
+    </section>
+
+    <!-- formulir -->
+    <section class="rating-section">
+        <div class="container">
+            <div class="rating-container">
+                <div class="rating-header">
+                    <div class="icon-rating"><i class="fas fa-star"></i></div>
+                    <h2>Formulir Rating & Kritik/Saran</h2>
+                    <p>Isi rating dan/atau kritik &amp; saran Anda. Masukan Anda akan tampil di halaman Testimoni.</p>
+                </div>
+                <form class="rating-form" id="ratingForm">
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" placeholder="Contoh: Fulan" required>
+                    </div>
+                    <div class="form-group rating-group">
+                        <label for="rating">Rating (1-5 Bintang) — Opsional</label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i
+                                    class="fas fa-star"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i
+                                    class="fas fa-star"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i
+                                    class="fas fa-star"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i
+                                    class="fas fa-star"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i
+                                    class="fas fa-star"></i></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="komentar">Ulasan / Komentar (Opsional)</label>
+                        <textarea id="komentar" name="komentar"
+                            placeholder="Bagikan pengalaman Anda untuk produk kami"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="kritik">Kritik (Opsional)</label>
+                        <textarea id="kritik" name="kritik" placeholder="Apa yang kurang dari produk kami?"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="saran">Saran (Opsional)</label>
+                        <textarea id="saran" name="saran" placeholder="Ide atau saran untuk perbaikan kami"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Kirim</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- overlay terima kasih -->
+    <div class="thank-you-overlay" id="thankYouOverlay">
+        <div class="thank-you-content">
+            <div class="icon-check"><i class="fas fa-check-circle"></i></div>
+            <h3>Terima Kasih!</h3>
+            <p>Masukan Anda berhasil disimpan. Kami sangat menghargai masukan Anda!</p>
+        </div>
+    </div>
+
+    <!-- Simpan penilaian dan tampilkan di halaman testimoni -->
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <script>
+        document.getElementById('ratingForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Mencegah pengiriman formulir default
+
+            // Ambil nilai dari formulir
+            const nama = document.getElementById('nama').value;
+            const ratingChecked = document.querySelector('input[name="rating"]:checked');
+            const rating = ratingChecked ? ratingChecked.value : 0;
+            const komentar = document.getElementById('komentar').value.trim();
+            const kritik = document.getElementById('kritik').value.trim();
+            const saran = document.getElementById('saran').value.trim();
+
+            // Validasi: minimal salah satu dari rating, komentar, kritik, atau saran harus diisi
+            if (!rating && !komentar && !kritik && !saran) {
+                alert('Mohon isi minimal rating, ulasan, kritik, atau saran terlebih dahulu.');
+                return;
+            }
+
+            const submitBtn = document.querySelector('#ratingForm .btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mengirim...';
+
+            // Gabungkan semua masukan yang diisi menjadi satu komentar
+            const bagian = [];
+            if (komentar) bagian.push(komentar);
+            if (kritik) bagian.push('Kritik: ' + kritik);
+            if (saran) bagian.push('Saran: ' + saran);
+            const komentarGabungan = bagian.length ? bagian.join(' | ') : '(Tidak ada catatan tambahan)';
+
+            // Simpan data agar tampil di halaman testimoni
+            const dataBaru = {
+                nama: nama,
+                rating: rating,
+                komentar: komentarGabungan,
+                tanggal: new Date().toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })
+            };
+            await TestimoniStore.add(dataBaru);
+
+            // Tampilkan overlay terima kasih
+            const overlay = document.getElementById('thankYouOverlay');
+            overlay.style.display = 'flex';
+            document.body.classList.add('thankyou-open');
+
+            // Sembunyikan overlay setelah 2.5 detik, lalu redirect ke testimoni.html
+            setTimeout(function () {
+                overlay.style.display = 'none';
+                document.body.classList.remove('thankyou-open');
+                document.getElementById('ratingForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Kirim';
+                // Redirect ke testimoni.html
+                window.location.href = 'testimoni.html';
+            }, 2500);
+        });
+    </script>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kandungan & Manfaat Susu Saanen - Margaluyu Farm SHOP</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Tambah Google Fonts untuk kreativitas font yang readable -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&family=Fredoka+One&display=swap"
+        rel="stylesheet">
+    <!-- Inovasi: Tambah animasi CSS kreatif dan inovatif -->
+    <style>
+        /* Animasi fade-in untuk banner dan sections */
+        .fade-in {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animasi slide-in dari kiri untuk grid nutrisi */
+        .slide-in-left {
+            animation: slideInLeft 1.2s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animasi slide-in dari kanan untuk benefit list */
+        .slide-in-right {
+            animation: slideInRight 1.2s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animasi wiggle untuk ikon (inovasi: gerakan lucu dan menarik) */
+        .wiggle {
+            animation: wiggle 2s infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+        /* Animasi glow dan scale pada hover untuk items (inovasi: efek interaktif) */
+        .nutrient-item:hover,
+        .benefit-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(46, 139, 87, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        /* Animasi stagger untuk list items (muncul satu per satu) */
+        .stagger-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .stagger-item:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        /* Animasi background gradient bergerak untuk banner (inovasi: efek dinamis) */
+        .animated-bg {
+            background: linear-gradient(-45deg, #2E8B57, #3CB371, #228B22, #32CD32);
+            background-size: 400% 400%;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Animasi typing effect untuk judul utama (inovasi: simulasi mengetik) */
+        .typing {
+            overflow: hidden;
+            border-right: 2px solid;
+            white-space: nowrap;
+            animation: typing 3s steps(20, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: white;
+            }
+        }
+
+        /* Responsivitas untuk banner di HP (layar kecil) */
+        @media (max-width: 768px) {
+            .banner-health {
+                max-height: 220px;
+                /* Diperbesar sedikit dari 200px ke 220px untuk banner yang lebih besar */
+                padding: 12px 0;
+                /* Diperbesar sedikit padding dari 10px 0 ke 12px 0 untuk keseimbangan */
+            }
+
+            .banner-content {
+                font-size: 0.7em;
+                /* Tetap sama */
+            }
+
+            .main-title {
+                font-size: 1.2em;
+                /* Tetap sama */
+            }
+
+            .sub-title {
+                font-size: 0.9em;
+                /* Tetap sama */
+            }
+
+            .health-tag {
+                font-size: 0.8em;
+                /* Tetap sama */
+            }
+
+            .health-icons i {
+                font-size: 1.3em;
+                /* Tetap sama */
+            }
+
+            /* Penyesuaian untuk card agar tidak terlalu sempit pada HP */
+            .nutrient-item,
+            .benefit-item {
+                width: 100%;
+                /* Satu card per baris untuk lebar penuh */
+                padding: 20px;
+                /* Tingkatkan padding untuk ruang lebih */
+                margin-bottom: 15px;
+                /* Jarak antar card */
+                font-size: 1em;
+                /* Tingkatkan ukuran font sedikit untuk readability */
+                box-sizing: border-box;
+                /* Pastikan padding tidak menambah lebar */
+            }
+
+            .nutrient-grid,
+            .benefit-list {
+                display: flex;
+                flex-direction: column;
+                /* Susun vertikal */
+                gap: 15px;
+                /* Jarak antar item */
+            }
+
+            .benefit-item {
+                display: flex;
+                flex-direction: column;
+                /* Ikon di atas, teks di bawah */
+                align-items: center;
+                /* Pusatkan ikon */
+            }
+
+            .benefit-icon {
+                margin-bottom: 10px;
+                /* Jarak ikon ke teks */
+            }
+        }
+
+        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
+        .active a {
+            background-color: #06474a;
+            /* Hijau tua */
+            color: white;
+            /* Pastikan teks putih untuk kontras */
+        }
+
+        /* Justify teks untuk paragraf di kandungan dan manfaat, dengan kontrol spasi untuk menghindari spasi berlebih */
+        .kandungan p,
+        .manfaat p,
+        .nutrient-item p,
+        .benefit-text p {
+            text-align: justify;
+            word-spacing: -0.05em;
+            /* Mengurangi spasi antar kata sedikit untuk menghindari spasi berlebih */
+            hyphens: auto;
+            /* Mengaktifkan hyphenation untuk memotong kata panjang, mengurangi spasi berlebih */
+            word-break: break-word;
+            /* Memungkinkan pemotongan kata jika diperlukan */
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
+                            class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
+                            class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
+                            class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="media library.html">MEDIA LIBRARY</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li class="active"><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- banner kreatif -->
+    <section class="banner-health animated-bg" style="max-height: 220px; padding: 12px 0;">
+        <div class="container">
+            <div class="banner-content" style="font-size: 0.7em;">
+                <h2 class="main-title">KANDUNGAN & MANFAAT</h2>
+                <h2 class="sub-title">SUSU SAANEN</h2>
+                <p class="health-tag">Berdasarkan Ilmu Kesehatan</p>
+                <div class="health-icons">
+                    <i class="fas fa-heartbeat"></i>
+                    <i class="fas fa-apple-alt"></i>
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- kandungan -->
+    <section class="kandungan fade-in">
+        <div class="container">
+            <h3>Kandungan Nutrisi Susu Saanen</h3>
+            <p>Berdasarkan penelitian ilmiah dari sumber seperti USDA dan studi nutrisi, susu kambing Saanen mengandung
+                nutrisi penting yang mendukung kesehatan manusia. Berikut detailnya:</p>
+            <div class="nutrient-grid slide-in-left">
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-dna wiggle"></i>
+                    <h4>Protein Tinggi</h4>
+                    <p>Sekitar 3-4g per 100ml, termasuk kasein dan whey yang mudah dicerna. Studi menunjukkan protein
+                        ini membantu pembentukan otot dan perbaikan jaringan (sumber: Journal of Dairy Science).</p>
+                </div>
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-oil-can wiggle"></i>
+                    <h4>Lemak Sehat</h4>
+                    <p>Asam lemak rantai sedang (MCFA) seperti kaproat dan kaprilat, yang lebih cepat diserap daripada
+                        lemak sapi. Penelitian dari American Journal of Clinical Nutrition mengonfirmasi manfaatnya
+                        untuk energi cepat.</p>
+                </div>
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-sun wiggle"></i>
+                    <h4>Vitamin & Mineral</h4>
+                    <p>Kaya vitamin A, D, E, B kompleks, kalsium, fosfor, magnesium. Vitamin D membantu penyerapan
+                        kalsium, mendukung kesehatan tulang (sumber: NIH).</p>
+                </div>
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-tint wiggle"></i>
+                    <h4>Laktosa Rendah</h4>
+                    <p>Rendah laktosa (sekitar 4-5g per liter vs 50g di susu sapi), cocok untuk intoleransi laktosa.
+                        Studi dari European Journal of Clinical Nutrition menunjukkan toleransi yang lebih baik.</p>
+                </div>
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-shield-alt wiggle"></i>
+                    <h4>Antioksidan</h4>
+                    <p>Mengandung selenium dan zinc, antioksidan alami yang melawan radikal bebas. Penelitian dari
+                        Antioxidants journal mendukung peran dalam kekebalan tubuh.</p>
+                </div>
+                <div class="nutrient-item stagger-item">
+                    <i class="fas fa-balance-scale wiggle"></i>
+                    <h4>Komposisi Mirip ASI</h4>
+                    <p>Protein dan lemak mirip susu manusia, membuatnya ideal untuk bayi dan anak-anak. WHO
+                        merekomendasikan susu alternatif ini untuk nutrisi optimal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- manfaat kesehatan -->
+    <section class="manfaat fade-in">
+        <div class="container">
+            <h3>Manfaat Kesehatan Berdasarkan Jurnal Ilmiah</h3>
+            <p>Susu kambing Saanen merupakan sumber protein dan mineral yang dapat membantu memenuhi kebutuhan gizi sehari-hari. Berikut manfaat yang didukung oleh penelitian ilmiah mengenai susu kambing.</p>
+
+            <div class="benefit-list slide-in-right">
+                <div class="benefit-item stagger-item">
+                    <div class="benefit-icon"><i class="fas fa-dumbbell wiggle"></i></div>
+                    <div class="benefit-text">
+                        <h4>Mendukung Pemenuhan Protein</h4>
+                        <p>Susu kambing menyediakan protein berkualitas dan asam amino yang dibutuhkan tubuh untuk membangun serta memelihara jaringan. Penelitian pada manusia menunjukkan protein susu kambing dapat dicerna dan diserap dengan baik.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item stagger-item">
+                    <div class="benefit-icon"><i class="fas fa-bone wiggle"></i></div>
+                    <div class="benefit-text">
+                        <h4>Mendukung Kesehatan Tulang</h4>
+                        <p>Susu kambing mengandung kalsium, fosfor, magnesium, dan protein yang berperan dalam pembentukan serta pemeliharaan tulang. Asupan mineral tersebut membantu memenuhi kebutuhan nutrisi untuk menjaga tulang tetap kuat.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item stagger-item">
+                    <div class="benefit-icon"><i class="fas fa-utensils wiggle"></i></div>
+                    <div class="benefit-text">
+                        <h4>Mendukung Pencernaan Protein</h4>
+                        <p>Penelitian pada manusia menunjukkan bahwa minuman berbahan susu kambing mengalami proses pencernaan protein yang baik dan menghasilkan respons asam amino setelah dikonsumsi. Hal ini mendukung pemanfaatannya sebagai sumber protein dalam pola makan sehari-hari.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item stagger-item">
+                    <div class="benefit-icon"><i class="fas fa-chart-line wiggle"></i></div>
+                    <div class="benefit-text">
+                        <h4>Mendukung Respons Gula Darah yang Lebih Terkendali</h4>
+                        <p>Dalam uji klinis pada 12 orang dewasa sehat, yogurt berbahan susu kambing memiliki indeks glikemik rendah dan menghasilkan kenaikan gula darah setelah makan yang lebih rendah dibandingkan glukosa. Hasil ini menunjukkan potensi manfaat dalam pengelolaan respons gula darah, meskipun penelitian tersebut menggunakan yogurt, bukan susu kambing segar.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item stagger-item">
+                    <div class="benefit-icon"><i class="fas fa-seedling wiggle"></i></div>
+                    <div class="benefit-text">
+                        <h4>Mendukung Pola Makan Bergizi</h4>
+                        <p>Susu kambing mengandung protein, lemak, karbohidrat, kalsium, fosfor, magnesium, kalium, serta berbagai vitamin dan komponen bioaktif. Kandungan tersebut menjadikannya salah satu pilihan pangan untuk melengkapi kebutuhan gizi sehari-hari.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background:#f0f9f2; border:1px solid #cfe8d3; border-radius:12px; padding:18px 22px; margin-top:26px;">
+                <p style="margin:0; color:#315d3a; font-size:0.92em;"><strong>Tentang klaim penyakit:</strong> Penelitian mengenai susu kambing menunjukkan manfaat nutrisi dan beberapa potensi efek kesehatan, tetapi belum menjadi dasar untuk menyatakan susu kambing sebagai obat yang menyembuhkan TBC, diabetes, osteoporosis, hipertensi, atau penyakit tertentu lainnya. Susu kambing adalah pangan dan tidak menggantikan obat atau terapi medis.</p>
+            </div>
+
+            <div style="margin-top:20px; font-size:0.88em; color:#555;">
+                <strong>Referensi jurnal ilmiah:</strong>
+                <ul style="margin:8px 0 0 20px;">
+                    <li>Nayik et al. (2021), <em>Frontiers in Nutrition</em>, 8:789117, DOI 10.3389/fnut.2021.789117 — tinjauan kandungan gizi dan potensi manfaat kesehatan susu kambing.</li>
+                    <li>Milan et al. (2018), <em>Nutrients</em>, PMID 30322081 — uji acak mengenai respons pencernaan minuman susu kambing pada manusia.</li>
+                    <li>Papakonstantinou et al. (2022), <em>British Journal of Nutrition</em>, PMID 35920045 — uji klinis acak mengenai yogurt susu kambing dan respons glikemik.</li>
+                    <li>Penelitian manusia mengenai kecernaan protein susu kambing, PMID 33677496 — pengukuran kecernaan asam amino protein susu kambing.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="container">
+            <small> Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+</body>
+
+</html>
