@@ -115,24 +115,38 @@ const OrdersStore = (function () {
         if (IS_LOCAL_FILE) {
             return { success: false, order: null, error: 'Halaman ini dibuka langsung dari file di komputer, sehingga data belum bisa dikirim ke server. Setelah situs dipublikasikan (misalnya di Vercel), ini akan berjalan normal' };
         }
-        try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ order })
-            });
-            const text = await res.text();
-            let json = {};
-            try { json = text ? JSON.parse(text) : {}; } catch (_) {}
-            if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
-            return { success: true, order: json.order || order, error: null };
-        } catch (e) {
-            console.warn('Gagal menyimpan pesanan ke server:', e);
-            return { success: false, order: null, error: e && e.message ? e.message : String(e) };
+
+        let lastError = 'Gagal menghubungi server.';
+        // Coba sampai 3 kali untuk mengatasi kegagalan jaringan sesaat.
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 12000);
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ order }),
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+
+                const text = await res.text();
+                let json = {};
+                try { json = text ? JSON.parse(text) : {}; } catch (_) {}
+                if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan HTTP ${res.status}`);
+                return { success: true, order: json.order || order, error: null };
+            } catch (e) {
+                lastError = e && e.name === 'AbortError'
+                    ? 'Server terlalu lama merespons (timeout).'
+                    : (e && e.message ? e.message : String(e));
+                console.warn(`Gagal menyimpan pesanan ke server (percobaan ${attempt}/3):`, lastError);
+                if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 700 * attempt));
+            }
         }
+        return { success: false, order: null, error: lastError };
     }
 
     async function putRemote(order) {
@@ -188,18 +202,21 @@ const OrdersStore = (function () {
             updatedAt: new Date().toISOString()
         }, orderData);
 
-        // Tampilkan/simpan lokal segera agar struk langsung muncul.
-        setLocal(mergeOrders(getLocal(), [entry]));
+        // Saat file dibuka langsung di komputer, pertahankan perilaku lokal untuk pengujian.
+        if (IS_LOCAL_FILE) {
+            setLocal(mergeOrders(getLocal(), [entry]));
+            return { success: true, online: false, local: true, orderId, error: null };
+        }
 
+        // Saat website online, pesanan HARUS berhasil masuk penyimpanan bersama.
+        // Jangan membuat pelanggan menerima nomor pesanan seolah-olah sudah tersimpan
+        // jika server gagal. postRemote sudah mencoba sampai 3 kali.
         const saved = await postRemote(entry);
         if (!saved.success) {
-            // Tandai pending agar bisa dicoba lagi dari perangkat yang sama.
-            const pending = Object.assign({}, entry, { syncStatus: 'pending' });
-            setLocal(mergeOrders(getLocal(), [pending]));
             return {
-                success: true,
+                success: false,
                 online: false,
-                orderId,
+                orderId: null,
                 error: saved.error
             };
         }

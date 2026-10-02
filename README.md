@@ -1,3 +1,21 @@
+
+### Perilaku saat server gagal
+Pada versi revisi ini, website tidak lagi menampilkan nomor pesanan seolah-olah sudah diterima jika server online gagal menyimpan data. Pengiriman dicoba hingga 3 kali. Jika semuanya gagal, pelanggan diminta mencoba lagi dan pesanan tidak dianggap masuk ke sistem admin.
+
+
+## Penting saat upload ke Vercel
+Struktur project yang benar harus langsung seperti ini di **Root Directory** Vercel:
+- `index.html`
+- `api/orders.js`
+- `api/health.js`
+- `lib/email.js`
+- `orders-store.js`
+- dan file website lainnya.
+
+Jangan sampai hasil upload menjadi `mf_spssfix/api/orders.js` sementara Root Directory Vercel berada satu tingkat di atas folder `mf_spssfix`. Jika memakai ZIP, buka/extract ZIP lalu pilih **folder `mf_spssfix` sebagai project**, atau upload isi folder tersebut sebagai root project.
+
+Untuk memeriksa server, buka `/cek-pesanan-server.html` setelah deploy. Tes koneksi sekarang memakai `/api/health`, sehingga tidak lagi salah dianggap gagal hanya karena endpoint pesanan meminta nomor HP.
+
 # Margaluyu Farm
 
 ## Penyimpanan pesanan

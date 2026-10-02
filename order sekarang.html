@@ -946,8 +946,12 @@
                 return;
             }
 
-            if (!result || !result.orderId) {
-                alert('Pesanan belum berhasil dibuat. Silakan coba lagi.');
+            if (!result || !result.success || !result.orderId) {
+                console.error('Pesanan belum masuk server:', result);
+                alert(
+                    'Pesanan belum berhasil tersimpan di server.\n\n' +
+                    (result && result.error ? result.error : 'Silakan coba lagi beberapa saat lagi.')
+                );
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
                 return;
@@ -983,27 +987,11 @@
                 noteText = 'Pesanan Anda akan kami konfirmasi dan siapkan. Pembayaran dilakukan saat barang sampai (COD).';
             }
 
-            if (!result.online) {
-                console.warn('Detail kegagalan sinkronisasi ke server bersama:', result.error);
-                noteText = '';
-                const wa = document.createElement('a');
-                wa.href = 'https://wa.me/62895635067289?text=' + encodeURIComponent('Halo Margaluyu Farm, nomor pesanan saya ' + orderId + '. Mohon dibantu diproses.');
-                wa.target = '_blank';
-                wa.rel = 'noopener';
-                wa.textContent = 'Bantuan Pesanan via WhatsApp';
-                wa.style.cssText = 'display:inline-block;margin-top:8px;font-weight:700;text-decoration:underline;';
-                noteEl.textContent = noteText;
-                noteEl.appendChild(document.createElement('br'));
-                noteEl.appendChild(wa);
-                const confirmCard = document.getElementById('orderConfirm');
-                confirmCard.style.display = 'block';
-                confirmCard.classList.remove('is-visible');
-                void confirmCard.offsetWidth;
-                confirmCard.classList.add('is-visible');
-                confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
-                return;
-            } else {
+            if (result.online) {
                 noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
+            } else {
+                // Hanya terjadi saat file HTML dibuka langsung di komputer.
+                noteText += ' (Mode lokal — belum tersimpan ke server online.)';
             }
             noteEl.textContent = noteText;
 

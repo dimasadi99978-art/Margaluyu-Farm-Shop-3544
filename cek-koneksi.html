@@ -181,15 +181,19 @@
         async function testOrders() {
             log('\n=== PENYIMPANAN PESANAN (/api/orders) ===', 'info');
             try {
-                const res = await fetch('/api/orders?orderId=__cek_koneksi__', { cache: 'no-store' });
+                const res = await fetch('/api/health', { cache: 'no-store' });
                 const bodyText = await res.text();
                 let json = {};
                 try { json = bodyText ? JSON.parse(bodyText) : {}; } catch (_) { /* respons bukan JSON */ }
 
-                if (res.ok && json.success) {
-                    log('BERHASIL. /api/orders bisa diakses dan tersambung ke penyimpanan pesanan.', 'ok');
+                if (res.ok && json.success && json.orders && json.orders.connected) {
+                    log('BERHASIL. Server Vercel dan penyimpanan pesanan (JSONBin) tersambung.', 'ok');
+                    log('Jumlah data pesanan di penyimpanan: ' + (json.orders.count ?? 0), 'info');
+                    log('Notifikasi email: ' + (json.email && json.email.configured ? 'TERKONFIGURASI' : 'BELUM TERKONFIGURASI'), json.email && json.email.configured ? 'ok' : 'fail');
                 } else {
-                    log('GAGAL (status ' + res.status + '): ' + (json.error || bodyText.slice(0, 300)), 'fail');
+                    log('GAGAL (status ' + res.status + '): ' + (json.error || bodyText.slice(0, 500)), 'fail');
+                    if (json.orders && json.orders.detail) log('Detail JSONBin: ' + json.orders.detail, 'fail');
+                    if (json.email && json.email.note) log('Email: ' + json.email.note, json.email.configured ? 'ok' : 'fail');
                 }
             } catch (e) {
                 log('GAGAL (kesalahan jaringan): ' + e.message, 'fail');
