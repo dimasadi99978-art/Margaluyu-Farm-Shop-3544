@@ -34,7 +34,9 @@ const OrdersStore = (function () {
     }
 
     function isConfigured() {
-        return true; // Konfigurasi sekarang dilakukan di Environment Variables Vercel.
+        // Frontend tidak dapat membaca Environment Variables server.
+        // Nilai true di sini hanya berarti modul tersedia; koneksi nyata diuji oleh /api/health.
+        return true;
     }
 
     function getLocal() {
@@ -140,8 +142,10 @@ const OrdersStore = (function () {
                 return { success: true, order: json.order || order, error: null };
             } catch (e) {
                 lastError = e && e.name === 'AbortError'
-                    ? 'Server terlalu lama merespons (timeout).'
-                    : (e && e.message ? e.message : String(e));
+                    ? 'Server terlalu lama merespons (timeout). Cek /cek-pesanan-server.html.'
+                    : (e && e.message === 'Failed to fetch'
+                        ? 'API server tidak dapat diakses. Pastikan deployment Vercel berisi folder /api dan buka /cek-pesanan-server.html untuk diagnosis.'
+                        : (e && e.message ? e.message : String(e)));
                 console.warn(`Gagal menyimpan pesanan ke server (percobaan ${attempt}/3):`, lastError);
                 if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 700 * attempt));
             }

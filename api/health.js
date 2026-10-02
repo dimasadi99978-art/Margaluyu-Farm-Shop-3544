@@ -1,13 +1,6 @@
-// Margaluyu Farm - endpoint diagnosis deployment.
-// Sengaja TIDAK mengimpor modul lain agar kegagalan import tidak menyamarkan masalah deployment.
+// Diagnosis server: membedakan API Vercel, konfigurasi Environment Variables,
+// koneksi JSONBin, dan konfigurasi email. Tidak pernah menampilkan secret.
 const API_ROOT = 'https://api.jsonbin.io/v3/b';
-
-async function parseResponse(response) {
-  const text = await response.text();
-  let data = null;
-  try { data = text ? JSON.parse(text) : null; } catch (_) {}
-  return { ok: response.ok, status: response.status, data, text };
-}
 
 function send(res, status, payload) {
   res.status(status);
@@ -23,21 +16,31 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return send(res, 204, {});
   if (req.method !== 'GET') return send(res, 405, { success: false, error: 'Method Not Allowed' });
 
-  const masterKey = process.env.ORDERS_MASTER_KEY || '';
-  const binId = process.env.ORDERS_BIN_ID || '';
-  const resendKey = process.env.RESEND_API_KEY || '';
-  const notifyEmail = process.env.NOTIFY_EMAIL || '';
+  const masterKey = String(process.env.ORDERS_MASTER_KEY || '').trim();
+  const binId = String(process.env.ORDERS_BIN_ID || '').trim();
+  const resendKey = String(process.env.RESEND_API_KEY || '').trim();
+  const notifyEmail = String(process.env.NOTIFY_EMAIL || '').trim();
 
   const result = {
     success: false,
-    server: { online: true, runtime: 'vercel-node', vercel: Boolean(process.env.VERCEL), environment: process.env.VERCEL_ENV || 'unknown' },
-    orders: { configured: Boolean(masterKey && binId), connected: false },
-    email: { configured: Boolean(resendKey && notifyEmail) }
+    server: {
+      online: true,
+      runtime: 'vercel-node',
+      vercel: Boolean(process.env.VERCEL),
+      environment: process.env.VERCEL_ENV || 'unknown'
+    },
+    orders: {
+      configured: Boolean(masterKey && binId),
+      connected: false
+    },
+    email: {
+      configured: Boolean(resendKey && notifyEmail)
+    }
   };
 
   if (!masterKey || !binId) {
-    result.error = 'API Vercel hidup, tetapi ORDERS_MASTER_KEY dan/atau ORDERS_BIN_ID belum tersedia pada deployment ini.';
-    return send(res, 500, result);
+    result.error = 'API Vercel aktif, tetapi Environment Variables pesanan belum lengkap. Yang wajib: ORDERS_MASTER_KEY dan ORDERS_BIN_ID.';
+    return send(res, 200, result);
   }
 
   try {
@@ -46,22 +49,26 @@ export default async function handler(req, res) {
       headers: { 'X-Master-Key': masterKey, 'Accept': 'application/json' },
       cache: 'no-store'
     });
-    const checked = await parseResponse(response);
+    const text = await response.text();
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch (_) {}
 
-    if (!checked.ok) {
-      result.error = `API Vercel hidup, tetapi JSONBin menolak permintaan (HTTP ${checked.status}).`;
-      result.orders.detail = checked.data?.message || checked.data?.error || checked.text.slice(0, 300);
-      return send(res, 502, result);
+    if (!response.ok) {
+      result.error = `Environment Variables terbaca, tetapi JSONBin menolak koneksi (HTTP ${response.status}).`;
+      result.orders.detail = data?.message || data?.error || text.slice(0, 300);
+      return send(res, 200, result);
     }
 
-    const record = checked.data?.record;
+    const record = data?.record;
     result.orders.connected = true;
-    result.orders.count = Array.isArray(record) ? record.length : (Array.isArray(record?.items) ? record.items.length : 0);
+    result.orders.count = Array.isArray(record)
+      ? record.length
+      : (Array.isArray(record?.items) ? record.items.length : 0);
     result.success = true;
     return send(res, 200, result);
   } catch (error) {
-    result.error = 'API Vercel hidup, tetapi koneksi dari Vercel ke JSONBin gagal.';
+    result.error = 'API Vercel aktif, tetapi koneksi dari Vercel ke JSONBin gagal.';
     result.orders.detail = error?.message || String(error);
-    return send(res, 502, result);
+    return send(res, 200, result);
   }
 }

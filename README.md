@@ -83,3 +83,11 @@ Cek juga folder Spam/Promosi di Gmail.
 3. Buat 1 pesanan uji. Halaman konfirmasi tidak boleh menampilkan peringatan "belum berhasil terkirim".
 4. Buka Admin Pesanan: pesanan harus tampil. Lalu Admin Analitik > Muat Ulang Data. Jika masih kosong, kotak merah di atas halaman akan menyebutkan penyebabnya.
 5. Email: buka `/api/test-email?secret=NILAI_CRON_SECRET` dan baca hasilnya (lihat bagian Notifikasi email di atas).
+
+## Diagnosis deployment V2
+- `/api/ping` hanya mengecek apakah fungsi API Vercel benar-benar ter-deploy.
+- `/api/health` mengecek Environment Variables dan koneksi JSONBin tanpa menampilkan secret.
+- Jika `/api/ping` gagal: masalah deployment/routing Vercel, bukan JSONBin.
+- Jika `/api/ping` berhasil tetapi `/api/health` menunjukkan `configured:false`: isi Environment Variables Production lalu Redeploy.
+- Jika `configured:true` tetapi `connected:false`: nilai Master Key/Bin ID atau akses JSONBin bermasalah.
+- Jika `orders.connected:true` tetapi `email.configured:false`: pesanan tetap tersimpan, tetapi email belum dikonfigurasi.

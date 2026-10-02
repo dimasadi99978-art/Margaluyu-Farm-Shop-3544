@@ -255,9 +255,9 @@ export default async function handler(req, res) {
 
       // Notifikasi email ke admin. Ditunggu (await) supaya benar-benar terkirim sebelum fungsi
       // server berhenti, tetapi kegagalan kirim email TIDAK menggagalkan pesanan yang sudah tersimpan.
-      await sendNotification(buildStrukEmail(saved)).catch(() => {});
+      const emailResult = await sendNotification(buildStrukEmail(saved)).catch((error) => ({ sent: false, reason: 'exception', detail: error?.message || String(error) }));
 
-      return json(res, 200, { success: true, order: saved });
+      return json(res, 200, { success: true, order: saved, notification: { sent: Boolean(emailResult?.sent), reason: emailResult?.reason || null } });
     }
 
     const idx = current.findIndex(o => normalizeId(o.orderId) === normalizeId(order.orderId));

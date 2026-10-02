@@ -22,11 +22,16 @@ btn.onclick=async()=>{
  btn.disabled=true; el.innerHTML='Memeriksa API Vercel...';
  const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),15000);
  try{
+   const ping=new URL('/api/ping',location.origin).href;
+   const pingRes=await fetch(ping,{method:'GET',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
+   const pingText=await pingRes.text();
+   let pingJson={}; try{pingJson=pingText?JSON.parse(pingText):{}}catch(_){}
+   if(!pingRes.ok || !pingJson.success){ throw new Error('Endpoint /api/ping gagal: HTTP '+pingRes.status+' '+pingText.slice(0,300)); }
    const api=new URL('/api/health',location.origin).href;
    const r=await fetch(api,{method:'GET',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
    const t=await r.text(); let j; try{j=t?JSON.parse(t):{}}catch(_){j={raw:t};}
-   if(r.ok){el.innerHTML='<h3 class="ok">✓ API Vercel + penyimpanan terhubung</h3><pre>'+esc(JSON.stringify(j,null,2))+'</pre>';}
-   else{el.innerHTML='<h3 class="bad">✗ API Vercel ditemukan, tetapi mengembalikan error</h3><pre>HTTP '+r.status+'\n'+esc(JSON.stringify(j,null,2))+'</pre>';}
+   if(r.ok && j.success && j.orders && j.orders.connected){el.innerHTML='<h3 class="ok">✓ Server, JSONBin, dan konfigurasi dasar aktif</h3><pre>'+esc(JSON.stringify(j,null,2))+'</pre>';} else if(r.ok){el.innerHTML='<h3 class="warn">⚠ API Vercel aktif, tetapi konfigurasi penyimpanan belum lengkap</h3><pre>'+esc(JSON.stringify(j,null,2))+'</pre>';} 
+   else{el.innerHTML='<h3 class="bad">✗ API Vercel mengembalikan error</h3><pre>HTTP '+r.status+'\n'+esc(JSON.stringify(j,null,2))+'</pre>';}
  }catch(e){
    const msg=e.name==='AbortError'?'Timeout 15 detik: endpoint API tidak merespons.':e.message;
    el.innerHTML='<h3 class="bad">✗ Endpoint API tidak dapat diakses</h3><pre>'+esc(msg)+'\n\nKemungkinan: /api tidak ikut ter-deploy, Root Directory Vercel salah, deployment gagal, atau domain yang dibuka bukan deployment yang berisi folder api/.</pre>';
