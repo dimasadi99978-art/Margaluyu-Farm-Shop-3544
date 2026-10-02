@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Analitik - Margaluyu Farm</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="vendor/chart.umd.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f9f2;
+            color: #2c3e2f;
+            margin: 0;
+            padding: 30px 16px 80px;
+        }
+
+        .wrap { max-width: 1080px; margin: 0 auto; }
+
+        h1 { color: #0a3d38; font-size: 1.6em; margin-bottom: 4px; }
+        h2 { color: #0a3d38; font-size: 1.15em; margin: 0 0 14px; }
+        .sub { color: #6b6d64; font-size: 0.92em; margin-bottom: 22px; }
+
+        .top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .top-row a { color: #0a3d38; font-size: 0.9em; text-decoration: underline; }
+
+        .login-box {
+            max-width: 360px; margin: 80px auto; background: #fff; padding: 28px;
+            border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); text-align: center;
+        }
+        .login-box input {
+            width: 100%; padding: 12px; border: 1px solid #cfe3d3; border-radius: 8px;
+            margin: 14px 0; box-sizing: border-box;
+        }
+        .login-box button, .btn {
+            background: #0a3d38; color: #fff; border: none; padding: 11px 20px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95em;
+        }
+        .login-box button:hover, .btn:hover { background: #052623; }
+        .btn--outline { background: #fff; color: #0a3d38; border: 1.5px solid #0a3d38; }
+        .btn--outline:hover { background: #f0f9f2; }
+        .error-text { color: #b3261e; font-size: 0.9em; min-height: 1.2em; }
+
+        #panel { display: none; }
+
+        .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 30px; }
+        .stat-card { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(0,0,0,.05); }
+        .stat-card .num { font-size: 1.7em; font-weight: 700; color: #0a3d38; line-height: 1.2; }
+        .stat-card .label { font-size: 0.82em; color: #6b6d64; margin-top: 2px; }
+
+        .card { background: #fff; border-radius: 14px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(0,0,0,.05); margin-bottom: 24px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .chart-box { position: relative; height: 260px; }
+        .chart-box.small { height: 220px; }
+
+        table.freq { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+        table.freq th, table.freq td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #eef2ee; }
+        table.freq th { color: #6b6d64; font-weight: 600; font-size: 0.85em; }
+        table.freq .bar-bg { background: #eef6ef; border-radius: 4px; overflow: hidden; height: 8px; margin-top: 4px; }
+        table.freq .bar-fill { background: #3f7d52; height: 100%; }
+
+        .note {
+            background: #fff8e1; border: 1px solid #f0d878; border-radius: 10px;
+            padding: 12px 16px; font-size: 0.86em; color: #6b5300; margin-bottom: 24px;
+        }
+        .empty-msg { color: #6b6d64; font-size: 0.92em; padding: 20px 0; text-align: center; }
+        .loading-msg { color: #6b6d64; font-size: 0.92em; padding: 30px 0; text-align: center; }
+
+        select { padding: 8px 10px; border: 1px solid #cfe3d3; border-radius: 8px; background: #fff; font-size: 0.9em; }
+        .card-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+        .card-head h2 { margin: 0; }
+        .card-head .ctrl { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-danger { background: #b3261e; }
+        .btn-danger:hover { background: #8a1f17; }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        details.manage { background: #fff; border-radius: 14px; padding: 16px 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(0,0,0,.05); margin-bottom: 24px; }
+        details.manage summary { cursor: pointer; font-weight: 700; color: #0a3d38; }
+        .testi-list { max-height: 320px; overflow: auto; margin: 12px 0; border: 1px solid #eef2ee; border-radius: 8px; }
+        .testi-row { display: flex; gap: 10px; padding: 8px 12px; border-bottom: 1px solid #eef2ee; font-size: 0.88em; align-items: flex-start; }
+        .testi-row:last-child { border-bottom: 0; }
+        .testi-row .meta { color: #6b6d64; font-size: 0.9em; }
+    </style>
+</head>
+
+
+<body>
+    <div class="wrap">
+        <div id="loginBox" class="login-box">
+            <h1 style="font-size:1.3em">Admin Analitik</h1>
+            <p style="color:#6b6d64;font-size:0.9em">Masukkan kata sandi admin untuk melihat data.</p>
+            <input type="password" id="passwordInput" placeholder="Kata sandi">
+            <div class="error-text" id="loginError"></div>
+            <button id="loginBtn">Masuk</button>
+        </div>
+
+        <div id="panel">
+            <div class="top-row">
+                <div>
+                    <h1>Analitik Pesanan &amp; Rating</h1>
+                    <div class="sub">Hanya menghitung data asli pelanggan. Klik Muat Ulang setelah ada pesanan atau rating baru.</div>
+                </div>
+                <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+                    <button class="btn btn--outline" id="reloadBtn">&#8635; Muat Ulang</button>
+                    <a href="admin-pesanan.html">&larr; Admin Pesanan</a>
+                </div>
+            </div>
+
+            <div id="dataBanner" class="note" style="display:none;background:#fdf0ee;border-color:#f0c5c0;color:#8a1f17"></div>
+            <div id="loadMsg" class="loading-msg">Memuat data...</div>
+            <div id="content" style="display:none">
+
+                <div class="stat-cards" id="statCards"></div>
+                <div id="totalWarn" class="note" style="display:none;margin-top:-14px"></div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Grafik Pesanan</h2>
+                        <div class="ctrl">
+                            <select id="periodSel" aria-label="Periode">
+                                <option value="day">Harian (30 hari terakhir)</option>
+                                <option value="month">Bulanan (12 bulan terakhir)</option>
+                                <option value="year">Tahunan (semua)</option>
+                            </select>
+                            <select id="metricSel" aria-label="Ukuran">
+                                <option value="count">Jumlah pesanan</option>
+                                <option value="sum">Pendapatan (Rp)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-box"><canvas id="chartDaily"></canvas></div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h2>Status Pesanan</h2>
+                        <div class="chart-box small"><canvas id="chartStatus"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h2>Metode Pembayaran</h2>
+                        <div class="chart-box small"><canvas id="chartPayment"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Distribusi Rating</h2>
+                    <div class="chart-box small"><canvas id="chartRating"></canvas></div>
+                </div>
+
+                <details class="manage">
+                    <summary>Kelola testimoni (hapus yang dipilih)</summary>
+                    <p style="color:#6b6d64;font-size:0.88em;margin:10px 0 0">Testimoni yang dihapus juga hilang dari halaman Testimoni dan dari perhitungan rating di sini.</p>
+                    <div class="testi-list" id="testiList"></div>
+                    <button class="btn btn-danger" id="deleteTesti" disabled>Hapus terpilih</button>
+                </details>
+
+                <div class="card">
+                    <h2>Unduh Data</h2>
+                    <p style="color:#6b6d64;font-size:0.9em;margin-bottom:14px">
+                        Excel dilengkapi lembar ringkasan dan grafik. Untuk SPSS, tersedia paket data CSV + syntax SPSS yang bisa langsung diimpor.
+                    </p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <button class="btn" id="downloadXlsx">Unduh Excel + Grafik (.xlsx)</button>
+                        <button class="btn btn--outline" id="downloadSpss">Unduh Paket SPSS Siap Analisis (.zip)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="orders-config.js"></script>
+    <script src="orders-store.js"></script>
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            var charts = {};
+            var STATUS_STEPS = (typeof OrdersStore !== 'undefined' && OrdersStore.STATUS_STEPS) || ['Dikonfirmasi', 'Dikemas', 'Dikirim', 'Selesai'];
+            var STATUS_COLORS = { 'Dikonfirmasi': '#e6a23c', 'Dikemas': '#3f7d52', 'Dikirim': '#2b6cb0', 'Selesai': '#0a3d38' };
+            var BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            var currentOrders = [], currentTesti = [], testiOnline = false;
+
+            function $(id) { return document.getElementById(id); }
+            function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+            function rp(n) { return 'Rp ' + Math.round(n).toLocaleString('id-ID'); }
+            function pad(n) { return String(n).padStart(2, '0'); }
+
+            // ---------- Login ----------
+            function enterPanel() {
+                $('loginBox').style.display = 'none';
+                $('panel').style.display = 'block';
+                loadAll();
+            }
+            $('loginBtn').addEventListener('click', async function () {
+                var btn = this, errEl = $('loginError');
+                var val = $('passwordInput').value;
+                errEl.textContent = '';
+                btn.disabled = true;
+                try {
+                    var check = await OrdersStore.verifyAdmin(val);
+                    if (check.ok && check.protectedByServer) return enterPanel();
+                    if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
+                        OrdersStore.setAdminKey('');
+                        errEl.textContent = 'Kata sandi salah.';
+                        return;
+                    }
+                    if (val === ADMIN_PASSWORD) return enterPanel();
+                    OrdersStore.setAdminKey('');
+                    errEl.textContent = 'Kata sandi salah.';
+                } finally { btn.disabled = false; }
+            });
+            $('passwordInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('loginBtn').click(); });
+            $('reloadBtn').addEventListener('click', function () { loadAll(); });
+
+            // ---------- Ambil data ----------
+            async function fetchAllOrders() {
+                try {
+                    var r = await OrdersStore.load();
+                    return { data: Array.isArray(r.data) ? r.data : [], online: r.online === true, error: r.error || '' };
+                } catch (e) { return { data: [], online: false, error: e && e.message ? e.message : String(e) }; }
+            }
+
+            // Hanya testimoni ASLI dari pelanggan (testimoni contoh bawaan di testimoni-static.js tidak dihitung).
+            function normalizeTesti(item) {
+                if (!item || typeof item !== 'object') return null;
+                var komentar = String(item.komentar == null ? '' : item.komentar).trim();
+                var rating = Math.max(0, Math.min(5, Math.round(Number(item.rating) || 0)));
+                if (!komentar && !rating) return null;
+                return {
+                    key: TestimoniStore.keyOf(item),
+                    nama: String(item.nama || 'Pelanggan').trim(),
+                    rating: rating, komentar: komentar,
+                    tanggal: String(item.tanggal || '').trim()
+                };
+            }
+            async function fetchAllTestimoni() {
+                try {
+                    var r = await TestimoniStore.load();
+                    return { data: (Array.isArray(r.data) ? r.data : []).map(normalizeTesti).filter(Boolean), online: r.online === true, error: r.error || '' };
+                } catch (e) { return { data: [], online: false, error: e && e.message ? e.message : String(e) }; }
+            }
+
+            // ---------- Tanggal pesanan ----------
+            // Nomor pesanan berformat MF-YYMMDD-xxxx, jadi tanggal asli pemesanan bisa dibaca dari sana
+            // (updatedAt berubah setiap status diubah, tidak cocok untuk grafik per hari).
+            function orderDate(o) {
+                var m = String(o && o.orderId || '').match(/^MF-(\d{2})(\d{2})(\d{2})-/i);
+                if (m) return new Date(2000 + Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+                var bulan = { januari: 0, februari: 1, maret: 2, april: 3, mei: 4, juni: 5, juli: 6, agustus: 7, september: 8, oktober: 9, november: 10, desember: 11 };
+                var t = String(o && o.tanggal || '').toLowerCase().match(/(\d{1,2})\s+([a-z]+)\s+(\d{4})/);
+                if (t && bulan[t[2]] !== undefined) return new Date(Number(t[3]), bulan[t[2]], Number(t[1]));
+                var p = Date.parse(o && (o.updatedAt || o.tanggal));
+                return isNaN(p) ? null : new Date(p);
+            }
+            function isoDate(d) { return d ? d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) : ''; }
+
+            // ---------- Kartu ringkasan (termasuk rata-rata) ----------
+            function renderStatCards(orders, testi) {
+                var wrap = $('statCards');
+                wrap.textContent = '';
+                var total = orders.reduce(function (s, o) { return s + (Number(o.totalHarga) || 0); }, 0);
+                var avgOrder = orders.length ? total / orders.length : 0;
+
+                var dates = orders.map(orderDate).filter(Boolean).map(function (d) { return d.getTime(); });
+                var perDay = 0;
+                if (dates.length) {
+                    var days = Math.max(1, Math.round((Date.now() - Math.min.apply(null, dates)) / 86400000) + 1);
+                    perDay = orders.length / days;
+                }
+                var rated = testi.filter(function (t) { return t.rating > 0; });
+                var avgRating = rated.length ? rated.reduce(function (s, t) { return s + t.rating; }, 0) / rated.length : 0;
+
+                var botol = orders.reduce(function (s, o) { return s + (Number(o.jumlah) || 0); }, 0);
+                var tanpaTotal = orders.filter(function (o) { return !(Number(o.totalHarga) > 0); }).length;
+                var warn = $('totalWarn');
+                if (warn) {
+                    warn.textContent = tanpaTotal
+                        ? tanpaTotal + ' pesanan tidak punya nilai total (dihitung Rp 0), jadi pendapatan bisa lebih kecil dari kenyataan. Cek kolom Total_Rp di file Excel.'
+                        : '';
+                    warn.style.display = tanpaTotal ? 'block' : 'none';
+                }
+                [
+                    ['Total Pesanan', orders.length],
+                    ['Total Botol Terjual', botol],
+                    ['Total Pendapatan', rp(total)],
+                    ['Rata-rata Nilai per Pesanan', orders.length ? rp(avgOrder) : '-'],
+                    ['Rata-rata Pesanan per Hari', orders.length ? perDay.toFixed(2).replace('.', ',') : '-'],
+                    ['Jumlah Rating', rated.length],
+                    ['Rata-rata Rating', rated.length ? avgRating.toFixed(2).replace('.', ',') + ' / 5' : '-']
+                ].forEach(function (c) {
+                    var card = el('div', 'stat-card');
+                    card.appendChild(el('div', 'num', String(c[1])));
+                    card.appendChild(el('div', 'label', c[0]));
+                    wrap.appendChild(card);
+                });
+            }
+
+            // ---------- Grafik ----------
+            function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+            function showEmpty(canvasId, key, isEmpty, text) {
+                var canvas = $(canvasId);
+                if (!canvas || !canvas.parentElement) return isEmpty;
+                var note = canvas.parentElement.querySelector('.empty-msg');
+                if (isEmpty) {
+                    destroyChart(key);
+                    canvas.style.display = 'none';
+                    if (!note) canvas.parentElement.appendChild(el('div', 'empty-msg', text));
+                } else {
+                    canvas.style.display = '';
+                    if (note) note.remove();
+                }
+                return isEmpty;
+            }
+            function chartMissing() { return typeof Chart === 'undefined'; }
+
+            var doughnutOpts = { maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } };
+
+            function renderStatusChart(orders) {
+                if (chartMissing() || showEmpty('chartStatus', 'status', !orders.length, 'Belum ada data pesanan.')) return;
+                var counts = {}; STATUS_STEPS.forEach(function (s) { counts[s] = 0; });
+                orders.forEach(function (o) { counts[STATUS_STEPS.indexOf(o.status) >= 0 ? o.status : STATUS_STEPS[0]]++; });
+                destroyChart('status');
+                charts.status = new Chart($('chartStatus'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: STATUS_STEPS.map(function (s) { return s + ' (' + counts[s] + ')'; }),
+                        datasets: [{ data: STATUS_STEPS.map(function (s) { return counts[s]; }), backgroundColor: STATUS_STEPS.map(function (s) { return STATUS_COLORS[s]; }) }]
+                    },
+                    options: doughnutOpts
+                });
+            }
+
+            function renderPaymentChart(orders) {
+                if (chartMissing() || showEmpty('chartPayment', 'payment', !orders.length, 'Belum ada data pesanan.')) return;
+                var counts = {};
+                orders.forEach(function (o) { var m = o.metodePembayaran || 'Lainnya'; counts[m] = (counts[m] || 0) + 1; });
+                var labels = Object.keys(counts);
+                destroyChart('payment');
+                charts.payment = new Chart($('chartPayment'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels.map(function (l) { return l + ' (' + counts[l] + ')'; }),
+                        datasets: [{ data: labels.map(function (l) { return counts[l]; }), backgroundColor: ['#3f7d52', '#e6a23c', '#2b6cb0', '#a0522d'] }]
+                    },
+                    options: doughnutOpts
+                });
+            }
+
+            // Kelompokkan per hari / bulan / tahun. Jumlah batang selalu kecil (30 / 12 / jumlah tahun),
+            // jadi grafik tetap muat walau data sudah bertahun-tahun.
+            function buildSeries(orders, period, metric) {
+                var now = new Date();
+                var buckets = [], index = {};
+                function add(key, label) { index[key] = buckets.length; buckets.push({ key: key, label: label, v: 0 }); }
+                var y, m, i, d;
+
+                if (period === 'day') {
+                    for (i = 29; i >= 0; i--) {
+                        d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+                        add(isoDate(d), pad(d.getDate()) + '/' + pad(d.getMonth() + 1));
+                    }
+                } else if (period === 'month') {
+                    for (i = 11; i >= 0; i--) {
+                        d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                        add(d.getFullYear() + '-' + pad(d.getMonth() + 1), BULAN[d.getMonth()] + ' ' + String(d.getFullYear()).slice(2));
+                    }
+                } else {
+                    var years = orders.map(orderDate).filter(Boolean).map(function (x) { return x.getFullYear(); });
+                    var first = years.length ? Math.min.apply(null, years) : now.getFullYear();
+                    for (y = first; y <= now.getFullYear(); y++) add(String(y), String(y));
+                }
+
+                orders.forEach(function (o) {
+                    var dt = orderDate(o);
+                    if (!dt) return;
+                    var key = period === 'day' ? isoDate(dt) : period === 'month' ? dt.getFullYear() + '-' + pad(dt.getMonth() + 1) : String(dt.getFullYear());
+                    if (index[key] === undefined) return;
+                    buckets[index[key]].v += metric === 'sum' ? (Number(o.totalHarga) || 0) : 1;
+                });
+                return buckets;
+            }
+
+            function renderDailyChart(orders) {
+                if (chartMissing() || showEmpty('chartDaily', 'daily', !orders.length, 'Belum ada data pesanan.')) return;
+                var period = $('periodSel').value, metric = $('metricSel').value;
+                var series = buildSeries(orders, period, metric);
+                destroyChart('daily');
+                charts.daily = new Chart($('chartDaily'), {
+                    type: 'bar',
+                    data: { labels: series.map(function (b) { return b.label; }), datasets: [{ label: metric === 'sum' ? 'Pendapatan' : 'Jumlah pesanan', data: series.map(function (b) { return b.v; }), backgroundColor: '#0a3d38' }] },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0, callback: function (v) { return metric === 'sum' ? Number(v).toLocaleString('id-ID') : v; } } }, x: { ticks: { autoSkip: true, maxRotation: 0 } } },
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return metric === 'sum' ? rp(c.parsed.y) : c.parsed.y + ' pesanan'; } } } }
+                    }
+                });
+            }
+            $('periodSel').addEventListener('change', function () { renderDailyChart(currentOrders); });
+            $('metricSel').addEventListener('change', function () { renderDailyChart(currentOrders); });
+
+            function renderRatingChart(testi) {
+                var rated = testi.filter(function (t) { return t.rating > 0; });
+                if (chartMissing() || showEmpty('chartRating', 'rating', !rated.length, 'Belum ada rating masuk.')) return;
+                var counts = [0, 0, 0, 0, 0];
+                rated.forEach(function (t) { counts[t.rating - 1]++; });
+                destroyChart('rating');
+                charts.rating = new Chart($('chartRating'), {
+                    type: 'bar',
+                    data: { labels: ['1 bintang', '2 bintang', '3 bintang', '4 bintang', '5 bintang'], datasets: [{ label: 'Jumlah', data: counts, backgroundColor: '#e6a23c' }] },
+                    options: { indexAxis: 'y', maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false } } }
+                });
+            }
+
+            // ---------- Kelola testimoni ----------
+            var pickedTesti = {};
+            function renderTestiManager() {
+                var box = $('testiList');
+                box.textContent = '';
+                pickedTesti = {};
+                $('deleteTesti').disabled = true;
+                if (!currentTesti.length) { box.appendChild(el('div', 'empty-msg', 'Belum ada testimoni dari pelanggan.')); return; }
+                currentTesti.forEach(function (t) {
+                    var row = el('label', 'testi-row');
+                    var cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.addEventListener('change', function () {
+                        if (cb.checked) pickedTesti[t.key] = true; else delete pickedTesti[t.key];
+                        var n = Object.keys(pickedTesti).length;
+                        $('deleteTesti').disabled = n === 0;
+                        $('deleteTesti').textContent = n ? 'Hapus terpilih (' + n + ')' : 'Hapus terpilih';
+                    });
+                    var txt = el('div');
+                    txt.appendChild(el('div', null, (t.rating ? '\u2605'.repeat(t.rating) + ' ' : '') + t.nama));
+                    txt.appendChild(el('div', 'meta', t.tanggal + (t.komentar ? ' \u2014 ' + t.komentar.slice(0, 140) : '')));
+                    row.appendChild(cb); row.appendChild(txt);
+                    box.appendChild(row);
+                });
+            }
+            $('deleteTesti').addEventListener('click', async function () {
+                var keys = Object.keys(pickedTesti);
+                if (!keys.length) return;
+                if (!testiOnline) { alert('Data testimoni belum terhubung ke server, hapus dibatalkan.'); return; }
+                if (!confirm('Hapus ' + keys.length + ' testimoni? Tidak bisa dibatalkan.')) return;
+                this.disabled = true;
+                var r = await TestimoniStore.removeMany(keys);
+                if (!r.success) alert('Gagal menghapus: ' + r.error);
+                loadAll();
+            });
+
+            // ---------- Unduh Excel (.xlsx) tanpa pustaka luar ----------
+            var CRC_TABLE = (function () {
+                var t = [], c, n, k;
+                for (n = 0; n < 256; n++) { c = n; for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+                return t;
+            })();
+            function crc32(bytes) { var c = 0xFFFFFFFF; for (var i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+            var enc = new TextEncoder();
+            function u16(n) { return [n & 255, (n >>> 8) & 255]; }
+            function u32(n) { return [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255]; }
+
+            // ZIP tanpa kompresi (mode "store"), cukup untuk file .xlsx.
+            function zipStore(files) {
+                var parts = [], central = [], offset = 0;
+                files.forEach(function (f) {
+                    var name = enc.encode(f.name), data = enc.encode(f.content), crc = crc32(data);
+                    var header = [].concat(u32(0x04034b50), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(crc), u32(data.length), u32(data.length), u16(name.length), u16(0));
+                    parts.push(new Uint8Array(header), name, data);
+                    central.push({ name: name, crc: crc, size: data.length, offset: offset });
+                    offset += header.length + name.length + data.length;
+                });
+                var cdSize = 0;
+                central.forEach(function (c) {
+                    var h = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0), u16(0), u16(0x21), u32(c.crc), u32(c.size), u32(c.size), u16(c.name.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(c.offset));
+                    parts.push(new Uint8Array(h), c.name);
+                    cdSize += h.length + c.name.length;
+                });
+                parts.push(new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0), u16(central.length), u16(central.length), u32(cdSize), u32(offset), u16(0))));
+                return new Blob(parts, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            }
+            function xmlEsc(v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, ''); }
+            function colName(i) { var s = ''; i++; while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+            function sheetXml(rows) {
+                var out = ['<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'];
+                rows.forEach(function (row, r) {
+                    out.push('<row r="' + (r + 1) + '">');
+                    row.forEach(function (v, c) {
+                        var ref = colName(c) + (r + 1);
+                        if (v === '' || v == null) return;
+                        if (typeof v === 'number' && isFinite(v)) out.push('<c r="' + ref + '"><v>' + v + '</v></c>');
+                        else out.push('<c r="' + ref + '" t="inlineStr"><is><t xml:space="preserve">' + xmlEsc(v) + '</t></is></c>');
+                    });
+                    out.push('</row>');
+                });
+                out.push('</sheetData></worksheet>');
+                return out.join('');
+            }
+            function buildXlsx(sheets, chartsSpec) {
+                // Membuat workbook XLSX sederhana lengkap dengan lembar ringkasan + grafik Excel native.
+                var files = [
+                    { name: '[Content_Types].xml', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' + sheets.map(function (_, i) { return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'; }).join('') + (chartsSpec && chartsSpec.length ? '<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>' + chartsSpec.map(function (_, i) { return '<Override PartName="/xl/charts/chart' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>'; }).join('') : '') + '</Types>' },
+                    { name: '_rels/.rels', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+                    { name: 'xl/workbook.xml', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map(function (s, i) { return '<sheet name="' + xmlEsc(s.name) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join('') + '</sheets></workbook>' },
+                    { name: 'xl/_rels/workbook.xml.rels', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map(function (_, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>'; }).join('') + '</Relationships>' }
+                ];
+                sheets.forEach(function (s, i) {
+                    var xml = sheetXml(s.rows);
+                    if (chartsSpec && chartsSpec.length && s.name === 'Ringkasan') xml = xml.replace('</sheetData></worksheet>', '</sheetData><drawing xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId1"/></worksheet>');
+                    files.push({ name: 'xl/worksheets/sheet' + (i + 1) + '.xml', content: xml });
+                    if (chartsSpec && chartsSpec.length && s.name === 'Ringkasan') {
+                        files.push({ name: 'xl/worksheets/_rels/sheet' + (i + 1) + '.xml.rels', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing1.xml"/></Relationships>' });
+                    }
+                });
+                if (chartsSpec && chartsSpec.length) {
+                    var anchors = [];
+                    chartsSpec.forEach(function (c, i) {
+                        var col = c.col || 0, row = c.row || 1;
+                        anchors.push('<xdr:twoCellAnchor><xdr:from><xdr:col>' + col + '</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>' + row + '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>' + (col + (c.widthCols || 8)) + '</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>' + (row + (c.heightRows || 14)) + '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:graphicFrame macro=""><xdr:nvGraphicFramePr><xdr:cNvPr id="' + (2 + i) + '" name="Chart ' + (i + 1) + '"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart"><c:chart xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId' + (i + 1) + '"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor>');
+                    });
+                    files.push({ name: 'xl/drawings/drawing1.xml', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">' + anchors.join('') + '</xdr:wsDr>' });
+                    files.push({ name: 'xl/drawings/_rels/drawing1.xml.rels', content: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + chartsSpec.map(function (_, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" Target="../charts/chart' + (i + 1) + '.xml"/>'; }).join('') + '</Relationships>' });
+                    chartsSpec.forEach(function (c, i) { files.push({ name: 'xl/charts/chart' + (i + 1) + '.xml', content: chartXml(c) }); });
+                }
+                return zipStore(files);
+            }
+
+            function chartXml(c) {
+                var title = xmlEsc(c.title || 'Grafik');
+                var sheet = xmlEsc(c.sheet || 'Ringkasan');
+                var cat = c.catRange, val = c.valRange;
+                var serName = xmlEsc(c.seriesName || 'Jumlah');
+                var type = c.type === 'pie' ? 'pieChart' : 'barChart';
+                var body;
+                if (type === 'pieChart') {
+                    body = '<c:pieChart><c:varyColors val="1"/><c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>' + serName + '</c:v></c:tx><c:cat><c:strRef><c:f>' + sheet + '!$' + cat.col + '$' + cat.start + ':$' + cat.col + '$' + cat.end + '</c:f></c:strRef></c:cat><c:val><c:numRef><c:f>' + sheet + '!$' + val.col + '$' + val.start + ':$' + val.col + '$' + val.end + '</c:f></c:numRef></c:val></c:ser></c:pieChart>';
+                } else {
+                    body = '<c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="0"/><c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>' + serName + '</c:v></c:tx><c:cat><c:strRef><c:f>' + sheet + '!$' + cat.col + '$' + cat.start + ':$' + cat.col + '$' + cat.end + '</c:f></c:strRef></c:cat><c:val><c:numRef><c:f>' + sheet + '!$' + val.col + '$' + val.start + ':$' + val.col + '$' + val.end + '</c:f></c:numRef></c:val></c:ser></c:barChart>';
+                }
+                return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="id-ID" sz="1400"/><a:t>' + title + '</a:t></a:r></a:p></c:rich></c:tx></c:title><c:plotArea><c:layout/>' + body + '<c:catAx><c:axId val="10000001"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="b"/><c:tickLblPos val="nextTo"/><c:crossAx val="10000002"/><c:crosses val="autoZero"/><c:auto val="1"/><c:lblAlgn val="ctr"/><c:lblOffset val="100"/></c:catAx><c:valAx><c:axId val="10000002"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="l"/><c:majorGridlines/><c:numFmt formatCode="#,##0" sourceLinked="1"/><c:tickLblPos val="nextTo"/><c:crossAx val="10000001"/><c:crosses val="autoZero"/><c:crossBetween val="midCat"/></c:valAx></c:plotArea><c:plotVisOnly val="1"/><c:dispBlanksAs val="gap"/></c:chart></c:chartSpace>';
+            }
+            // Nama kolom tanpa spasi supaya langsung menjadi nama variabel yang valid di SPSS.
+            function buildExportRows() {
+                var orderRows = [['Nomor_Pesanan', 'Tanggal', 'Nama', 'No_HP', 'Alamat', 'Produk', 'Jumlah', 'Total_Rp', 'Pembayaran', 'Status', 'Status_Kode']];
+                currentOrders.forEach(function (o) {
+                    var st = STATUS_STEPS.indexOf(o.status);
+                    orderRows.push([o.orderId, isoDate(orderDate(o)), o.nama, o.telepon, o.alamat, o.produk, Number(o.jumlah) || '', Number(o.totalHarga) || '', o.metodePembayaran, o.status, st >= 0 ? st + 1 : '']);
+                });
+                var ratingRows = [['Nama', 'Rating', 'Komentar', 'Tanggal']];
+                currentTesti.forEach(function (t) { ratingRows.push([t.nama, t.rating || '', t.komentar, t.tanggal]); });
+                return { orderRows: orderRows, ratingRows: ratingRows };
+            }
+
+            function buildSummaryRows() {
+                var rows = [['Ringkasan Analitik Margaluyu Farm', '', '', ''], ['Metrik', 'Nilai', '', ''], ['Total Pesanan', currentOrders.length, '', ''], ['Total Pendapatan (Rp)', currentOrders.reduce(function (s, o) { return s + (Number(o.totalHarga) || 0); }, 0), '', ''], ['Rata-rata Rating', currentTesti.filter(function (t) { return Number(t.rating) > 0; }).length ? currentTesti.filter(function (t) { return Number(t.rating) > 0; }).reduce(function (s, t) { return s + Number(t.rating); }, 0) / currentTesti.filter(function (t) { return Number(t.rating) > 0; }).length : 0, '', ''], ['', '', '', ''], ['Bulan', 'Jumlah_Pesanan', 'Pendapatan_Rp', 'Status'], ['Jan',0,0,''], ['Feb',0,0,''], ['Mar',0,0,''], ['Apr',0,0,''], ['Mei',0,0,''], ['Jun',0,0,''], ['Jul',0,0,''], ['Agu',0,0,''], ['Sep',0,0,''], ['Okt',0,0,''], ['Nov',0,0,''], ['Des',0,0,''], ['', '', '', ''], ['Status', 'Jumlah', '', '']];
+                var byMonth = {}, status = {};
+                BULAN.forEach(function (m) { byMonth[m] = { count: 0, sum: 0 }; });
+                currentOrders.forEach(function (o) { var d = orderDate(o); if (!d || isNaN(d.getTime())) return; var m = BULAN[d.getMonth()]; byMonth[m].count++; byMonth[m].sum += Number(o.totalHarga) || 0; status[o.status] = (status[o.status] || 0) + 1; });
+                for (var i = 0; i < BULAN.length; i++) { rows[7 + i][1] = byMonth[BULAN[i]].count; rows[7 + i][2] = byMonth[BULAN[i]].sum; }
+                STATUS_STEPS.forEach(function (st) { rows.push([st, status[st] || 0, '', '']); });
+                return rows;
+            }
+
+            $('downloadXlsx').addEventListener('click', function () {
+                var data = buildExportRows();
+                var summary = buildSummaryRows();
+                var sheets = [{ name: 'Pesanan', rows: data.orderRows }, { name: 'Rating', rows: data.ratingRows }, { name: 'Ringkasan', rows: summary }];
+                var chartsSpec = [
+                    { title: 'Jumlah Pesanan per Bulan', sheet: 'Ringkasan', catRange: { col: 'A', start: 8, end: 19 }, valRange: { col: 'B', start: 8, end: 19 }, seriesName: 'Jumlah Pesanan', col: 5, row: 1, widthCols: 9, heightRows: 14 },
+                    { title: 'Pesanan berdasarkan Status', sheet: 'Ringkasan', catRange: { col: 'A', start: 22, end: 25 }, valRange: { col: 'B', start: 22, end: 25 }, seriesName: 'Jumlah', col: 5, row: 16, widthCols: 9, heightRows: 14 }
+                ];
+                var blob = buildXlsx(sheets, chartsSpec);
+                var url = URL.createObjectURL(blob), a = document.createElement('a');
+                a.href = url; a.download = 'data-margaluyu-farm-' + isoDate(new Date()) + '.xlsx';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            });
+
+            function csvCell(v) { var s = v == null ? '' : String(v); return '"' + s.replace(/"/g, '""') + '"'; }
+            function rowsToCsv(rows) { return '\uFEFF' + rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n'); }
+            $('downloadSpss').addEventListener('click', function () {
+                var data = buildExportRows();
+                var syntax = '* Paket data Margaluyu Farm untuk SPSS.\n* Ekstrak ZIP ini ke satu folder sebelum menjalankan syntax.\n* Syntax ini juga mengatur Variable View: Label, Value Labels, dan Measure.\n\nGET DATA\n /TYPE=TXT\n /FILE="pesanan.csv"\n /ENCODING="UTF8"\n /DELCASE=LINE\n /DELIMITERS=","\n /QUALIFIER="\""\n /ARRANGEMENT=DELIMITED\n /FIRSTCASE=2\n /VARIABLES=\n Nomor_Pesanan A40\n Tanggal A20\n Nama A100\n No_HP A30\n Alamat A200\n Produk A150\n Jumlah F8.0\n Total_Rp F15.0\n Pembayaran A40\n Status A30\n Status_Kode F2.0.\n.\nEXECUTE.\n\nVARIABLE LABELS\n Nomor_Pesanan "Nomor pesanan"\n Tanggal "Tanggal pesanan"\n Nama "Nama pelanggan"\n No_HP "Nomor HP pelanggan"\n Alamat "Alamat pelanggan"\n Produk "Produk yang dipesan"\n Jumlah "Jumlah produk"\n Total_Rp "Total pembayaran (Rupiah)"\n Pembayaran "Metode pembayaran"\n Status "Status pesanan"\n Status_Kode "Kode status pesanan".\nVALUE LABELS Status_Kode 1 "Dikonfirmasi" 2 "Dikemas" 3 "Dikirim" 4 "Selesai".\nVARIABLE LEVEL Nomor_Pesanan Tanggal Nama No_HP Alamat Produk Pembayaran Status (NOMINAL)\n /Jumlah Total_Rp (SCALE)\n /Status_Kode (NOMINAL).\nFORMATS Jumlah (F8.0) Total_Rp (F15.0) Status_Kode (F2.0).\nEXECUTE.\nSAVE OUTFILE="pesanan.sav".\n\nGET DATA\n /TYPE=TXT\n /FILE="rating.csv"\n /ENCODING="UTF8"\n /DELCASE=LINE\n /DELIMITERS=","\n /QUALIFIER="\""\n /ARRANGEMENT=DELIMITED\n /FIRSTCASE=2\n /VARIABLES=\n Nama A100\n Rating F2.0\n Komentar A500\n Tanggal A30.\nEXECUTE.\n\nVARIABLE LABELS\n Nama "Nama pelanggan"\n Rating "Rating pelanggan (1-5)"\n Komentar "Komentar, kritik, atau saran pelanggan"\n Tanggal "Tanggal ulasan".\nVALUE LABELS Rating 1 "Sangat tidak puas" 2 "Tidak puas" 3 "Cukup" 4 "Puas" 5 "Sangat puas".\nVARIABLE LEVEL Nama Komentar Tanggal (NOMINAL)\n /Rating (ORDINAL).\nFORMATS Rating (F2.0).\nEXECUTE.\nSAVE OUTFILE="rating.sav".\n';
+                var variableViewRows = [
+                    ['DATASET', 'Nama Variabel', 'Tipe', 'Width', 'Decimals', 'Label', 'Value Labels', 'Measure', 'Role'],
+                    ['Pesanan', 'Nomor_Pesanan', 'String', '40', '0', 'Nomor pesanan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Tanggal', 'String', '20', '0', 'Tanggal pesanan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Nama', 'String', '100', '0', 'Nama pelanggan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'No_HP', 'String', '30', '0', 'Nomor HP pelanggan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Alamat', 'String', '200', '0', 'Alamat pelanggan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Produk', 'String', '150', '0', 'Produk yang dipesan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Jumlah', 'Numeric', '8', '0', 'Jumlah produk', '', 'Scale', 'Input'],
+                    ['Pesanan', 'Total_Rp', 'Numeric', '15', '0', 'Total pembayaran (Rupiah)', '', 'Scale', 'Input'],
+                    ['Pesanan', 'Pembayaran', 'String', '40', '0', 'Metode pembayaran', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Status', 'String', '30', '0', 'Status pesanan', '', 'Nominal', 'Input'],
+                    ['Pesanan', 'Status_Kode', 'Numeric', '2', '0', 'Kode status pesanan', '1=Dikonfirmasi; 2=Dikemas; 3=Dikirim; 4=Selesai', 'Nominal', 'Input'],
+                    ['Rating', 'Nama', 'String', '100', '0', 'Nama pelanggan', '', 'Nominal', 'Input'],
+                    ['Rating', 'Rating', 'Numeric', '2', '0', 'Rating pelanggan (1-5)', '1=Sangat tidak puas; 2=Tidak puas; 3=Cukup; 4=Puas; 5=Sangat puas', 'Ordinal', 'Input'],
+                    ['Rating', 'Komentar', 'String', '500', '0', 'Komentar, kritik, atau saran pelanggan', '', 'Nominal', 'Input'],
+                    ['Rating', 'Tanggal', 'String', '30', '0', 'Tanggal ulasan', '', 'Nominal', 'Input']
+                ];
+                var grafikSyntax = '* Jalankan SETELAH import-ke-spss.sps selesai.\n* Grafik dibuat dari file .sav yang sudah memiliki Variable View.\n\nGET FILE="pesanan.sav".\nGRAPH /BAR(SIMPLE)=COUNT BY Status_Kode.\nGRAPH /BAR(SIMPLE)=COUNT BY Pembayaran.\nGRAPH /HISTOGRAM(NORMAL)=Total_Rp.\n\nGET FILE="rating.sav".\nGRAPH /BAR(SIMPLE)=COUNT BY Rating.\nGRAPH /HISTOGRAM(NORMAL)=Rating.\n';
+                var files = [
+                    { name: 'pesanan.csv', content: rowsToCsv(data.orderRows) },
+                    { name: 'rating.csv', content: rowsToCsv(data.ratingRows) },
+                    { name: 'variabel-view.csv', content: rowsToCsv(variableViewRows) },
+                    { name: 'import-ke-spss.sps', content: syntax },
+                    { name: 'analisis-grafik.sps', content: grafikSyntax },
+                    { name: 'BUKA-DAN-RUN-SEMUA.sps', content: syntax + '\n\n' + grafikSyntax },
+                    { name: 'README-SPSS.txt', content: 'PAKET SPSS SIAP ANALISIS - MARGALUYU FARM\n\nCara paling mudah:\n1. Ekstrak ZIP ini ke satu folder.\n2. Buka IBM SPSS Statistics.\n3. Pilih File > Open > Syntax, lalu buka BUKA-DAN-RUN-SEMUA.sps.\n4. Klik Run > All.\n5. SPSS otomatis mengimpor data pesanan dan rating, mengisi Variable View, membuat Data View, menyimpan pesanan.sav dan rating.sav, lalu menjalankan grafik.\n\nPENTING: Variable View dan Data View tidak perlu diisi manual. File BUKA-DAN-RUN-SEMUA.sps yang mengerjakannya.\n\nVariable View Pesanan: Nomor_Pesanan, Tanggal, Nama, No_HP, Alamat, Produk, Jumlah, Total_Rp, Pembayaran, Status, Status_Kode.\nVariable View Rating: Nama, Rating, Komentar, Tanggal.\n\nGrafik Pesanan: jumlah berdasarkan status, jumlah berdasarkan metode pembayaran, dan distribusi Total_Rp.\nGrafik Rating: jumlah berdasarkan nilai rating dan distribusi rating.\n\nJika ingin menjalankan tahap terpisah, gunakan import-ke-spss.sps lalu analisis-grafik.sps.\nvariabel-view.csv hanya sebagai tabel referensi Variable View.\n' }
+                ];
+                var blob = zipStore(files), url = URL.createObjectURL(blob), a = document.createElement('a');
+                a.href = url; a.download = 'data-margaluyu-farm-spss-' + isoDate(new Date()) + '.zip';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            });
+
+
+            // ---------- Muat semua ----------
+            function showBanner(orderRes, testiRes) {
+                var box = $('dataBanner'), msgs = [], isFile = location.protocol === 'file:';
+                if (isFile) msgs.push('Halaman dibuka dari file di komputer (file://). Buka lewat alamat online (mis. https://nama-anda.vercel.app).');
+                if (!orderRes.online && !isFile) msgs.push('Data pesanan belum bisa dimuat dari server' + (orderRes.error ? ' (' + orderRes.error + ')' : '') + '.');
+                if (!testiRes.online) msgs.push('Data rating belum bisa dimuat dari server' + (testiRes.error ? ' (' + testiRes.error + ')' : '') + '.');
+                box.textContent = msgs.join(' \u2022 ');
+                box.style.display = msgs.length ? 'block' : 'none';
+            }
+
+            async function loadAll() {
+                $('loadMsg').style.display = 'block';
+                $('content').style.display = 'none';
+                var results = await Promise.all([fetchAllOrders(), fetchAllTestimoni()]);
+                currentOrders = results[0].data.filter(function (o) { return o && o.orderId; });
+                currentTesti = results[1].data;
+                testiOnline = results[1].online;
+
+                $('loadMsg').style.display = 'none';
+                $('content').style.display = 'block';
+                showBanner(results[0], results[1]);
+
+                renderStatCards(currentOrders, currentTesti);
+                renderDailyChart(currentOrders);
+                renderStatusChart(currentOrders);
+                renderPaymentChart(currentOrders);
+                renderRatingChart(currentTesti);
+                renderTestiManager();
+            }
+        })();
+    </script>
+</body>
+
+</html>

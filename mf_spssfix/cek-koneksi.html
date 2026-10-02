@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cek Koneksi Penyimpanan - Margaluyu Farm</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #f0f9f2;
+            color: #2c3e2f;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 30px 18px 80px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #0a3d38;
+            font-size: 1.5em;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        button {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background: #0a3d38;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .log {
+            background: #1e1e1e;
+            color: #e6e6e6;
+            border-radius: 10px;
+            padding: 16px;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-top: 18px;
+            min-height: 80px;
+        }
+
+        .ok {
+            color: #6ee7a0;
+        }
+
+        .fail {
+            color: #ff8a80;
+        }
+
+        .info {
+            color: #8ecaff;
+        }
+
+        .note {
+            background: #fff8e1;
+            border: 1px solid #f0d878;
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.92em;
+            color: #6b5300;
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-responsive.css">
+</head>
+
+<body>
+    <h1>Cek Koneksi Penyimpanan Bersama</h1>
+    <p>Halaman ini menguji apakah website benar-benar bisa membaca dan menyimpan data ke server bersama
+        (jsonbin). Gunakan ini untuk mengetahui penyebab pasti jika pesanan atau testimoni tidak tersimpan.</p>
+
+    <div class="card">
+        <button id="runBtn">Jalankan Pengujian</button>
+        <div class="log" id="log">Klik tombol di atas untuk memulai pengujian...</div>
+    </div>
+
+    <div class="note">
+        <strong>Ingin melihat daftar pesanan yang masuk?</strong> Gunakan halaman
+        <a href="admin-pesanan.html">Admin Pesanan</a> yang dilindungi kata sandi, bukan halaman ini.
+        Data pelanggan (nama, HP, alamat) sengaja tidak ditampilkan di halaman pengujian ini demi menjaga privasi.
+    </div>
+
+    <div class="note">
+        <strong>Cara membaca hasil:</strong> jika semua baris bertanda <strong>BERHASIL</strong>, berarti
+        penyimpanan sudah berfungsi dan pesanan baru akan tersimpan dengan benar. Jika ada yang
+        <strong>GAGAL</strong>, salin seluruh isi kotak hitam di atas dan kirimkan agar bisa ditelusuri
+        penyebabnya. Khusus bagian Pesanan: pengujian ini hanya bisa berhasil setelah website benar-benar
+        online (misalnya sudah dipublikasikan di Vercel) dan ORDERS_MASTER_KEY / ORDERS_BIN_ID sudah diisi
+        di Vercel &rarr; Settings &rarr; Environment Variables. Selama masih dibuka langsung dari file
+        komputer (file://) atau belum dipublikasikan, bagian Pesanan akan selalu menampilkan kegagalan
+        jaringan &mdash; itu wajar, bukan tanda ada yang rusak.
+    </div>
+
+    <script src="testimoni-config.js"></script>
+    <script>
+        const logEl = document.getElementById('log');
+
+        function log(msg, cls) {
+            const span = document.createElement('span');
+            if (cls) span.className = cls;
+            span.textContent = msg + '\n';
+            logEl.appendChild(span);
+        }
+
+        async function testTestimoni() {
+            log('\n=== PENYIMPANAN TESTIMONI ===', 'info');
+            const masterKey = typeof TESTIMONI_MASTER_KEY !== 'undefined' ? TESTIMONI_MASTER_KEY : '';
+            const binId = typeof TESTIMONI_BIN_ID !== 'undefined' ? TESTIMONI_BIN_ID : '';
+
+            if (!masterKey || !binId) {
+                log('GAGAL: Master Key atau Bin ID masih kosong di testimoni-config.js.', 'fail');
+                return;
+            }
+            log('Bin ID: ' + binId, 'info');
+
+            let existing = null;
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    headers: { 'X-Master-Key': masterKey },
+                    cache: 'no-store'
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log('GAGAL BACA (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                    return;
+                }
+                const json = JSON.parse(bodyText);
+                existing = json.record;
+                const bentuk = Array.isArray(existing) ? 'array' : (typeof existing);
+                const jumlah = Array.isArray(existing) ? existing.length
+                    : (existing && Array.isArray(existing.items) ? existing.items.length : '-');
+                log('BERHASIL BACA. Bentuk data: ' + bentuk + ', jumlah entri: ' + jumlah, 'ok');
+            } catch (e) {
+                log('GAGAL BACA (kesalahan jaringan): ' + e.message, 'fail');
+                return;
+            }
+
+            const daftar = Array.isArray(existing) ? existing
+                : (existing && Array.isArray(existing.items) ? existing.items : []);
+
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': masterKey },
+                    body: JSON.stringify({ items: daftar })
+                });
+                const bodyText = await res.text();
+                if (!res.ok) {
+                    log('GAGAL TULIS (status ' + res.status + '): ' + bodyText.slice(0, 300), 'fail');
+                } else {
+                    log('BERHASIL TULIS. Data lama tetap aman, jumlah entri tidak berubah: ' + daftar.length, 'ok');
+                }
+            } catch (e) {
+                log('GAGAL TULIS (kesalahan jaringan): ' + e.message, 'fail');
+            }
+        }
+
+        async function testOrders() {
+            log('\n=== PENYIMPANAN PESANAN (/api/orders) ===', 'info');
+            try {
+                const res = await fetch('/api/orders?orderId=__cek_koneksi__', { cache: 'no-store' });
+                const bodyText = await res.text();
+                let json = {};
+                try { json = bodyText ? JSON.parse(bodyText) : {}; } catch (_) { /* respons bukan JSON */ }
+
+                if (res.ok && json.success) {
+                    log('BERHASIL. /api/orders bisa diakses dan tersambung ke penyimpanan pesanan.', 'ok');
+                } else {
+                    log('GAGAL (status ' + res.status + '): ' + (json.error || bodyText.slice(0, 300)), 'fail');
+                }
+            } catch (e) {
+                log('GAGAL (kesalahan jaringan): ' + e.message, 'fail');
+                log('Ini NORMAL jika halaman ini sedang dibuka langsung dari file komputer (file://), atau website belum dipublikasikan. Coba lagi setelah situs online.', 'info');
+            }
+        }
+
+        document.getElementById('runBtn').addEventListener('click', async function () {
+            this.disabled = true;
+            logEl.innerHTML = '';
+            log('Memulai pengujian...', 'info');
+            await testTestimoni();
+            await testOrders();
+            log('\nPengujian selesai.', 'info');
+            this.disabled = false;
+        });
+    </script>
+</body>
+
+</html>

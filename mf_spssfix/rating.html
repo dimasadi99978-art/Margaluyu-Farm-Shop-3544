@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rating & Saran - Margaluyu Farm</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" href="justify.css">
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
+                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
+                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
+                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li class="active"><a href="rating.html" aria-current="page">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="page-hero page-hero--plain">
+        <div class="container">
+            <h2>Rating &amp; Saran</h2>
+            <p>Bagikan penilaian, kritik, dan saran Anda tentang susu Saanen kami. Masukan Anda akan menjadi bahan
+                evaluasi dan ditampilkan di halaman Testimoni.</p>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div class="form-card">
+                <div class="form-head">
+                    <h3>Ceritakan pengalaman Anda</h3>
+                </div>
+
+                <form id="ratingForm" novalidate>
+                    <div class="field">
+                        <label for="nama">Nama</label>
+                        <input class="input" type="text" id="nama" name="nama" placeholder="Contoh: Fulan"
+                            maxlength="60" autocomplete="name" required>
+                        <div class="error" id="namaError" role="alert"></div>
+                    </div>
+
+                    <fieldset class="field star-field">
+                        <legend>Rating <span class="opt">(opsional)</span></legend>
+                        <div class="star-input" id="starInput">
+                            <input type="radio" id="star5" name="rating" value="5"><label for="star5"
+                                title="5 bintang"><span class="visually-hidden">5 bintang</span><i class="fas fa-star"
+                                    aria-hidden="true"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4"><label for="star4"
+                                title="4 bintang"><span class="visually-hidden">4 bintang</span><i class="fas fa-star"
+                                    aria-hidden="true"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3"><label for="star3"
+                                title="3 bintang"><span class="visually-hidden">3 bintang</span><i class="fas fa-star"
+                                    aria-hidden="true"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2"><label for="star2"
+                                title="2 bintang"><span class="visually-hidden">2 bintang</span><i class="fas fa-star"
+                                    aria-hidden="true"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1"><label for="star1"
+                                title="1 bintang"><span class="visually-hidden">1 bintang</span><i class="fas fa-star"
+                                    aria-hidden="true"></i></label>
+                        </div>
+                        <div class="star-hint" id="starHint" aria-live="polite">Ketuk bintang untuk memberi nilai</div>
+                    </fieldset>
+
+                    <div class="field">
+                        <label for="komentar">Ulasan <span class="opt">(opsional)</span></label>
+                        <textarea class="textarea" id="komentar" name="komentar" maxlength="600"
+                            placeholder="Bagikan pengalaman Anda dengan produk kami"></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="kritiksaran">Kritik &amp; Saran <span class="opt">(opsional)</span></label>
+                        <textarea class="textarea" id="kritiksaran" name="kritiksaran" maxlength="600"
+                            placeholder="Apa yang kurang, atau ide perbaikan untuk kami?"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="foto">Foto <span class="opt">(opsional)</span></label>
+                        <input class="input file-input" type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp">
+                        <div class="help">Tambahkan foto pengalaman Anda. Foto yang dikirim akan ditampilkan bersama ulasan di halaman Testimoni.</div>
+                        <div class="photo-preview" id="photoPreview" hidden>
+                            <button type="button" class="photo-preview-trigger" id="photoPreviewTrigger" aria-label="Pratinjau foto yang dipilih">
+                                <img id="photoPreviewImg" alt="Pratinjau foto ulasan">
+                            </button>
+                            <button type="button" class="link-btn photo-remove" id="photoRemove">Hapus foto</button>
+                        </div>
+                        <div class="error" id="fotoError" role="alert"></div>
+                    </div>
+
+                    <div class="form-msg" id="formMsg" role="status" aria-live="polite" hidden></div>
+                    <div class="rating-success-card" id="ratingSuccessCard" hidden role="status" aria-live="polite">
+                        <div class="rating-success-icon" aria-hidden="true"><i class="fas fa-check"></i></div>
+                        <div>
+                            <strong>Terima kasih!</strong>
+                            <p>Rating dan masukan Anda berhasil diberikan.</p>
+                            <a href="testimoni.html" class="btn btn--sm">Lihat Testimoni</a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" id="submitBtn">Kirim</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <dialog class="photo-lightbox" id="ratingPhotoLightbox" aria-label="Pratinjau foto">
+        <div class="photo-lightbox-shell">
+            <div class="photo-lightbox-toolbar">
+                <button type="button" class="photo-lightbox-btn" id="ratingPhotoZoomOut" aria-label="Perkecil foto">−</button>
+                <span id="ratingPhotoZoomLabel">100%</span>
+                <button type="button" class="photo-lightbox-btn" id="ratingPhotoZoomIn" aria-label="Perbesar foto">+</button>
+                <button type="button" class="photo-lightbox-btn photo-lightbox-reset" id="ratingPhotoZoomReset">Atur ulang</button>
+                <button type="button" class="photo-lightbox-btn photo-lightbox-close" id="ratingPhotoLightboxClose" aria-label="Tutup pratinjau">&times;</button>
+            </div>
+            <div class="photo-lightbox-viewport" id="ratingPhotoViewport">
+                <img id="ratingPhotoLightboxImg" alt="Pratinjau foto">
+            </div>
+            <div class="photo-lightbox-hint">Gunakan roda mouse untuk memperbesar. Foto dapat digeser saat diperbesar.</div>
+        </div>
+    </dialog>
+
+    <script src="rating.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Testimoni Pelanggan - Margaluyu Farm</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" href="justify.css">
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
+                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
+                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
+                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
+                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li class="active"><a href="testimoni.html" aria-current="page">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="page-hero page-hero--plain">
+        <div class="container">
+            <h2>Testimoni Pelanggan</h2>
+            <p>Ulasan dan masukan pelanggan tentang susu kambing Saanen Margaluyu Farm.</p>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div class="testi-summary" id="testiSummary" hidden></div>
+
+            <div class="notice" id="testiNotice" hidden role="status"></div>
+
+            <div class="testi-toolbar">
+                <div>
+                    <h3>Semua Testimoni</h3>
+                    <span class="total" id="testiTotal" aria-live="polite"></span>
+                </div>
+                <a class="btn btn--sm" href="rating.html"><i class="fas fa-star"></i> Berikan Rating</a>
+            </div>
+
+            <div class="testi-grid" id="testiGrid" aria-live="polite"></div>
+            <div id="testiState" hidden></div>
+            <div class="testi-more" id="testiMore" hidden></div>
+        </div>
+    </main>
+
+    <dialog class="testi-dialog" id="testiDialog" aria-label="Testimoni lengkap">
+        <div class="dialog-body" id="testiDialogBody"></div>
+    </dialog>
+    <dialog class="photo-lightbox" id="testiPhotoLightbox" aria-label="Pratinjau foto testimoni">
+        <div class="photo-lightbox-shell">
+            <div class="photo-lightbox-toolbar">
+                <button type="button" class="photo-lightbox-btn" id="testiPhotoZoomOut" aria-label="Perkecil foto">−</button>
+                <span id="testiPhotoZoomLabel">100%</span>
+                <button type="button" class="photo-lightbox-btn" id="testiPhotoZoomIn" aria-label="Perbesar foto">+</button>
+                <button type="button" class="photo-lightbox-btn photo-lightbox-reset" id="testiPhotoZoomReset">Atur ulang</button>
+                <button type="button" class="photo-lightbox-btn photo-lightbox-close" id="testiPhotoLightboxClose" aria-label="Tutup pratinjau">&times;</button>
+            </div>
+            <div class="photo-lightbox-viewport" id="testiPhotoViewport">
+                <img id="testiPhotoLightboxImg" alt="Pratinjau foto testimoni">
+            </div>
+            <div class="photo-lightbox-hint">Gunakan roda mouse untuk memperbesar. Foto dapat digeser saat diperbesar.</div>
+        </div>
+    </dialog>
+
+
+    <!-- footer -->
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <script src="testimoni-static.js"></script>
+    <script src="testimoni.js"></script>
+</body>
+
+</html>

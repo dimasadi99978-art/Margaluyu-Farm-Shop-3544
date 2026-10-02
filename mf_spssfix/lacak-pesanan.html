@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lacak Pesanan - Margaluyu Farm</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="nav-fix.js" defer></script>
+
+    <style>
+        /* Struk pesanan (juga dipakai saat cetak) */
+        .result-box {
+            margin-top: 26px;
+            padding-top: 22px;
+            border-top: 1px solid var(--line);
+        }
+
+        .order-summary {
+            width: 100%;
+            max-width: 72mm;
+            margin: 24px auto 0;
+            background: #fff;
+            border: 1.5px dashed var(--line);
+            border-radius: 8px;
+            padding: 14px 12px;
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: #444;
+        }
+
+        .order-summary .invoice-head {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .order-summary .invoice-brand {
+            font-family: var(--font-head);
+            font-weight: 600;
+            color: var(--forest);
+            font-size: 1.2em;
+        }
+
+        .order-summary .invoice-sub {
+            font-size: 0.85em;
+            color: var(--muted);
+        }
+
+        .order-summary .invoice-id {
+            text-align: center;
+            font-weight: 700;
+            color: var(--forest);
+            margin: 8px 0 12px;
+            letter-spacing: 0.4px;
+            overflow-wrap: anywhere;
+        }
+
+        .order-summary .invoice-row {
+            display: grid;
+            grid-template-columns: minmax(0, 34%) minmax(0, 66%);
+            gap: 6px;
+            padding: 3px 0;
+        }
+
+        .order-summary .invoice-row span {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .order-summary .invoice-row span:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .order-summary .invoice-total {
+            font-size: 1.08em;
+        }
+
+        .order-summary .invoice-total span:last-child {
+            color: var(--forest);
+            font-weight: 700;
+        }
+
+        .order-summary hr {
+            border: none;
+            border-top: 1px dashed #d8d3c6;
+            margin: 10px 0;
+        }
+
+        .print-row {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .track-mode-row {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .track-mode-link {
+            border: 0;
+            background: transparent;
+            color: var(--forest);
+            text-decoration: underline;
+            cursor: pointer;
+            font: inherit;
+            padding: 4px 8px;
+        }
+
+        .track-mode-link:hover {
+            opacity: 0.78;
+        }
+
+        .order-pick .pick-meta {
+            display: block;
+            margin-top: 4px;
+        }
+
+        .privacy-confirm {
+            margin: 16px 0 0;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fffdf7;
+        }
+
+        .privacy-confirm label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: var(--forest);
+        }
+
+        .privacy-confirm .input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        @media print {
+            @page {
+                size: 80mm auto;
+                margin: 0;
+            }
+
+            html,
+            body {
+                width: 80mm;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .order-summary,
+            .order-summary * {
+                visibility: visible;
+            }
+
+            .order-summary {
+                position: absolute;
+                top: 0;
+                left: 4mm;
+                width: 72mm;
+                max-width: 72mm;
+                margin: 0;
+                padding: 8px 6px;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                font-size: 11px;
+            }
+
+            .order-summary .invoice-brand {
+                font-size: 14px;
+            }
+
+            .order-summary .invoice-sub {
+                font-size: 10px;
+            }
+
+            .order-summary .invoice-row {
+                font-size: 10.5px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="justify.css">
+</head>
+
+<body>
+    <!-- Medsos -->
+    <div class="medsos">
+        <div class="container">
+            <ul>
+                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
+                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
+                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
+                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
+                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
+                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+                <li class="active"><a href="lacak-pesanan.html" aria-current="page">LACAK PESANAN</a></li>
+                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
+                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
+                <li><a href="rating.html">RATING &amp; SARAN</a></li>
+                <li><a href="testimoni.html">TESTIMONI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="page-hero page-hero--photo"
+        style="background-image: linear-gradient(180deg, rgba(5, 38, 35, 0.72) 0%, rgba(5, 38, 35, 0.62) 45%, rgba(5, 38, 35, 0.88) 100%), url('proses pengiriman susu.jpeg')">
+        <div class="container">
+            <h2>Lacak Pesanan</h2>
+            <p>Lacak pesanan dengan nomor pesanan. Jika lupa, gunakan nomor HP yang digunakan saat memesan.</p>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div class="track-card">
+                <form id="trackForm" novalidate>
+                    <div class="track-form">
+                        <div class="track-field" id="orderIdField">
+                            <label class="visually-hidden" for="orderIdInput">Nomor pesanan</label>
+                            <input class="input" type="text" id="orderIdInput" name="orderId" inputmode="text"
+                                autocomplete="off" placeholder="Nomor pesanan, mis. MF-260914-1234">
+                        </div>
+                        <div class="track-field">
+                            <label class="visually-hidden" for="phoneInput">Nomor HP</label>
+                            <input class="input" type="tel" id="phoneInput" name="telepon" inputmode="tel"
+                                autocomplete="tel" placeholder="Nomor HP saat memesan" required>
+                        </div>
+                        <button type="submit" class="btn" id="trackBtn"><i class="fas fa-search" aria-hidden="true"></i>
+                            Lacak</button>
+                    </div>
+                    <div class="track-mode-row">
+                        <button type="button" class="track-mode-link" id="forgotOrderBtn">Lupa nomor pesanan?</button>
+                    </div>
+                    <p class="track-hint" id="trackHint">Masukkan nomor pesanan dan nomor HP untuk melihat detail pesanan.</p>
+                </form>
+
+                <div class="track-state" id="trackState" role="status" aria-live="polite" hidden></div>
+                <div class="order-picks" id="orderList"></div>
+
+                <div class="result-box" id="resultBox" hidden>
+                    <ol class="stepper" id="stepper" aria-label="Status pesanan">
+                        <li class="progress-line" id="progressLine" style="width:0%" aria-hidden="true"></li>
+                        <li class="step" data-step="0">
+                            <div class="dot"><i class="fas fa-clipboard-check" aria-hidden="true"></i></div>
+                            <div class="label">Dikonfirmasi</div>
+                        </li>
+                        <li class="step" data-step="1">
+                            <div class="dot"><i class="fas fa-box" aria-hidden="true"></i></div>
+                            <div class="label">Dikemas</div>
+                        </li>
+                        <li class="step" data-step="2">
+                            <div class="dot"><i class="fas fa-truck" aria-hidden="true"></i></div>
+                            <div class="label">Dikirim</div>
+                        </li>
+                        <li class="step" data-step="3">
+                            <div class="dot"><i class="fas fa-house-user" aria-hidden="true"></i></div>
+                            <div class="label">Selesai</div>
+                        </li>
+                    </ol>
+                    <div class="status-note" id="statusNote"></div>
+                    <div class="order-summary" id="orderSummary"></div>
+                    <div class="print-row">
+                        <button type="button" class="btn btn--outline btn--sm" id="printBtn"><i class="fas fa-print"
+                                aria-hidden="true"></i> Cetak Struk</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <script src="orders-config.js"></script>
+    <script src="orders-store.js"></script>
+    <script src="lacak-pesanan.js"></script>
+</body>
+
+</html>
