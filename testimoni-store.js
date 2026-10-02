@@ -46,7 +46,8 @@ const TestimoniStore = (function () {
     }
 
     // Ambil seluruh data testimoni.
-    // Mengembalikan { data, online } — online=true jika berhasil ambil dari server bersama.
+    // Mengembalikan { data, online, error } — online=true jika berhasil ambil dari server bersama;
+    // error berisi alasan kegagalan (jika ada) agar UI dapat menampilkan pesan yang jelas.
     async function load() {
         if (!isConfigured()) {
             return { data: getLocal(), online: false };
@@ -59,12 +60,26 @@ const TestimoniStore = (function () {
             });
             if (!res.ok) throw new Error('Respons server tidak OK: ' + res.status);
             const json = await res.json();
-            const list = unwrap(json.record);
-            setLocal(list); // sinkronkan cadangan lokal
-            return { data: list, online: true };
+            const serverList = unwrap(json.record);
+
+            // Jangan menghapus testimoni yang baru tersimpan secara lokal
+            // ketika sinkronisasi server belum sempat berhasil. Gabungkan
+            // data server + data lokal dan hilangkan duplikat.
+            const localList = getLocal();
+            const merged = serverList.slice();
+            const seen = new Set(merged.map(keyOf));
+            localList.forEach(function (item) {
+                const key = keyOf(item);
+                if (!seen.has(key)) {
+                    merged.push(item);
+                    seen.add(key);
+                }
+            });
+            setLocal(merged); // simpan hasil gabungan sebagai cadangan lokal
+            return { data: merged, online: true };
         } catch (e) {
             console.warn('Gagal mengambil data dari server bersama, memakai data lokal:', e);
-            return { data: getLocal(), online: false };
+            return { data: getLocal(), online: false, error: e && e.message ? e.message : String(e) };
         }
     }
 
@@ -109,9 +124,56 @@ const TestimoniStore = (function () {
             return { success: true, online: true };
         } catch (e) {
             console.warn('Gagal menyimpan ke server bersama, tersimpan di perangkat ini saja:', e);
-            return { success: true, online: false };
+            return { success: true, online: false, error: e && e.message ? e.message : String(e) };
         }
     }
 
-    return { load, add, isConfigured };
+    // ---------- Khusus admin ----------
+    // Kunci unik testimoni (harus sama dengan api/testimoni.js).
+    function keyOf(t) {
+        const clean = v => String(v == null ? '' : v).trim();
+        return [clean(t && t.nama), clean(t && t.tanggal), clean(t && t.komentar)].join('|');
+    }
+
+    function adminHeaders(extra) {
+        const headers = Object.assign({ 'Accept': 'application/json' }, extra || {});
+        try {
+            const k = sessionStorage.getItem('mfAdminKey');
+            if (k) headers['X-Admin-Key'] = k;
+        } catch (e) { /* sessionStorage tidak tersedia */ }
+        return headers;
+    }
+
+    // true hanya bila server menerima kata sandi admin yang tersimpan di sesi ini.
+    async function isAdmin() {
+        try {
+            const k = sessionStorage.getItem('mfAdminKey');
+            if (!k) return false;
+            const res = await fetch('/api/testimoni?check=1', { headers: adminHeaders(), cache: 'no-store' });
+            return res.ok;
+        } catch (e) { return false; }
+    }
+
+    async function removeMany(keys) {
+        const list = (Array.isArray(keys) ? keys : []).filter(Boolean);
+        if (!list.length) return { success: false, removed: 0, error: 'Pilih minimal satu testimoni.' };
+        try {
+            const res = await fetch('/api/testimoni', {
+                method: 'DELETE',
+                headers: adminHeaders({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify({ keys: list })
+            });
+            const text = await res.text();
+            let json = {};
+            try { json = text ? JSON.parse(text) : {}; } catch (_) {}
+            if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
+            const gone = new Set(list);
+            setLocal(getLocal().filter(t => !gone.has(keyOf(t))));
+            return { success: true, removed: json.removed || 0, error: null };
+        } catch (e) {
+            return { success: false, removed: 0, error: e && e.message ? e.message : String(e) };
+        }
+    }
+
+    return { load, add, isConfigured, keyOf, isAdmin, removeMany };
 })();

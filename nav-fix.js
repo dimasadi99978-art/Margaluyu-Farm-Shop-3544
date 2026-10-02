@@ -1,21 +1,31 @@
-// Mengatur posisi vertikal menu dropdown agar selalu presisi tepat di bawah
-// header (termasuk bar media sosial di atasnya), berapa pun tingginya di
-// halaman yang berbeda-beda atau saat teks header melipat ke baris baru.
+// Perilaku menu hamburger: tutup saat memilih menu, klik di luar, atau menekan Escape.
+// Posisi dropdown diatur oleh CSS (menempel pada header), jadi tidak perlu hitungan JS lagi.
 (function () {
-    function updateHeaderHeight() {
+    function init() {
+        var toggle = document.getElementById('nav-toggle');
         var header = document.querySelector('header');
-        if (!header) return;
-        var bottom = header.getBoundingClientRect().bottom;
-        document.documentElement.style.setProperty('--header-h', Math.max(bottom, 0) + 'px');
+        if (!toggle || !header) return;
+
+        function sync() { toggle.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false'); }
+        function close() { if (toggle.checked) { toggle.checked = false; sync(); } }
+
+        toggle.addEventListener('change', sync);
+        sync();
+
+        header.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('header ul a')) close();
+        });
+        document.addEventListener('click', function (e) {
+            if (toggle.checked && !header.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && toggle.checked) {
+                close();
+                var label = header.querySelector('.nav-toggle-label');
+                if (label) label.focus && label.focus();
+            }
+        });
     }
-
-    window.addEventListener('DOMContentLoaded', updateHeaderHeight);
-    window.addEventListener('load', updateHeaderHeight);
-    window.addEventListener('resize', updateHeaderHeight);
-    window.addEventListener('orientationchange', updateHeaderHeight);
-
-    // Elemen web font baru termuat belakangan bisa mengubah tinggi header sedikit;
-    // ukur ulang sesaat setelahnya untuk jaga-jaga.
-    setTimeout(updateHeaderHeight, 300);
-    setTimeout(updateHeaderHeight, 1000);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
 })();

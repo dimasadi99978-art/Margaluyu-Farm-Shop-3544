@@ -11,6 +11,27 @@ const OrdersStore = (function () {
         : '/api/orders';
     const IS_LOCAL_FILE = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
     const STATUS_STEPS = ['Dikonfirmasi', 'Dikemas', 'Dikirim', 'Selesai'];
+    const ADMIN_KEY_STORAGE = 'mfAdminKey';
+
+    // Kata sandi admin (hanya dipakai halaman admin) disimpan di sessionStorage dan dikirim
+    // sebagai header X-Admin-Key. Server hanya memeriksanya jika ORDERS_ADMIN_KEY diaktifkan.
+    function getAdminKey() {
+        try { return sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) { return ''; }
+    }
+
+    function setAdminKey(key) {
+        try {
+            if (key) sessionStorage.setItem(ADMIN_KEY_STORAGE, key);
+            else sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+        } catch (e) { /* sessionStorage tidak tersedia */ }
+    }
+
+    function adminHeaders(extra) {
+        const headers = Object.assign({ 'Accept': 'application/json' }, extra || {});
+        const key = getAdminKey();
+        if (key) headers['X-Admin-Key'] = key;
+        return headers;
+    }
 
     function isConfigured() {
         return true; // Konfigurasi sekarang dilakukan di Environment Variables Vercel.
@@ -58,14 +79,19 @@ const OrdersStore = (function () {
         return Array.from(map.values());
     }
 
-    async function fetchRemote() {
+    // params: {} = seluruh daftar (admin); {orderId, telepon} = pelacakan publik.
+    async function fetchRemote(params) {
         if (IS_LOCAL_FILE) {
-            return { data: [], online: false, error: 'Website sedang dibuka langsung dari file komputer (file://). Upload ke Vercel untuk mengaktifkan /api/orders.' };
+            return { data: [], online: false, error: 'Halaman ini dibuka langsung dari file di komputer, sehingga belum bisa terhubung ke server. Setelah situs dipublikasikan (misalnya di Vercel), ini akan berjalan normal' };
         }
         try {
-            const res = await fetch(API_URL, {
+            const qs = params ? Object.keys(params)
+                .filter(k => params[k])
+                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                .join('&') : '';
+            const res = await fetch(API_URL + (qs ? '?' + qs : ''), {
                 method: 'GET',
-                headers: { 'Accept': 'application/json' },
+                headers: params && (params.orderId || params.telepon) ? { 'Accept': 'application/json' } : adminHeaders(),
                 cache: 'no-store'
             });
             const text = await res.text();
@@ -74,7 +100,7 @@ const OrdersStore = (function () {
             if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
 
             const data = Array.isArray(json.data) ? json.data : [];
-            return { data, online: true, error: null };
+            return { data, online: true, error: null, protectedByServer: json.protected === true };
         } catch (e) {
             console.warn('Gagal membaca data pesanan dari server:', e);
             return {
@@ -87,7 +113,7 @@ const OrdersStore = (function () {
 
     async function postRemote(order) {
         if (IS_LOCAL_FILE) {
-            return { success: false, order: null, error: 'Website dibuka dari file komputer. /api/orders hanya berjalan setelah website dipublish di Vercel.' };
+            return { success: false, order: null, error: 'Halaman ini dibuka langsung dari file di komputer, sehingga data belum bisa dikirim ke server. Setelah situs dipublikasikan (misalnya di Vercel), ini akan berjalan normal' };
         }
         try {
             const res = await fetch(API_URL, {
@@ -111,15 +137,12 @@ const OrdersStore = (function () {
 
     async function putRemote(order) {
         if (IS_LOCAL_FILE) {
-            return { success: false, order: null, error: 'Website dibuka dari file komputer. /api/orders hanya berjalan setelah website dipublish di Vercel.' };
+            return { success: false, order: null, error: 'Halaman ini dibuka langsung dari file di komputer, sehingga data belum bisa dikirim ke server. Setelah situs dipublikasikan (misalnya di Vercel), ini akan berjalan normal' };
         }
         try {
             const res = await fetch(API_URL, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: adminHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ order })
             });
             const text = await res.text();
@@ -187,72 +210,200 @@ const OrdersStore = (function () {
         return { success: true, online: true, orderId, error: null };
     }
 
-    async function findById(orderId) {
+    async function findById(orderId, phone) {
         const cleanId = normalizeOrderId(orderId);
-        if (!cleanId) return { order: null, online: false, error: null };
+        const cleanPhone = normalizePhone(phone);
+        if (!cleanId || !cleanPhone) return { order: null, online: false, error: null };
 
-        const remote = await fetchRemote();
+        // Saat file HTML dibuka langsung di komputer, server memang tidak dapat
+        // diakses. Tetap izinkan pelacakan dengan cache lokal, tetapi WAJIB cocok
+        // nomor pesanan + nomor HP agar tidak membuka pesanan milik orang lain.
+        if (IS_LOCAL_FILE) {
+            const foundLocal = getLocal().find(o =>
+                o && normalizeOrderId(o.orderId) === cleanId
+                && normalizePhone(o.telepon) === cleanPhone
+            ) || null;
+            return {
+                order: foundLocal,
+                online: false,
+                local: Boolean(foundLocal),
+                error: foundLocal ? null : 'Pesanan tidak ditemukan di data lokal.'
+            };
+        }
+
+        const remote = await fetchRemote({ orderId: cleanId, telepon: cleanPhone });
         if (remote.online) {
-            const found = remote.data.find(o => normalizeOrderId(o.orderId) === cleanId) || null;
-            setLocal(remote.data);
+            // Server sudah mencocokkan nomor pesanan DAN nomor HP.
+            const found = remote.data.find(o =>
+                o && normalizeOrderId(o.orderId) === cleanId
+                && normalizePhone(o.telepon) === cleanPhone
+            ) || null;
+            if (found) setLocal(mergeOrders(getLocal(), [found]));
             return { order: found, online: true, error: null };
         }
 
-        const localFound = getLocal().find(o => normalizeOrderId(o.orderId) === cleanId) || null;
-        return { order: localFound, online: false, error: remote.error };
+        // Jangan gunakan cache lokal untuk pelacakan publik berdasarkan ID saja.
+        // Ini mencegah data pesanan teman yang tersimpan di perangkat ikut tampil.
+        return { order: null, online: false, error: remote.error };
+    }
+
+    async function findByIdAndName(orderId, phone, name) {
+        const cleanId = normalizeOrderId(orderId);
+        const cleanPhone = normalizePhone(phone);
+        const cleanName = String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+        if (!cleanId || !cleanPhone || !cleanName) return { order: null, online: false, error: null };
+
+        if (IS_LOCAL_FILE) {
+            const foundLocal = getLocal().find(o =>
+                o && normalizeOrderId(o.orderId) === cleanId
+                && normalizePhone(o.telepon) === cleanPhone
+                && String(o.nama || '').trim().toLowerCase().replace(/\s+/g, ' ') === cleanName
+            ) || null;
+            return {
+                order: foundLocal,
+                online: false,
+                local: Boolean(foundLocal),
+                error: foundLocal ? null : 'Pesanan tidak ditemukan di data lokal.'
+            };
+        }
+
+        const remote = await fetchRemote({ orderId: cleanId, telepon: cleanPhone, nama: cleanName });
+        if (remote.online) {
+            const found = remote.data.find(o =>
+                o && normalizeOrderId(o.orderId) === cleanId
+                && normalizePhone(o.telepon) === cleanPhone
+                && String(o.nama || '').trim().toLowerCase().replace(/\s+/g, ' ') === cleanName
+            ) || null;
+            if (found) setLocal(mergeOrders(getLocal(), [found]));
+            return { order: found, online: true, error: null };
+        }
+
+        // Jangan gunakan cache lokal untuk verifikasi publik.
+        return { order: null, online: false, error: remote.error };
     }
 
     async function findByPhone(phone) {
         const target = normalizePhone(phone);
         if (!target) return { orders: [], online: false, error: null };
 
-        const remote = await fetchRemote();
-        const data = remote.online ? remote.data : getLocal();
+        // Saat file HTML dibuka langsung di komputer, gunakan cache lokal.
+        // Hanya data dengan nomor HP yang sama yang ditampilkan dan tetap dibatasi
+        // ke informasi minimum, sama seperti aturan pelacakan online.
+        if (IS_LOCAL_FILE) {
+            const orders = getLocal()
+                .filter(o => o && normalizePhone(o.telepon) === target)
+                .map(o => ({
+                    orderId: o.orderId || '',
+                    tanggal: o.tanggal || '',
+                    status: o.status || 'Dikonfirmasi',
+                    produk: o.produk || 'Pesanan',
+                    jumlah: o.jumlah || ''
+                }))
+                .reverse();
+            return { orders, online: false, local: true, error: null };
+        }
 
-        if (remote.online) setLocal(data);
-
-        const matches = data.filter(o =>
-            o && o.telepon && normalizePhone(o.telepon) === target
-        );
+        // Pencarian publik berdasarkan nomor HP hanya boleh mengembalikan
+        // data terbatas dari server. Jangan memakai cache lokal bila server online.
+        const remote = await fetchRemote({ telepon: target });
+        if (!remote.online) {
+            return { orders: [], online: false, error: remote.error };
+        }
 
         return {
-            orders: matches.slice().reverse(),
-            online: remote.online,
-            error: remote.error || null
+            orders: remote.data.slice().reverse(),
+            online: true,
+            error: null
         };
     }
 
-    async function updateStatus(orderId, newStatus) {
-        const current = await findById(orderId);
-        if (!current.order) {
-            return { success: false, online: current.online, error: 'Pesanan tidak ditemukan.' };
+    // Dipakai halaman admin: memastikan kata sandi diterima server.
+    // Hasil: { ok, protectedByServer, error }
+    async function verifyAdmin(key) {
+        setAdminKey(key);
+        const r = await fetchRemote(null);
+        if (r.online) return { ok: true, protectedByServer: r.protectedByServer === true, error: null };
+        return { ok: false, protectedByServer: false, error: r.error };
+    }
+
+    async function updateStatus(orderId, newStatus, orderHint) {
+        const cleanId = normalizeOrderId(orderId);
+        const validStatus = STATUS_STEPS.includes(newStatus) ? newStatus : null;
+        if (!cleanId || !validStatus) {
+            return { success: false, online: false, error: 'Nomor pesanan atau status tidak valid.' };
         }
 
-        const updated = Object.assign({}, current.order, {
-            status: newStatus,
+        // KHUSUS ADMIN: jangan memakai findById() karena fungsi tersebut memang
+        // mewajibkan nomor HP untuk pelacakan publik. Admin sudah memiliki data
+        // pesanan dari load(), jadi ambil pesanan berdasarkan orderId dari cache admin.
+        const local = getLocal();
+        const current = (orderHint && normalizeOrderId(orderHint.orderId) === cleanId)
+            ? orderHint
+            : (local.find(o => o && normalizeOrderId(o.orderId) === cleanId) || null);
+
+        if (!current) {
+            return { success: false, online: false, error: 'Pesanan tidak ditemukan.' };
+        }
+
+        const updated = Object.assign({}, current, {
+            status: validStatus,
             updatedAt: new Date().toISOString()
         });
 
-        const result = await putRemote(updated);
-        if (result.success) {
-            const local = getLocal();
-            setLocal(mergeOrders(local, [result.order || updated]));
-            return { success: true, online: true, error: null };
+        // Saat masih membuka file HTML secara lokal, status tetap dapat diubah
+        // dan disimpan di localStorage seperti perilaku website sebelumnya.
+        if (IS_LOCAL_FILE) {
+            setLocal(mergeOrders(local, [updated]));
+            return { success: true, online: false, local: true, order: updated, error: null };
         }
 
-        // Jangan menghapus data lokal ketika server gagal.
-        setLocal(mergeOrders(getLocal(), [updated]));
-        return { success: false, online: false, error: result.error };
+        // Saat online, perubahan harus disimpan ke server. Header admin dikirim
+        // agar endpoint dapat membedakan perubahan admin dari pelacakan publik.
+        const result = await putRemote(updated);
+        if (result.success) {
+            setLocal(mergeOrders(getLocal(), [result.order || updated]));
+            return { success: true, online: true, local: false, order: result.order || updated, error: null };
+        }
+
+        return { success: false, online: false, local: false, error: result.error };
+    }
+
+    // Hapus banyak pesanan sekaligus (hanya yang berstatus Selesai; server yang memastikan).
+    async function removeMany(orderIds) {
+        const ids = (Array.isArray(orderIds) ? orderIds : []).filter(Boolean);
+        if (!ids.length) return { success: false, removed: [], error: 'Pilih minimal satu pesanan.' };
+        if (IS_LOCAL_FILE) return { success: false, removed: [], error: 'Halaman dibuka dari file di komputer. Buka lewat alamat online (Vercel).' };
+        try {
+            const res = await fetch(API_URL, {
+                method: 'DELETE',
+                headers: adminHeaders({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify({ orderIds: ids })
+            });
+            const text = await res.text();
+            let json = {};
+            try { json = text ? JSON.parse(text) : {}; } catch (_) {}
+            if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
+            const removed = Array.isArray(json.removed) ? json.removed : [];
+            const gone = new Set(removed.map(normalizeOrderId));
+            setLocal(getLocal().filter(o => !gone.has(normalizeOrderId(o && o.orderId))));
+            return { success: true, removed, skipped: json.skipped || [], error: null };
+        } catch (e) {
+            return { success: false, removed: [], error: e && e.message ? e.message : String(e) };
+        }
     }
 
     return {
         load,
         add,
         findById,
+        findByIdAndName,
         findByPhone,
         updateStatus,
+        removeMany,
         isConfigured,
         normalizePhone,
+        setAdminKey,
+        verifyAdmin,
         STATUS_STEPS
     };
 })();

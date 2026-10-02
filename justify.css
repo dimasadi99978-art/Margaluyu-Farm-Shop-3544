@@ -1,0 +1,145 @@
+/* Semua kalimat/paragraf di halaman publik dibuat rata kanan-kiri (justify). */
+p, li, dd,
+.callout, .notice, .prose-note, .shipping-note,
+footer small {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+/* Sel tabel sengaja tetap rata kiri: kolom sempit jika di-justify jadi renggang tak rata. */
+
+/* Area yang desainnya rata tengah (hero, judul seksi, kartu fakta, kotak QRIS):
+   isi tetap justify, tetapi baris terakhir tetap di tengah supaya tampilan tidak berubah. */
+.page-hero p, .page-hero li,
+.hero-lead,
+.section-head p, .section-head li,
+.cta-close p, .cta-band p, .cta-section p, .goat-cta p,
+.why-card p, .facts-item p,
+.contact-section p,
+.order-header p, .order-confirm p, .qris-box p {
+    text-align: justify;
+    text-align-last: center;
+    text-justify: inter-word;
+}
+
+/* Halaman "Pengenalan susu saanen": kartu isi rata tengah di layar HP */
+@media (max-width: 768px) {
+    .content-grid p {
+        text-align: justify;
+        text-align-last: center;
+    }
+}
+
+/* Rating & testimoni: kartu sukses dan pratinjau foto */
+.rating-success-card {
+    display: flex; align-items: center; gap: 14px; margin: 18px 0 6px; padding: 18px 20px;
+    border: 1px solid rgba(46, 125, 50, .18); border-radius: 16px; background: #fff;
+    box-shadow: 0 14px 35px rgba(0,0,0,.10); opacity: 0; transform: translateY(16px) scale(.96);
+}
+.rating-success-card.is-visible { animation: ratingSuccessPop .55s cubic-bezier(.2,.8,.2,1) forwards; }
+.rating-success-icon { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 42px; background: #e8f5e9; color: #2e7d32; font-size: 18px; }
+.rating-success-card strong { display: block; font-size: 17px; }
+.rating-success-card p { margin: 3px 0 11px; }
+@keyframes ratingSuccessPop { 0% { opacity: 0; transform: translateY(16px) scale(.96); } 70% { opacity: 1; transform: translateY(-3px) scale(1.01); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+.photo-preview-trigger { display: block; border: 0; padding: 0; background: transparent; cursor: zoom-in; }
+.photo-preview-trigger img { max-width: 180px; max-height: 180px; object-fit: cover; border-radius: 12px; display: block; }
+.photo-lightbox { border: 0; padding: 0; background: transparent; width: auto; max-width: min(76vw, 760px); max-height: 76vh; overflow: visible; }
+.photo-lightbox::backdrop { background: rgba(0,0,0,.78); }
+.photo-lightbox img { display: block; max-width: 68vw; max-height: 68vh; width: auto; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 18px 50px rgba(0,0,0,.28); }
+.photo-lightbox-close { position: absolute; right: 8px; top: 8px; z-index: 2; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,.94); font-size: 26px; line-height: 1; cursor: pointer; }
+.testi-photo { cursor: zoom-in; }
+.dialog-photo--large { max-height: 75vh; object-fit: contain; }
+@media (max-width: 600px) { .rating-success-card { align-items: flex-start; } .photo-lightbox { width: auto; max-width: 88vw; max-height: 78vh; } .photo-lightbox img { max-width: 78vw; max-height: 68vh; } }
+
+/* Pratinjau foto fleksibel: tetap di tengah, dapat diperbesar dan digeser. */
+dialog.photo-lightbox {
+    border: 0;
+    padding: 0;
+    margin: auto;
+    width: min(92vw, 980px);
+    height: min(88vh, 820px);
+    max-width: none;
+    max-height: none;
+    overflow: hidden;
+    background: transparent;
+}
+dialog.photo-lightbox::backdrop { background: rgba(0, 0, 0, .72); }
+.photo-lightbox-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .97);
+    box-shadow: 0 24px 70px rgba(0,0,0,.30);
+}
+.photo-lightbox-toolbar {
+    position: relative;
+    z-index: 5;
+    flex: 0 0 auto;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    background: rgba(255,255,255,.98);
+}
+.photo-lightbox-btn {
+    min-width: 38px;
+    height: 36px;
+    padding: 0 11px;
+    border: 1px solid rgba(4,51,53,.16);
+    border-radius: 9px;
+    background: #fff;
+    color: #043335;
+    font: 600 14px/1 Inter, sans-serif;
+    cursor: pointer;
+}
+.photo-lightbox-btn:hover { background: #f2f7f6; }
+.photo-lightbox-reset { min-width: 82px; }
+.photo-lightbox-close { margin-left: 6px; font-size: 22px; padding: 0; }
+.photo-lightbox-viewport {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    background: #f3f5f4;
+}
+.photo-lightbox-viewport img {
+    display: block;
+    flex: 0 0 auto;
+    max-width: calc(100% - 32px);
+    max-height: calc(100% - 32px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform-origin: center center;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+    border-radius: 10px;
+    box-shadow: 0 12px 35px rgba(0,0,0,.18);
+}
+.photo-lightbox-hint {
+    flex: 0 0 auto;
+    padding: 7px 12px 9px;
+    text-align: center;
+    font-size: 12px;
+    color: #687776;
+    background: rgba(255,255,255,.98);
+}
+@media (max-width: 640px) {
+    dialog.photo-lightbox { width: 94vw; height: 82vh; }
+    .photo-lightbox-toolbar { gap: 5px; padding: 7px; }
+    .photo-lightbox-btn { min-width: 34px; height: 34px; padding: 0 8px; }
+    .photo-lightbox-reset { min-width: 70px; }
+    .photo-lightbox-hint { font-size: 11px; }
+}

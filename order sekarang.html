@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Order Sekarang - Margaluyu Farm SHOP</title>
+    <title>Order Sekarang - Margaluyu Farm</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="nav-fix.js" defer></script>
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Tambah Google Fonts untuk kreativitas -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+        rel="stylesheet">
     <style>
         /* ---------- Palette & Base ---------- */
         :root {
-            --green-deep: #1f4b2c;
-            --green-soft: #eef6f0;
-            --green-accent: #2f9b5d;
+            --green-deep: var(--forest);
+            --green-soft: var(--paper-alt);
+            --green-accent: var(--accent-deep);
             --card-shadow: 0 16px 32px rgba(6, 71, 74, 0.14);
-            --radius-lg: 26px;
-            --radius-sm: 14px;
+            --radius-lg: 14px;
+            --radius-sm: 8px;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at 20% 20%, #f6fff6 0%, #eaf5ee 38%, #e3eee7 70%);
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #fdf9ef 0%, #f6efdd 38%, #f0e6cd 70%);
             color: var(--green-deep);
             overflow-x: hidden;
             position: relative;
@@ -33,7 +36,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: linear-gradient(120deg, rgba(76, 175, 80, 0.08), transparent 40%, rgba(6, 71, 74, 0.06));
+            background: linear-gradient(120deg, rgba(179, 137, 63, 0.08), transparent 40%, rgba(10, 61, 56, 0.06));
             z-index: -1;
         }
 
@@ -43,9 +46,9 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            padding: 52px 18px 64px;
+            padding: 76px 18px 88px;
             box-sizing: border-box;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 249, 242, 0.9));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(247, 240, 224, 0.9));
         }
 
         .order-section .container {
@@ -60,8 +63,8 @@
             width: 100%;
             max-width: 980px;
             margin: 0 auto;
-            padding: 36px 34px 42px;
-            background: linear-gradient(150deg, #ffffff 0%, #f8fbf9 55%, #f3f9f5 100%);
+            padding: 48px 46px 54px;
+            background: linear-gradient(150deg, #ffffff 0%, #fbf7ef 55%, #f6eee0 100%);
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow), 0 2px 10px rgba(0, 0, 0, 0.04);
             position: relative;
@@ -76,7 +79,7 @@
             right: -38px;
             width: 180px;
             height: 180px;
-            background: radial-gradient(circle, rgba(47, 155, 93, 0.16) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(179, 137, 63, 0.18) 0%, transparent 70%);
             border-radius: 50%;
             filter: blur(5px);
         }
@@ -104,23 +107,11 @@
 
         .order-header p {
             font-size: 1.02rem;
-            color: #3f5f46;
+            color: var(--ink-soft);
             font-weight: 400;
             max-width: 640px;
             margin: 0 auto;
             line-height: 1.55;
-        }
-
-        /* ---------- Hamburger Menu Fixes ---------- */
-        /* Menghapus sumber icon daun (background-image, SVG, font icon, atau pseudo-element) di belakang hamburger menu */
-        .nav-toggle-label,
-        .nav-toggle-label::before,
-        .nav-toggle-label::after,
-        .nav-toggle-label span,
-        .nav-toggle-label span::before,
-        .nav-toggle-label span::after {
-            background-image: none !important;
-            content: none !important;
         }
 
         /* ---------- Form ---------- */
@@ -142,7 +133,7 @@
             width: 100%;
         }
 
-        label {
+        .form-group>label {
             font-weight: 700;
             color: var(--green-deep);
             display: inline-flex;
@@ -150,7 +141,7 @@
             gap: 8px;
         }
 
-        label::before {
+        .form-group>label::before {
             content: "\f06c";
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
@@ -162,13 +153,13 @@
         select,
         textarea {
             padding: 15px 14px;
-            border: 1.4px solid #cde6d3;
+            border: 1.4px solid var(--line);
             border-radius: var(--radius-sm);
             font-size: 1rem;
-            background: #f7fbf7;
+            background: var(--paper);
             transition: all 0.22s ease;
             outline: none;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             width: 100%;
             box-sizing: border-box;
         }
@@ -177,8 +168,8 @@
         select:focus,
         textarea:focus {
             border-color: var(--green-accent);
-            box-shadow: 0 8px 18px rgba(47, 155, 93, 0.14);
-            background: #eef7ef;
+            box-shadow: 0 8px 18px rgba(179, 137, 63, 0.18);
+            background: var(--paper-alt);
         }
 
         textarea {
@@ -197,7 +188,7 @@
 
         .btn-submit {
             padding: 17px;
-            background: linear-gradient(115deg, #2f8c4d, #43b070);
+            background: linear-gradient(115deg, var(--forest), var(--forest-deep));
             border: none;
             border-radius: 16px;
             color: #fff;
@@ -205,19 +196,19 @@
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-            box-shadow: 0 12px 26px rgba(47, 140, 77, 0.22);
+            box-shadow: 0 12px 26px rgba(5, 38, 35, 0.24);
             width: 100%;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 16px 30px rgba(47, 140, 77, 0.26);
+            box-shadow: 0 16px 30px rgba(5, 38, 35, 0.28);
             filter: brightness(1.02);
         }
 
         .btn-submit:active {
             transform: translateY(0);
-            box-shadow: 0 10px 20px rgba(47, 140, 77, 0.2);
+            box-shadow: 0 10px 20px rgba(5, 38, 35, 0.22);
         }
 
         /* ---------- Responsive Tweaks ---------- */
@@ -279,7 +270,7 @@
                 gap: 12px;
             }
 
-            label {
+            .form-group>label {
                 font-size: 0.97rem;
             }
 
@@ -296,12 +287,6 @@
             }
         }
 
-        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
-        .active a {
-            background-color: #06474a; /* Hijau tua */
-            color: white; /* Pastikan teks putih untuk kontras */
-        }
-
         /* ---------- Metode Pembayaran ---------- */
         .payment-options {
             display: flex;
@@ -316,9 +301,9 @@
             align-items: center;
             gap: 10px;
             padding: 14px 16px;
-            border: 1.4px solid #cde6d3;
+            border: 1.4px solid var(--line);
             border-radius: var(--radius-sm);
-            background: #f7fbf7;
+            background: var(--paper);
             cursor: pointer;
             font-weight: 600;
             color: var(--green-deep);
@@ -327,8 +312,8 @@
 
         .payment-option:has(input:checked) {
             border-color: var(--green-accent);
-            background: #eaf7ee;
-            box-shadow: 0 6px 14px rgba(47, 155, 93, 0.15);
+            background: var(--paper-alt);
+            box-shadow: 0 6px 14px rgba(179, 137, 63, 0.18);
         }
 
         .payment-option input {
@@ -344,7 +329,7 @@
         .qris-box {
             text-align: center;
             padding: 24px 18px;
-            background: #f7fbf7;
+            background: var(--paper);
             border: 1.4px dashed var(--green-accent);
             border-radius: var(--radius-sm);
         }
@@ -376,7 +361,7 @@
 
         .qris-note {
             font-size: 0.92rem;
-            color: #3f5f46;
+            color: var(--ink-soft);
             max-width: 420px;
             margin: 0 auto 16px;
             line-height: 1.5;
@@ -403,7 +388,21 @@
         .order-confirm {
             display: none;
             text-align: center;
-            padding: 10px 4px 4px;
+            padding: 24px 22px 22px;
+            background: #fff;
+            border: 1px solid rgba(46, 125, 50, .16);
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(0,0,0,.12);
+            opacity: 0;
+            transform: translateY(18px) scale(.96);
+        }
+        .order-confirm.is-visible {
+            animation: orderConfirmPop .58s cubic-bezier(.2,.8,.2,1) forwards;
+        }
+        @keyframes orderConfirmPop {
+            0% { opacity: 0; transform: translateY(18px) scale(.96); }
+            70% { opacity: 1; transform: translateY(-4px) scale(1.01); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .order-confirm .icon-check {
@@ -420,7 +419,7 @@
 
         .order-confirm .order-id-box {
             display: inline-block;
-            background: #eaf7ee;
+            background: var(--paper-alt);
             border: 1.4px dashed var(--green-accent);
             border-radius: 12px;
             padding: 10px 22px;
@@ -432,7 +431,7 @@
         }
 
         .order-confirm p {
-            color: #3f5f46;
+            color: var(--ink-soft);
             max-width: 480px;
             margin: 0 auto 18px;
         }
@@ -468,12 +467,12 @@
             box-sizing: border-box;
             margin: 20px auto;
             background: #fff;
-            border: 1.5px dashed #cde6d3;
+            border: 1.5px dashed var(--line);
             border-radius: 8px;
             padding: 12px 10px;
             font-size: 12px;
             line-height: 1.35;
-            color: #444;
+            color: var(--ink-soft);
             text-align: left;
         }
 
@@ -490,7 +489,7 @@
 
         .invoice-box .invoice-sub {
             font-size: 0.85em;
-            color: #888;
+            color: var(--muted);
         }
 
         .invoice-box .invoice-id {
@@ -510,7 +509,7 @@
             width: 100%;
             box-sizing: border-box;
             font-size: 0.92em;
-            color: #444;
+            color: var(--ink-soft);
             padding: 3px 0;
         }
 
@@ -527,7 +526,7 @@
         .invoice-box .invoice-row span:last-child {
             text-align: right;
             font-weight: 600;
-            color: #222;
+            color: var(--ink);
         }
 
         .invoice-box .invoice-total {
@@ -541,7 +540,7 @@
 
         .invoice-box hr {
             border: none;
-            border-top: 1px dashed #ddd;
+            border-top: 1px dashed var(--line);
             margin: 10px 0;
         }
 
@@ -551,7 +550,8 @@
                 margin: 0;
             }
 
-            html, body {
+            html,
+            body {
                 width: 80mm !important;
                 min-width: 80mm !important;
                 max-width: 80mm !important;
@@ -588,14 +588,29 @@
                 overflow: visible !important;
             }
 
-            .invoice-box .invoice-brand { font-size: 14px !important; }
-            .invoice-box .invoice-sub { font-size: 10px !important; }
-            .invoice-box .invoice-id { margin: 7px 0 9px !important; }
-            .invoice-box .invoice-row { font-size: 10.5px !important; }
-            .invoice-box .invoice-total { font-size: 12px !important; }
+            .invoice-box .invoice-brand {
+                font-size: 14px !important;
+            }
+
+            .invoice-box .invoice-sub {
+                font-size: 10px !important;
+            }
+
+            .invoice-box .invoice-id {
+                margin: 7px 0 9px !important;
+            }
+
+            .invoice-box .invoice-row {
+                font-size: 10.5px !important;
+            }
+
+            .invoice-box .invoice-total {
+                font-size: 12px !important;
+            }
         }
     </style>
     <link rel="stylesheet" href="mobile-responsive.css">
+    <link rel="stylesheet" href="justify.css">
 </head>
 
 <body>
@@ -605,37 +620,35 @@
         <div class="container">
             <ul>
                 <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
-                            class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
-                            class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
-                            class="fab fa-youtube"></i></a></li>
+                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
+                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
+                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
+                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
             </ul>
         </div>
     </div>
 
-
     <!-- header -->
     <header>
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
-            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
                 <span></span>
                 <span></span>
                 <span></span>
             </label>
             <ul>
                 <li><a href="index.html">HOME</a></li>
-                <li class="active"><a href="product.html">PRODUCT</a></li>
+                <li><a href="product.html">PRODUCT</a></li>
                 <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
                 <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
                 <li><a href="contact.html">CONTACT</a></li>
-                <li><a href="media library.html">MEDIA LIBRARY</a></li>
                 <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
-                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
                 <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
                 <li><a href="rating.html">RATING &amp; SARAN</a></li>
                 <li><a href="testimoni.html">TESTIMONI</a></li>
@@ -652,7 +665,7 @@
                     <h2>Order Sekarang</h2>
                     <p>Isi formulir di bawah ini untuk memesan produk susu kambing Saanen kami. Setiap pesanan akan
                         mendapat nomor pesanan yang bisa dilacak statusnya kapan saja.</p>
-</div>
+                </div>
                 <form id="orderForm">
                     <div class="form-group" data-tooltip="Masukkan nama lengkap Anda">
                         <label for="nama">Nama Lengkap</label>
@@ -667,11 +680,16 @@
                         <input type="text" id="alamat" name="alamat"
                             placeholder="Contoh: Jl. Sudirman No. 354, Surabaya" required>
                     </div>
-                    <div class="form-group" data-tooltip="Pilih produk yang diinginkan">
+                    <!-- Sementara disembunyikan karena baru ada 1 produk. Nanti kalau sudah ada beberapa
+                         pilihan (misalnya rasa/varian susu), hapus saja "style=display:none" di bawah ini
+                         dan tambahkan <option> baru (dengan data-price) di dalam <select> - form akan otomatis
+                         menampilkan pilihannya lagi tanpa perlu ubah kode lain. -->
+                    <div class="form-group" data-tooltip="Pilih produk yang diinginkan" style="display:none">
                         <label for="produk">Produk</label>
                         <select id="produk" name="produk" required>
                             <option value="">Pilih produk</option>
-                            <option value="Susu Kambing Saanen 500ml" data-price="20000">Susu Kambing Saanen 500ml - Rp 20.000</option>
+                            <option value="Susu Kambing Saanen 500ml" data-price="20000" selected>Susu Kambing Saanen
+                                500ml - Rp 20.000</option>
                             <!-- Tambahkan produk lain jika ada, sertakan data-price agar total QRIS terhitung otomatis -->
                         </select>
                     </div>
@@ -707,11 +725,7 @@
                             <label for="buktiPembayaran">Unggah Bukti Pembayaran</label>
                             <input type="file" id="buktiPembayaran" name="buktiPembayaran" accept="image/*">
                         </div>
-                        <p class="qris-note">Mohon diperhatikan, QRIS ini bersifat statis sehingga nominalnya belum
-                            terisi otomatis saat dipindai. Setelah memindai, kami mohon kesediaan Anda untuk
-                            mengetikkan sendiri jumlah yang tertera pada Total di atas, agar pembayaran sesuai
-                            dengan pesanan Anda. Bukti pembayaran akan otomatis terkirim bersama pesanan Anda saat
-                            menekan tombol "Buat Pesanan" di bawah ini.</p>
+                        <p class="qris-note"></p>
                     </div>
 
                     <button type="submit" class="btn-submit"><i class="fas fa-check-circle"></i> Buat Pesanan</button>
@@ -719,9 +733,9 @@
 
                 <div class="order-confirm" id="orderConfirm">
                     <div class="icon-check"><i class="fas fa-check-circle"></i></div>
-                    <h3>Pesanan Berhasil Dibuat!</h3>
-                    <p>Simpan nomor pesanan berikut untuk melacak status pesanan Anda kapan saja. Apabila nomor ini
-                        terlupa, Anda tetap dapat melacaknya menggunakan nomor HP yang Anda isikan tadi.</p>
+                    <h3>Terima Kasih, Pesanan Anda Berhasil Dibuat!</h3>
+                    <p>Simpan nomor pesanan ini untuk melacak status pesanan kapan saja. Jika lupa, Anda tetap dapat
+                        melacaknya menggunakan nomor HP yang telah diisikan.</p>
 
                     <div class="invoice-box" id="invoiceBox">
                         <div class="invoice-head">
@@ -735,7 +749,7 @@
                         <div class="invoice-row"><span>Alamat</span><span id="invAlamat">-</span></div>
                         <hr>
                         <div class="invoice-row"><span id="invProdukNama">-</span><span id="invJumlah">-</span></div>
-<hr>
+                        <hr>
                         <div class="invoice-row invoice-total"><span>Total</span><span id="invTotal">Rp 0</span></div>
                         <div class="invoice-row"><span>Pembayaran</span><span id="invPembayaran">-</span></div>
                         <div class="invoice-row"><span>Status</span><span id="invStatus">Dikonfirmasi</span></div>
@@ -753,8 +767,31 @@
 
     <!-- footer -->
     <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
         <div class="container">
-            <small> Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
         </div>
     </footer>
 
@@ -801,7 +838,7 @@
                 reader.onload = function (e) {
                     const img = new Image();
                     img.onload = function () {
-                        let { width, height } = img;
+                        let {width, height} = img;
                         if (width > height && width > maxDimension) {
                             height = Math.round(height * (maxDimension / width));
                             width = maxDimension;
@@ -827,11 +864,11 @@
             // Target maksimal ±35KB (dalam base64) per foto, dicoba bertahap dari kualitas terbaik.
             const targetChars = 35 * 1024 * 1.37; // perkiraan panjang string base64 untuk ±35KB biner
             const attempts = [
-                { maxDimension: 700, quality: 0.55 },
-                { maxDimension: 500, quality: 0.45 },
-                { maxDimension: 400, quality: 0.35 },
-                { maxDimension: 320, quality: 0.3 },
-                { maxDimension: 260, quality: 0.25 }
+                {maxDimension: 700, quality: 0.55},
+                {maxDimension: 500, quality: 0.45},
+                {maxDimension: 400, quality: 0.35},
+                {maxDimension: 320, quality: 0.3},
+                {maxDimension: 260, quality: 0.25}
             ];
             let result = null;
             for (const attempt of attempts) {
@@ -851,7 +888,7 @@
             const alamat = document.getElementById('alamat').value.trim();
             const produk = document.getElementById('produk').value;
             const jumlah = document.getElementById('jumlah').value;
-const pesan = document.getElementById('pesan').value.trim();
+            const pesan = document.getElementById('pesan').value.trim();
             const pembayaran = document.querySelector('input[name="pembayaran"]:checked').value;
 
             // Validasi sederhana
@@ -905,14 +942,14 @@ const pesan = document.getElementById('pesan').value.trim();
                 console.error('Gagal menyimpan pesanan:', e);
                 alert('Pesanan belum berhasil disimpan. Silakan coba lagi.');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Pesan Sekarang';
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
                 return;
             }
 
             if (!result || !result.orderId) {
                 alert('Pesanan belum berhasil dibuat. Silakan coba lagi.');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Pesan Sekarang';
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
                 return;
             }
 
@@ -925,7 +962,7 @@ const pesan = document.getElementById('pesan').value.trim();
 
             // Isi struk/invoice
             document.getElementById('invOrderId').textContent = orderId;
-            document.getElementById('invTanggal').textContent = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('invTanggal').textContent = new Date().toLocaleDateString('id-ID', {year: 'numeric', month: 'long', day: 'numeric'});
             document.getElementById('invNama').textContent = nama;
             document.getElementById('invTelepon').textContent = telepon;
             document.getElementById('invAlamat').textContent = alamat;
@@ -948,14 +985,34 @@ const pesan = document.getElementById('pesan').value.trim();
 
             if (!result.online) {
                 console.warn('Detail kegagalan sinkronisasi ke server bersama:', result.error);
-                noteText += ' Pastikan nomor pesanan ini tetap tersimpan. Untuk mencetak struk, silakan buka halaman Lacak Pesanan.';
+                noteText = '';
+                const wa = document.createElement('a');
+                wa.href = 'https://wa.me/62895635067289?text=' + encodeURIComponent('Halo Margaluyu Farm, nomor pesanan saya ' + orderId + '. Mohon dibantu diproses.');
+                wa.target = '_blank';
+                wa.rel = 'noopener';
+                wa.textContent = 'Bantuan Pesanan via WhatsApp';
+                wa.style.cssText = 'display:inline-block;margin-top:8px;font-weight:700;text-decoration:underline;';
+                noteEl.textContent = noteText;
+                noteEl.appendChild(document.createElement('br'));
+                noteEl.appendChild(wa);
+                const confirmCard = document.getElementById('orderConfirm');
+                confirmCard.style.display = 'block';
+                confirmCard.classList.remove('is-visible');
+                void confirmCard.offsetWidth;
+                confirmCard.classList.add('is-visible');
+                confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
+                return;
             } else {
                 noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
             }
             noteEl.textContent = noteText;
 
-            document.getElementById('orderConfirm').style.display = 'block';
-            document.getElementById('orderConfirm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const confirmCard = document.getElementById('orderConfirm');
+            confirmCard.style.display = 'block';
+            confirmCard.classList.remove('is-visible');
+            void confirmCard.offsetWidth;
+            confirmCard.classList.add('is-visible');
+            confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
         });
 
     </script>

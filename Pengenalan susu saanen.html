@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,8 @@
     <script src="nav-fix.js" defer></script>
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Fredoka+One&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
         rel="stylesheet">
     <style>
         * {
@@ -18,10 +20,10 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.8;
-            color: #06474a;
-            background: linear-gradient(180deg, #f9fcf9 0%, #f0f7f0 100%);
+            color: #0a3d38;
+            background: #fbf7ee;
         }
 
         .container {
@@ -30,23 +32,16 @@
             padding: 0 24px;
         }
 
-        /* CSS untuk menu aktif hijau tua, disamakan dengan web lain */
-        .active a {
-            background-color: #06474a;
-            color: white;
-        }
-
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, rgba(44, 85, 48, 0.85), rgba(74, 124, 89, 0.7)),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700"><rect width="1400" height="700" fill="%23e8f5e8"/><path fill="%2398d8c8" opacity="0.4" d="M0 350Q350 250 700 350T1400 350V700H0Z"/><circle fill="%2390EE90" opacity="0.6" cx="200" cy="200" r="80"/><circle fill="%2390EE90" opacity="0.4" cx="1200" cy="150" r="60"/></svg>');
+            background: #0a3d38;
             padding: 64px 0 48px;
             text-align: center;
             color: white;
         }
 
         .hero h1 {
-            font-family: 'Fredoka One', cursive;
+            font-family: 'Fraunces', serif;
             font-size: clamp(26px, 4vw, 38px);
             font-weight: 400;
             margin-bottom: 16px;
@@ -73,11 +68,11 @@
         }
 
         .section-title {
-            font-family: 'Fredoka One', cursive;
+            font-family: 'Fraunces', serif;
             text-align: center;
             font-size: clamp(22px, 3.5vw, 30px);
             font-weight: 400;
-            color: #06474a;
+            color: #0a3d38;
             margin-bottom: 36px;
             max-width: 800px;
             margin-left: auto;
@@ -87,10 +82,10 @@
         .section-title::after {
             content: '';
             display: block;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #27ae60, #27ae60);
-            margin: 24px auto 0;
+            width: 44px;
+            height: 2px;
+            background: #3f7d52;
+            margin: 20px auto 0;
             border-radius: 2px;
         }
 
@@ -105,28 +100,25 @@
         .content-card {
             background: #ffffff;
             padding: 32px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(44, 85, 48, 0.08);
-            border: 1px solid rgba(74, 124, 89, 0.15);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(41, 35, 25, 0.05), 0 10px 32px rgba(41, 35, 25, 0.08);
+            border: 1px solid #e6dabf;
         }
 
         .content-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 32px 80px rgba(44, 85, 48, 0.15);
-            border-color: rgba(74, 124, 89, 0.3);
+            border-color: #e6dabf;
         }
 
         .content-card h3 {
             font-size: 28px;
             font-weight: 700;
-            color: #06474a;
+            color: #0a3d38;
             margin-bottom: 24px;
         }
 
         .content-card p {
             font-size: 18px;
-            color: #4b7a5a;
+            color: #564d3f;
             margin-bottom: 20px;
         }
 
@@ -138,9 +130,9 @@
 
         .spec-list li {
             font-size: 17px;
-            color: #4b7a5a;
+            color: #564d3f;
             padding: 10px 0 10px 30px;
-            border-bottom: 1px solid #e5f0e6;
+            border-bottom: 1px solid #efe6d2;
             position: relative;
         }
 
@@ -152,30 +144,25 @@
             content: '✓';
             position: absolute;
             left: 0;
-            color: #4a7c59;
+            color: #2f6140;
             font-weight: bold;
         }
 
         .spec-list li strong {
-            color: #06474a;
+            color: #0a3d38;
         }
 
         /* Images */
         .feature-image {
             height: 300px;
-            border-radius: 20px;
+            border-radius: 12px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(44, 85, 48, 0.12);
-            transition: all 0.4s ease;
-        }
-
-        .feature-image:hover {
-            transform: scale(1.02);
+            box-shadow: 0 2px 4px rgba(41, 35, 25, 0.05), 0 10px 32px rgba(41, 35, 25, 0.08);
         }
 
         .goat-img {
-            background: linear-gradient(135deg, #f0f9f0 0%, #e0f2e0 50%, #d1e7d1 100%);
+            background: #f2ead9;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -183,7 +170,7 @@
         }
 
         .milk-img {
-            background: #eaf6ec;
+            background: #f2ead9;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -193,7 +180,7 @@
             width: 100%;
             max-width: 320px;
             margin: 0 auto;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
         }
 
@@ -216,18 +203,21 @@
         .compare-card {
             background: #ffffff;
             padding: 40px 32px;
-            border-radius: 20px;
-            box-shadow: 0 16px 48px rgba(44, 85, 48, 0.08);
-            border-top: 6px solid;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(41, 35, 25, 0.05), 0 10px 32px rgba(41, 35, 25, 0.08);
+            border-top: 4px solid;
         }
 
-        .compare-saanen { border-top-color: #27ae60; }
-        .compare-etawa { border-top-color: #f59e0b; }
-        .compare-sapi { border-top-color: #3b82f6; }
+        .compare-saanen {
+            border-top-color: #27ae60;
+        }
 
-        .compare-card:hover {
-            transform: translateY(-6px);
+        .compare-etawa {
+            border-top-color: #f59e0b;
+        }
+
+        .compare-sapi {
+            border-top-color: #3b82f6;
         }
 
         .compare-icon {
@@ -238,7 +228,7 @@
 
         .compare-card h4 {
             font-size: 24px;
-            color: #06474a;
+            color: #0a3d38;
             margin-bottom: 24px;
             font-weight: 700;
         }
@@ -249,7 +239,7 @@
 
         .compare-features li {
             font-size: 17px;
-            color: #4b7a5a;
+            color: #564d3f;
             margin-bottom: 16px;
             padding-left: 28px;
             position: relative;
@@ -264,71 +254,110 @@
         }
 
         /* Myth Section */
-        .myth-section {
-            background: #f0f9f2;
-            border-radius: 24px;
-            padding: 60px 48px;
-            margin: 80px 0;
-            border: 2px solid #a9dcb5;
+        .article-note {
+            max-width: 760px;
+            margin: 48px auto 0;
+            padding-top: 32px;
+            border-top: 1px solid #e6dabf;
         }
 
-        .myth-title {
-            font-family: 'Fredoka One', cursive;
-            font-size: 30px;
-            font-weight: 400;
-            color: #06474a;
-            text-align: center;
-            margin-bottom: 32px;
+        .article-note h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #0a3d38;
+            margin-bottom: 12px;
+        }
+
+        .article-note p {
+            color: #564d3f;
+            line-height: 1.7;
+        }
+
+        .section-alt {
+            background: #f2ead9;
+        }
+
+        .compare-table-wrap {
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            font-size: 14.5px;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e6dabf;
+        }
+
+        .compare-table thead th {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 15px;
+            color: #0a3d38;
+            border-bottom: 2px solid #0a3d38;
+        }
+
+        .compare-table tbody th {
+            color: #7a715f;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .compare-table tbody tr:nth-child(odd) {
+            background: #fbf7ee;
+        }
+
+        .compare-table td:first-of-type,
+        .compare-table thead th:nth-child(2) {
+            font-weight: 600;
+            color: #292319;
         }
 
         /* CTA */
         .cta-section {
-            background: linear-gradient(135deg, #06474a, #27ae60);
+            background: #0a3d38;
             color: white;
             text-align: center;
-            padding: 80px 48px;
-            border-radius: 24px;
-            margin: 80px 0;
+            padding: 28px 24px;
+            border-radius: 8px;
+            margin: 32px 0;
         }
 
         .cta-title {
-            font-family: 'Fredoka One', cursive;
-            font-size: 32px;
-            margin-bottom: 24px;
-            font-weight: 400;
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .cta-text {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.95;
+            font-size: 14.5px;
+            margin-bottom: 16px;
+            opacity: 0.9;
         }
 
         .cta-btn {
             display: inline-block;
-            background: linear-gradient(135deg, #27ae60, #06474a);
-            color: white;
-            padding: 20px 56px;
-            border-radius: 50px;
+            background: #fff;
+            color: #0a3d38;
+            padding: 10px 24px;
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 14.5px;
             font-weight: 600;
-            box-shadow: 0 16px 48px rgba(34, 197, 94, 0.3);
-            transition: all 0.3s ease;
+            transition: background 0.15s ease;
         }
 
         .cta-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 24px 64px rgba(34, 197, 94, 0.4);
-        }
-
-        /* Footer */
-        footer {
-            background: #06474a;
-            color: #d1fae5;
-            text-align: center;
-            padding: 48px 0;
-            font-size: 16px;
+            background: #f2ead9;
         }
 
         /* Responsive */
@@ -351,22 +380,22 @@
             .container {
                 padding: 0 20px;
             }
-            
+
             .content-grid {
                 grid-template-columns: 1fr;
                 gap: 32px;
                 text-align: center;
             }
-            
+
             .header-inner {
                 flex-direction: column;
                 gap: 16px;
             }
-            
+
             .section {
                 padding: 40px 0;
             }
-            
+
             .content-card {
                 padding: 26px 22px;
             }
@@ -378,7 +407,7 @@
             .content-card p {
                 font-size: 15px;
             }
-            
+
             .feature-image {
                 height: 190px;
                 border-radius: 16px;
@@ -388,27 +417,42 @@
                 height: auto;
                 max-width: 220px;
             }
-            
+
             .goat-img {
                 font-size: 64px;
             }
-            
-            .comparison-grid {
-                grid-template-columns: 1fr;
+
+            .compare-table {
+                font-size: 13px;
             }
 
-            .myth-section {
-                padding: 28px 20px;
-                margin: 36px 0;
+            .compare-table th,
+            .compare-table td {
+                padding: 10px 10px;
             }
 
-            .compare-card {
-                padding: 24px 20px;
+            .article-note {
+                padding-top: 24px;
+                margin-top: 32px;
+            }
+
+            .cta-section {
+                padding: 20px 16px;
+                margin: 20px 0;
+            }
+
+            .cta-title {
+                font-size: 19px;
+            }
+
+            .cta-text {
+                font-size: 14px;
+                margin-bottom: 14px;
             }
 
             .cta-btn {
-                padding: 14px 30px;
-                font-size: 16px;
+                padding: 10px 22px;
+                font-size: 14.5px;
             }
         }
 
@@ -439,25 +483,35 @@
             transform: translateY(0);
         }
 
-        .fade-in:nth-child(2) { transition-delay: 0.1s; }
-        .fade-in:nth-child(3) { transition-delay: 0.2s; }
-        .fade-in:nth-child(4) { transition-delay: 0.3s; }
+        .fade-in:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .fade-in:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
+        .fade-in:nth-child(4) {
+            transition-delay: 0.3s;
+        }
     </style>
     <link rel="stylesheet" href="mobile-responsive.css">
+    <link rel="stylesheet" href="justify.css">
 </head>
+
 <body>
     <!-- Medsos -->
     <div class="medsos">
         <div class="container">
             <ul>
                 <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"><i
-                            class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&_t=ZS-93KMgz5gtDc" target="_blank"><i
-                            class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"><i
-                            class="fab fa-youtube"></i></a></li>
+                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
+                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
+                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
+                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
+                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
             </ul>
         </div>
     </div>
@@ -465,9 +519,9 @@
     <!-- header -->
     <header>
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm SHOP</a></h1>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
-            <label for="nav-toggle" class="nav-toggle-label" aria-label="Buka menu">
+            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -475,12 +529,12 @@
             <ul>
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="product.html">PRODUCT</a></li>
-                <li class="active"><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
+                <li class="active"><a href="Pengenalan susu saanen.html" aria-current="page">Informasi Susu Saanen</a>
+                </li>
                 <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
                 <li><a href="contact.html">CONTACT</a></li>
-                <li><a href="media library.html">MEDIA LIBRARY</a></li>
                 <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
-                <li><a href="kandungan & manfaat.html">KANDUNGAN & MANFAAT</a></li>
+                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
                 <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
                 <li><a href="rating.html">RATING &amp; SARAN</a></li>
                 <li><a href="testimoni.html">TESTIMONI</a></li>
@@ -491,8 +545,9 @@
     <!-- Hero -->
     <section class="hero">
         <div class="container">
-            <h1>Mengapa Susu Kambing Saanen Tidak Berbau Amis?</h1>
-            <p class="hero-lead">Banyak orang enggan mengonsumsi susu kambing karena aromanya yang menyengat. Padahal, aroma tersebut bukan disebabkan oleh jenis kambingnya, melainkan oleh cara perawatannya. Berikut penjelasan mengapa susu kambing Saanen dari Margaluyu Farm berbeda.</p>
+            <h1>Mengenal susu saanen</h1>
+            <p class="hero-lead">Aroma menyengat pada susu kambing umumnya bukan disebabkan oleh jenis kambing,
+                melainkan dari cara perawatannya.</p>
         </div>
     </section>
 
@@ -500,79 +555,75 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title fade-in">Susu Kambing Saanen Seperti Apa?</h2>
-            
+
             <div class="content-grid">
                 <div class="feature-image milk-img fade-in">
                     <img src="poster-susu-saanen.png" alt="Poster Susu Kambing Saanen Murni Margaluyu Farm">
                 </div>
                 <div class="content-card fade-in">
                     <h3>Rasa, Aroma, dan Tekstur yang Khas</h3>
-                    <p>Susu ini memiliki rasa manis yang lembut dengan sisa rasa (aftertaste) yang bersih, tanpa
-                        rasa pahit atau asam yang mengganggu. Teksturnya creamy, lebih kental dibandingkan susu sapi,
-                        tetapi tidak seberat susu kambing pada umumnya.</p>
+                    <p>Rasanya manis lembut dengan sisa rasa (aftertaste) yang bersih, tanpa pahit atau asam.
+                        Teksturnya creamy, lebih kental dari susu sapi tapi tidak seberat susu kambing pada
+                        umumnya.</p>
 
-                    <p>Aromanya segar dengan sedikit wangi herbal, jauh lebih ringan dibandingkan susu kambing lokal
-                        pada umumnya. Aroma menyengat yang sering dikeluhkan sebenarnya bukan disebabkan oleh jenis
-                        kambingnya, melainkan oleh tiga faktor: kebersihan kandang, kualitas pakan, dan cara
-                        pemerahan.</p>
-
-                    <p>Oleh karena itu, kandang kami dibersihkan secara rutin, pakan yang diberikan berupa rumput
-                        segar, dan susu segera didinginkan setelah diperah. Hasilnya adalah susu yang nyaman diminum
-                        tanpa aroma yang mengganggu.</p>
+                    <p>Aromanya ringan, dengan rasa yang segar dan alami sehingga nyaman diminum.
+                    </p>
                 </div>
+            </div>
+
+            <div class="article-note fade-in">
+                <h3>Kenapa Susu Kambing Sering Dianggap Amis?</h3>
+                <p>Aroma susu kambing yang menyengat dapat dipengaruhi oleh kondisi lingkungan, kualitas pakan, dan
+                    higienitas saat memerah. Di kandang kami, kambing diberi rumput dan jerami segar. Area pemerahan
+                    dijaga tetap bersih, dan setelah diperah, susu segera didinginkan hingga 4&deg;C dalam waktu 30
+                    menit untuk menjaga kualitas dan kesegarannya.
+
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Section 3: Meluruskan Mitos -->
-    <section class="section">
+    <!-- Perbandingan -->
+    <section class="section section-alt">
         <div class="container">
-            <div class="myth-section fade-in">
-                <h3 class="myth-title">Mengapa Susu Kambing Sering Dianggap Amis?</h3>
-                <p>Hal ini umumnya terjadi karena pernah mengonsumsi susu kambing yang perawatannya kurang baik,
-                    misalnya kandang yang kotor, pakan seadanya, atau proses pemerahan dengan tangan dan wadah yang
-                    tidak steril. Aroma amis tersebut berkaitan dengan cara perawatan, bukan dengan jenis
-                    kambingnya.</p>
-
-                <p>Di kandang kami, tiga hal tersebut dijaga secara ketat: kandang dibersihkan dua kali sehari,
-                    pakan berupa rumput dan jerami segar, serta susu didinginkan hingga 4°C dalam waktu 30 menit
-                    setelah diperah. Hasilnya adalah susu yang bersih dan siap dikonsumsi.</p>
-            </div>
-
             <h2 class="section-title fade-in">Perbandingan dengan Susu Lain</h2>
-            <div class="comparison-grid">
-                <div class="compare-card compare-saanen fade-in">
-                    <div class="compare-icon">🐐</div>
-                    <h4>Susu Saanen</h4>
-                    <ul class="compare-features">
-                        <li>Rasa manis lembut alami</li>
-                        <li>Aroma segar herbal ringan</li>
-                        <li>Tekstur creamy mudah ditelan</li>
-                        <li>Pencernaan lebih lancar</li>
-                    </ul>
-                </div>
-                <div class="compare-card compare-etawa fade-in">
-                    <div class="compare-icon">🐐</div>
-                    <h4>Susu Etawa</h4>
-                    <ul class="compare-features">
-                        <li>Rasa lebih tajam kuat</li>
-                        <li>Aroma kambing lebih jelas</li>
-                        <li>Tekstur sangat kental</li>
-                        <li>Kadar lemak lebih tinggi</li>
-                        <li>Kokoh untuk pengolahan</li>
-                    </ul>
-                </div>
-                <div class="compare-card compare-sapi fade-in">
-                    <div class="compare-icon">🐄</div>
-                    <h4>Susu Sapi</h4>
-                    <ul class="compare-features">
-                        <li>Rasa familiar standar</li>
-                        <li>Aroma netral polos</li>
-                        <li>Tekstur lebih cair</li>
-                        <li>Laktosa tinggi sulit dicerna</li>
-                        <li>Produksi sangat melimpah</li>
-                    </ul>
-                </div>
+            <div class="compare-table-wrap fade-in">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Susu Saanen</th>
+                            <th>Susu Etawa</th>
+                            <th>Susu Sapi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Rasa</th>
+                            <td>Manis, lembut, alami</td>
+                            <td>Lebih tajam dan kuat</td>
+                            <td>Familiar, standar</td>
+                        </tr>
+                        <tr>
+                            <th>Aroma</th>
+                            <td>Segar,creamy</td>
+                            <td>Aroma kambing lebih terasa</td>
+                            <td>Netral</td>
+                        </tr>
+                        <tr>
+                            <th>Tekstur</th>
+                            <td>Creamy, mudah ditelan</td>
+                            <td>Sangat kental, lemak lebih tinggi</td>
+                            <td>Lebih cair</td>
+                        </tr>
+                        <tr>
+                            <th>Pencernaan</th>
+                            <td>Cenderung lebih ringan dicerna</td>
+                            <td>Cocok untuk diolah lebih lanjut</td>
+                            <td>Laktosa tinggi, sering sulit dicerna</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -580,18 +631,39 @@
     <!-- CTA -->
     <section class="cta-section fade-in">
         <div class="container">
-            <h2 class="cta-title">Saatnya Membuktikan Sendiri</h2>
-            <p class="cta-text">Susu segar kami diperah dan dikirim pada hari yang sama. Silakan mencoba pesanan
-                pertama, dan apabila sesuai dengan selera Anda, tersedia paket langganan mingguan dengan harga
-                lebih hemat.</p>
+            <h2 class="cta-title">Susu Saanen Segar Setiap Hari</h2>
+            <p class="cta-text">Susu segar kami diperah dan dikirim di hari yang sama. Yuk, pesan sekarang.</p>
             <a href="order sekarang.html" class="cta-btn">Pesan Susu Saanen</a>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- footer -->
     <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
         <div class="container">
-            <p>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</p>
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
         </div>
     </footer>
 
@@ -603,7 +675,7 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, {threshold: 0.1});
 
         // Observe semua elemen fade-in
         document.querySelectorAll('.fade-in').forEach(el => {
@@ -615,9 +687,10 @@
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                target.scrollIntoView({behavior: 'smooth', block: 'start'});
             });
         });
     </script>
 </body>
+
 </html>

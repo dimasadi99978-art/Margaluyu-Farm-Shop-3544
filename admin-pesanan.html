@@ -21,7 +21,7 @@
         }
 
         h1 {
-            color: #06474a;
+            color: #0a3d38;
             font-size: 1.6em;
         }
 
@@ -57,7 +57,7 @@
 
         .login-box button:hover,
         .refresh-btn:hover {
-            background: #06474a;
+            background: #0a3d38;
         }
 
         .login-error {
@@ -95,7 +95,7 @@
 
         .order-id {
             font-weight: 800;
-            color: #06474a;
+            color: #0a3d38;
         }
 
         .status-tag {
@@ -144,7 +144,7 @@
             cursor: pointer;
             font-size: 0.85em;
             font-weight: 600;
-            color: #06474a;
+            color: #0a3d38;
         }
 
         .status-buttons button:hover {
@@ -152,15 +152,62 @@
         }
 
         .status-buttons button.active-status {
-            background: #06474a;
+            background: #0a3d38;
             color: #fff;
-            border-color: #06474a;
+            border-color: #0a3d38;
         }
 
         .empty-msg {
             text-align: center;
             color: #777;
             padding: 40px 0;
+        }
+
+        .bulk-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #fff;
+            border: 1px solid #cfe3d3;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            font-size: 0.9em;
+        }
+
+        .bulk-bar .btn-sm {
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid #0a3d38;
+            background: #fff;
+            color: #0a3d38;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .bulk-bar .btn-danger {
+            background: #b3261e;
+            border-color: #b3261e;
+            color: #fff;
+        }
+
+        .bulk-bar .btn-danger:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .select-row {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        .select-row label {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .config-warning {
@@ -189,12 +236,21 @@
         <div id="adminPanel">
             <div class="toolbar">
                 <h1>Daftar Pesanan</h1>
-                <button class="refresh-btn" id="refreshBtn">Muat Ulang</button>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <a href="admin-analitik.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Lihat Analitik &rarr;</a>
+                    <button class="refresh-btn" id="refreshBtn">Muat Ulang</button>
+                </div>
             </div>
             <input type="text" id="searchInput" placeholder="Cari nama, nomor HP, atau nomor pesanan..."
                 style="width:100%;padding:12px 14px;border:1px solid #cfe3d3;border-radius:10px;margin-bottom:18px;box-sizing:border-box;">
             <div id="configWarning" class="config-warning" style="display:none;">
                 Penyimpanan pesanan bersama belum terhubung. Pastikan Environment Variables Vercel untuk ORDERS_MASTER_KEY dan ORDERS_BIN_ID sudah diatur.
+            </div>
+            <div class="bulk-bar" id="bulkBar">
+                <span id="bulkInfo"></span>
+                <button type="button" class="btn-sm" id="selectAllDone">Pilih semua yang Selesai</button>
+                <button type="button" class="btn-sm" id="clearSelection">Batal pilih</button>
+                <button type="button" class="btn-sm btn-danger" id="deleteSelected" disabled>Hapus terpilih</button>
             </div>
             <div id="ordersList"></div>
         </div>
@@ -203,15 +259,39 @@
     <script src="orders-config.js"></script>
     <script src="orders-store.js"></script>
     <script>
-        document.getElementById('loginBtn').addEventListener('click', function () {
+        let refreshTimer = null;
+
+        function enterAdmin() {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadOrders();
+            if (!refreshTimer) refreshTimer = setInterval(loadOrders, 30000); // auto-refresh tiap 30 detik (satu timer saja)
+        }
+
+        // Login: bila server memakai ORDERS_ADMIN_KEY, kata sandi diperiksa oleh server.
+        // Jika belum diaktifkan, perilaku lama dipertahankan (dibandingkan dengan ADMIN_PASSWORD).
+        document.getElementById('loginBtn').addEventListener('click', async function () {
+            const btn = this;
+            const errEl = document.getElementById('loginError');
             const val = document.getElementById('passwordInput').value;
-            if (val === ADMIN_PASSWORD) {
-                document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                loadOrders();
-                setInterval(loadOrders, 30000); // auto-refresh tiap 30 detik
-            } else {
-                document.getElementById('loginError').style.display = 'block';
+            errEl.style.display = 'none';
+            btn.disabled = true;
+            try {
+                const check = await OrdersStore.verifyAdmin(val);
+                if (check.ok && check.protectedByServer) return enterAdmin();
+                if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
+                    OrdersStore.setAdminKey('');
+                    errEl.textContent = 'Kata sandi salah.';
+                    errEl.style.display = 'block';
+                    return;
+                }
+                // Server belum memakai kata sandi admin: pakai pemeriksaan lama
+                if (val === ADMIN_PASSWORD) return enterAdmin();
+                OrdersStore.setAdminKey('');
+                errEl.textContent = 'Kata sandi salah.';
+                errEl.style.display = 'block';
+            } finally {
+                btn.disabled = false;
             }
         });
 
@@ -222,6 +302,63 @@
         document.getElementById('refreshBtn').addEventListener('click', loadOrders);
 
         let allOrders = [];
+        const selected = new Set(); // nomor pesanan yang dicentang (hanya status Selesai)
+
+        function doneOrders() {
+            return allOrders.filter(o => o && o.orderId && o.status === 'Selesai');
+        }
+
+        function updateBulkBar() {
+            const done = doneOrders();
+            const bar = document.getElementById('bulkBar');
+            // buang pilihan yang sudah tidak ada / bukan Selesai lagi
+            const valid = new Set(done.map(o => o.orderId));
+            Array.from(selected).forEach(id => { if (!valid.has(id)) selected.delete(id); });
+            bar.style.display = done.length ? 'flex' : 'none';
+            const total = allOrders
+                .filter(o => selected.has(o.orderId))
+                .reduce((sum, o) => sum + (Number(o.totalHarga) || 0), 0);
+            document.getElementById('bulkInfo').textContent = selected.size
+                ? selected.size + ' pesanan dipilih (Rp ' + total.toLocaleString('id-ID') + ')'
+                : done.length + ' pesanan Selesai bisa dihapus';
+            document.getElementById('deleteSelected').disabled = selected.size === 0;
+        }
+
+        document.getElementById('selectAllDone').addEventListener('click', function () {
+            doneOrders().forEach(o => selected.add(o.orderId));
+            renderList(document.getElementById('searchInput').value.trim().toLowerCase());
+        });
+        document.getElementById('clearSelection').addEventListener('click', function () {
+            selected.clear();
+            renderList(document.getElementById('searchInput').value.trim().toLowerCase());
+        });
+        document.getElementById('deleteSelected').addEventListener('click', async function () {
+            if (!selected.size) return;
+            const ids = Array.from(selected);
+            const total = allOrders.filter(o => selected.has(o.orderId)).reduce((s, o) => s + (Number(o.totalHarga) || 0), 0);
+            if (!confirm('Hapus ' + ids.length + ' pesanan Selesai (total Rp ' + total.toLocaleString('id-ID') +
+                ')?\n\nData ini juga hilang dari Analitik (jumlah pesanan & pendapatan ikut berkurang). Tidak bisa dibatalkan.\n\nSaran: unduh Excel di halaman Analitik dulu bila datanya masih dibutuhkan.')) return;
+            const btn = this;
+            btn.disabled = true;
+            const r = await OrdersStore.removeMany(ids);
+            if (!r.success) {
+                alert('Gagal menghapus: ' + r.error);
+            } else {
+                r.removed.forEach(id => selected.delete(id));
+                if (r.skipped && r.skipped.length) alert(r.skipped.length + ' pesanan dilewati karena statusnya belum Selesai.');
+            }
+            await loadOrders();
+        });
+
+        // Semua data pesanan berasal dari input pelanggan, jadi wajib di-escape sebelum masuk innerHTML.
+        function esc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function safeImgSrc(src) {
+            return /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(String(src || '')) ? src : '';
+        }
 
         document.getElementById('searchInput').addEventListener('input', function () {
             renderList(this.value.trim().toLowerCase());
@@ -241,6 +378,7 @@
             }
 
             if (!shown.length) {
+                updateBulkBar();
                 listEl.innerHTML = '<p class="empty-msg">' +
                     (keyword ? 'Tidak ada pesanan yang cocok dengan pencarian.' : 'Belum ada pesanan masuk.') +
                     '</p>';
@@ -255,13 +393,26 @@
                 return;
             }
 
+            document.querySelectorAll('[data-select-id]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    if (this.checked) selected.add(this.dataset.selectId);
+                    else selected.delete(this.dataset.selectId);
+                    updateBulkBar();
+                });
+            });
+            updateBulkBar();
+
             document.querySelectorAll('[data-action="update-status"]').forEach(btn => {
                 btn.addEventListener('click', async function () {
                     const orderId = this.dataset.orderId;
                     const newStatus = this.dataset.status;
                     this.disabled = true;
-                    await OrdersStore.updateStatus(orderId, newStatus);
-                    loadOrders();
+                    const order = allOrders.find(o => o && o.orderId === orderId);
+                    const result = await OrdersStore.updateStatus(orderId, newStatus, order);
+                    if (!result.success) {
+                        alert('Status pesanan belum berubah: ' + (result.error || 'Terjadi kesalahan.'));
+                    }
+                    await loadOrders();
                 });
             });
         }
@@ -284,7 +435,7 @@
                     configWarning.textContent = 'Penyimpanan pesanan bersama belum terhubung. Pastikan Environment Variables Vercel untuk ORDERS_MASTER_KEY dan ORDERS_BIN_ID sudah diatur.';
                     configWarning.style.display = 'block';
                 } else if (!online) {
-                    configWarning.textContent = 'Gagal terhubung ke server penyimpanan bersama' + (error ? (': ' + error) : '') + '. Daftar di bawah ini adalah data cadangan dari perangkat ini, bisa jadi tidak lengkap/terbaru.';
+                    configWarning.textContent = 'Gagal terhubung ke server penyimpanan bersama' + (error ? (': ' + esc(error)) : '') + '. Daftar di bawah ini adalah data cadangan dari perangkat ini, bisa jadi tidak lengkap/terbaru.';
                     configWarning.style.display = 'block';
                 } else {
                     configWarning.style.display = 'none';
@@ -304,14 +455,15 @@
             const steps = OrdersStore.STATUS_STEPS;
             const buttons = steps.map(s => {
                 const isActive = s === status;
-                return `<button data-action="update-status" data-order-id="${orderId}" data-status="${s}"
-                    class="${isActive ? 'active-status' : ''}" ${isActive ? 'disabled' : ''}>${s}</button>`;
+                return `<button data-action="update-status" data-order-id="${esc(orderId)}" data-status="${esc(s)}"
+                    class="${isActive ? 'active-status' : ''}" ${isActive ? 'disabled' : ''}>${esc(s)}</button>`;
             }).join('');
 
-            const buktiHtml = order.buktiPembayaran
+            const bukti = safeImgSrc(order.buktiPembayaran);
+            const buktiHtml = bukti
                 ? `<div style="margin-top:8px;">
-                        <a href="${order.buktiPembayaran}" target="_blank">
-                            <img src="${order.buktiPembayaran}" alt="Bukti pembayaran"
+                        <a href="${bukti}" target="_blank" rel="noopener">
+                            <img src="${bukti}" alt="Bukti pembayaran"
                                 style="max-width:120px;border-radius:8px;border:1px solid #cfe3d3;display:block;">
                         </a>
                         <span style="font-size:0.8em;color:#888;">Klik gambar untuk memperbesar</span>
@@ -325,18 +477,19 @@
             return `
                 <div class="order-card">
                     <div class="top-row">
-                        <span class="order-id">${orderId}${newBadge}</span>
-                        <span class="status-tag status-${status}">${status}</span>
+                        <span class="order-id">${esc(orderId)}${newBadge}</span>
+                        <span class="status-tag status-${esc(status)}">${esc(status)}</span>
                     </div>
                     <div class="order-detail">
-                        <strong>${order.nama || '-'}</strong> — ${order.telepon || '-'}<br>
-                        ${order.alamat || '-'}<br>
-                        Produk: ${order.produk || '-'} x${order.jumlah || '-'} · ${order.langganan || '-'}<br>
-                        Pembayaran: ${order.metodePembayaran || '-'}${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${order.tanggal || '-'}
-                        ${order.pesan ? '<br>Catatan: ' + order.pesan : ''}
+                        <strong>${esc(order.nama || '-')}</strong> — ${esc(order.telepon || '-')}<br>
+                        ${esc(order.alamat || '-')}<br>
+                        Produk: ${esc(order.produk || '-')} x${esc(order.jumlah || '-')} · ${esc(order.langganan || '-')}<br>
+                        Pembayaran: ${esc(order.metodePembayaran || '-')}${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${esc(order.tanggal || '-')}
+                        ${order.pesan ? '<br>Catatan: ' + esc(order.pesan) : ''}
                         ${buktiHtml}
                     </div>
                     <div class="status-buttons">${buttons}</div>
+                    ${status === 'Selesai' && order.orderId ? `<div class="select-row"><label><input type="checkbox" data-select-id="${esc(order.orderId)}" ${selected.has(order.orderId) ? 'checked' : ''}> Pilih untuk dihapus</label></div>` : ''}
                 </div>
             `;
         }

@@ -1,9 +1,9 @@
 // Vercel Cron: hapus seluruh pesanan yang sudah berstatus Selesai
-// dan sudah lebih dari 90 hari sejak status terakhir diperbarui.
+// dan sudah lebih dari 6 bulan (180 hari) sejak status terakhir diperbarui.
 // Testimoni tidak disentuh karena memakai JSONBin terpisah.
 
 const API_ROOT = 'https://api.jsonbin.io/v3/b';
-const RETENTION_DAYS = 90;
+const RETENTION_DAYS = 180; // 6 bulan
 
 function unwrap(record) {
   if (Array.isArray(record)) return record;
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
         success: true,
         deleted: 0,
         remaining: kept.length,
-        message: 'Tidak ada pesanan Selesai yang melewati 90 hari.'
+        message: 'Tidak ada pesanan Selesai yang melewati 6 bulan.'
       });
     }
 
