@@ -68,22 +68,10 @@ header.site-top h1 a { color: var(--forest); text-decoration: none; }
     box-shadow: inset 3px 0 0 var(--forest);
 }
 
-.menu-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 2px 2px; border-top: 1px solid var(--line-soft); margin-top: 6px; flex: 0 0 auto; }
-.menu-panel a.menu-btn {
-    display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 8px;
-    font-size: 14.5px; font-weight: 700; text-decoration: none; text-align: center;
-}
-.menu-panel a.menu-btn--primary { background: var(--forest); color: #fff; }
-.menu-panel a.menu-btn--primary:hover { background: var(--forest-deep); color: #fff; }
-.menu-panel a.menu-btn--ghost { background: #fff; color: var(--forest); border: 1.5px solid var(--forest); }
-.menu-panel a.menu-btn--ghost:hover { background: var(--paper-alt); }
-
-/* Layar lebar: panel dua kolom */
+/* Layar lebar: tetap satu kolom vertikal, sedikit lebih longgar */
 @media (min-width: 900px) {
-    .menu-panel { width: 600px; right: 24px; padding: 14px; }
-    .menu-cols { grid-template-columns: 1fr 1fr; column-gap: 14px; row-gap: 0; }
-    .menu-group { border-top: 0 !important; padding: 4px 0 10px; }
-    .menu-panel a.menu-link { min-height: 42px; }
+    .menu-panel { width: 320px; right: 24px; padding: 12px; }
+    .menu-panel a.menu-link { min-height: 40px; }
 }
 @media (max-width: 600px) { .menu-panel { right: 16px; } }
 @media (prefers-reduced-motion: reduce) { .menu-panel { animation: none; } }
