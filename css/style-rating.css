@@ -1,7 +1,7 @@
 /* ==========================================================================
    Margaluyu Farm - stylesheet bersama
    Urutan: 1 tokens · 2 dasar · 3 header/menu · 4 footer · 5 komponen umum
-           6 halaman-halaman (testimoni, rating, lacak, galeri, info) · 7 legacy
+           6 halaman (testimoni, rating, lacak, info) · 7 legacy
    ========================================================================== */
 
 /* ---------- 1. Design tokens ---------- */
@@ -72,74 +72,7 @@ button { font-family: inherit; }
 .eyebrow-center { text-align: center; }
 .eyebrow-invert { color: rgba(255, 255, 255, 0.75); }
 
-/* ---------- 3. Media sosial, header & menu ---------- */
-.medsos { background: var(--forest-deep); padding: 9px 0; }
-.medsos ul { list-style: none; display: flex; justify-content: center; gap: 24px; }
-.medsos a { color: #fff; font-size: 15px; opacity: 0.85; transition: opacity 0.15s ease; }
-.medsos a:hover { opacity: 1; color: #fff; }
-
-header {
-    background: rgba(251, 247, 238, 0.94);
-    -webkit-backdrop-filter: saturate(1.1) blur(6px);
-    backdrop-filter: saturate(1.1) blur(6px);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    box-shadow: 0 1px 0 var(--line);
-}
-header .container {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; position: relative; min-height: 72px;
-}
-header h1 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: 0.01em; }
-header h1 a { color: var(--forest); }
-
-/* Menu dropdown menempel pada header (bukan fixed), jadi selalu tepat di bawah header */
-header ul {
-    list-style: none;
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: calc(100% + 1px);
-    right: 24px;
-    width: 280px;
-    max-width: calc(100vw - 48px);
-    max-height: calc(100vh - 110px);
-    max-height: calc(100dvh - 110px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lift);
-    padding: 8px;
-    gap: 2px;
-    z-index: 1000;
-}
-header ul li a {
-    display: block; padding: 12px 16px; border-radius: 3px;
-    font-size: 14px; color: var(--ink);
-    transition: background-color 0.15s ease, color 0.15s ease;
-}
-header ul li a:hover { background: var(--paper-alt); color: var(--forest); }
-header ul li.active a { background: var(--forest); color: #fff; }
-
-/* Hamburger: checkbox tetap bisa difokus keyboard */
-.nav-toggle { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
-.nav-toggle-label {
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    gap: 5px; width: 40px; height: 40px; border-radius: var(--radius);
-    border: 1.5px solid var(--forest); background: #fff; cursor: pointer; flex: 0 0 40px;
-}
-.nav-toggle-label span {
-    display: block; width: 18px; height: 2px; background: var(--forest);
-    border-radius: 2px; transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.nav-toggle:focus-visible + .nav-toggle-label { outline: 2px solid var(--forest); outline-offset: 2px; }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(2) { opacity: 0; }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-.nav-toggle:checked + .nav-toggle-label + ul { display: flex; }
+/* ---------- 3. Header & menu: lihat css/site.css ---------- */
 
 /* ---------- 4. Footer ---------- */
 footer { background: var(--forest-deep); color: rgba(255, 255, 255, 0.85); text-align: left; padding: 0; }
@@ -407,58 +340,6 @@ fieldset.star-field { border: 0; min-width: 0; }
     .track-form .btn { width: 100%; }
     .step .label { font-size: 11.5px; }
 }
-
-/* ---------- 6d. Media library ---------- */
-.filter-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 44px; }
-.filter-btn {
-    background: #fff; color: var(--forest); border: 1.5px solid var(--line); padding: 9px 20px;
-    border-radius: 999px; cursor: pointer; font-size: 14.5px; font-weight: 500;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-.filter-btn:hover { border-color: var(--forest); }
-.filter-btn.active { background: var(--forest); color: #fff; border-color: var(--forest); }
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px 20px; }
-.media-item { margin: 0; min-width: 0; }
-.media-item[hidden] { display: none; }
-.media-thumb {
-    display: block; width: 100%; padding: 0; border: 0; background: var(--paper-alt); cursor: zoom-in;
-    border-radius: var(--radius); overflow: hidden; aspect-ratio: 1 / 1;
-}
-.media-thumb img, .media-thumb video { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-.media-thumb:hover img, .media-thumb:hover video { transform: scale(1.03); }
-.media-item figcaption { padding: 10px 2px 0; }
-.media-item figcaption h4 { font-size: 16px; color: var(--forest); margin-bottom: 2px; }
-.media-item figcaption p { font-size: 13.5px; color: var(--muted); }
-.gallery-empty { text-align: center; color: var(--muted); padding: 40px 0; }
-
-dialog.lightbox {
-    border: 0; padding: 0; background: transparent; max-width: 92vw; max-height: 86vh;
-    width: 92vw; height: 86vh; color: #fff;
-}
-dialog.lightbox::backdrop { background: rgba(4, 20, 21, 0.92); }
-.lightbox-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 48px 56px 18px; gap: 10px; }
-.lightbox-stage img, .lightbox-stage video { max-width: min(78vw, 760px); max-height: min(68vh, 560px); width: auto; height: auto; object-fit: contain; border-radius: 6px; }
-.lightbox-caption { text-align: center; max-width: 60ch; font-size: 14.5px; color: rgba(255, 255, 255, 0.85); }
-.lightbox-caption strong { display: block; font-family: var(--font-head); font-weight: 500; font-size: 17px; color: #fff; }
-.lb-btn {
-    position: absolute; width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
-    background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center;
-}
-.lb-btn:hover { background: rgba(255, 255, 255, 0.28); }
-.lb-close { top: 12px; right: 12px; }
-.lb-prev { left: 8px; top: 50%; transform: translateY(-50%); }
-.lb-next { right: 8px; top: 50%; transform: translateY(-50%); }
-@media (max-width: 640px) {
-    .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
-    .media-item figcaption h4 { font-size: 14.5px; }
-    .media-item figcaption p { font-size: 12.5px; }
-    dialog.lightbox { width: 94vw; height: 82vh; max-width: 94vw; max-height: 82vh; }
-    .lightbox-stage { padding: 48px 12px 16px; }
-    .lightbox-stage img, .lightbox-stage video { max-width: 82vw; max-height: 62vh; }
-    .lb-prev { top: auto; bottom: 14px; left: 14px; transform: none; }
-    .lb-next { top: auto; bottom: 14px; right: 14px; transform: none; }
-}
-@media (max-width: 340px) { .gallery-grid { grid-template-columns: 1fr; } }
 
 /* ---------- 6e. Halaman informasi (Kandungan & Manfaat, Cara Penyajian) ---------- */
 .prose { max-width: 68ch; margin: 0 auto; }

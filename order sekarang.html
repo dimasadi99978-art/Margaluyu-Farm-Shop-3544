@@ -611,6 +611,7 @@
     </style>
     <link rel="stylesheet" href="mobile-responsive.css">
     <link rel="stylesheet" href="justify.css">
+    <link rel="stylesheet" href="css/menu.css">
 </head>
 
 <body>
@@ -632,7 +633,7 @@
     </div>
 
     <!-- header -->
-    <header>
+    <header class="site-top">
         <div class="container">
             <h1><a href="index.html">Margaluyu Farm</a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
@@ -641,18 +642,36 @@
                 <span></span>
                 <span></span>
             </label>
-            <ul>
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="product.html">PRODUCT</a></li>
-                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
-                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
-                <li><a href="contact.html">CONTACT</a></li>
-                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
-                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
-                <li><a href="penyajian.html">CARA PENYAJIAN</a></li>
-                <li><a href="rating.html">RATING &amp; SARAN</a></li>
-                <li><a href="testimoni.html">TESTIMONI</a></li>
-            </ul>
+            <nav class="menu-panel" aria-label="Menu utama">
+                <div class="menu-cols">
+                    <div class="menu-group">
+                        <span class="menu-label">Utama</span>
+                        <a class="menu-link" href="index.html">Beranda</a>
+                        <a class="menu-link" href="product.html">Produk</a>
+                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Informasi</span>
+                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
+                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
+                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
+                        <a class="menu-link" href="penyajian.html">Cara Penyajian</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Ulasan</span>
+                        <a class="menu-link" href="testimoni.html">Testimoni</a>
+                        <a class="menu-link" href="rating.html">Rating &amp; Saran</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Lainnya</span>
+                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
+                    </div>
+                </div>
+                <div class="menu-actions">
+                    <a class="menu-btn menu-btn--primary" href="order sekarang.html">Pesan Sekarang</a>
+                    <a class="menu-btn menu-btn--ghost" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">WhatsApp</a>
+                </div>
+            </nav>
         </div>
     </header>
 
@@ -946,18 +965,54 @@
                 return;
             }
 
-            if (!result || !result.success || !result.orderId) {
-                console.error('Pesanan belum masuk server:', result);
-                alert(
-                    'Pesanan belum berhasil tersimpan di server.\n\n' +
-                    (result && result.error ? result.error : 'Silakan coba lagi beberapa saat lagi.')
-                );
+            if (!result || !result.orderId) {
+                alert('Pesanan belum berhasil dibuat. Silakan coba lagi.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
                 return;
             }
 
             const orderId = result.orderId;
+
+            // Gagal tersimpan di server: JANGAN tampilkan struk seolah berhasil. Form dibiarkan terisi
+            // supaya pelanggan bisa mencoba lagi, dan disediakan jalur cadangan lewat WhatsApp.
+            if (!result.online && window.location.protocol !== 'file:') {
+                console.warn('Pesanan gagal tersimpan di server:', result.error);
+                let box = document.getElementById('orderError');
+                if (!box) {
+                    box = document.createElement('div');
+                    box.id = 'orderError';
+                    box.setAttribute('role', 'alert');
+                    box.style.cssText = 'margin:0 0 16px;padding:14px 16px;border:1px solid #e3b4ae;background:#fdf0ee;color:#8a1f18;border-radius:8px;font-size:14px;line-height:1.55;text-align:left;';
+                    submitBtn.parentNode.insertBefore(box, submitBtn);
+                }
+                const waText = 'Halo Margaluyu Farm, saya mau pesan:\n' +
+                    'Nama: ' + nama + '\nNo. HP: ' + telepon + '\nAlamat: ' + alamat + '\n' +
+                    'Produk: ' + produk + ' x' + jumlah + '\nPembayaran: ' + pembayaran +
+                    (pesan ? '\nCatatan: ' + pesan : '');
+                box.textContent = '';
+                const strong = document.createElement('strong');
+                strong.textContent = 'Pesanan belum tersimpan di server.';
+                box.appendChild(strong);
+                box.appendChild(document.createTextNode(' Data Anda masih ada di formulir, silakan tekan "Buat Pesanan" sekali lagi. Jika tetap gagal, kirim pesanan lewat WhatsApp: '));
+                const wa = document.createElement('a');
+                wa.href = 'https://wa.me/62895635067289?text=' + encodeURIComponent(waText);
+                wa.target = '_blank';
+                wa.rel = 'noopener';
+                wa.textContent = 'Kirim pesanan via WhatsApp';
+                wa.style.cssText = 'font-weight:700;text-decoration:underline;color:inherit;';
+                box.appendChild(wa);
+                if (result.error) {
+                    const small = document.createElement('div');
+                    small.style.cssText = 'margin-top:6px;font-size:12px;opacity:.8;';
+                    small.textContent = 'Rincian teknis: ' + result.error;
+                    box.appendChild(small);
+                }
+                box.scrollIntoView({behavior: 'smooth', block: 'center'});
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
+                return;
+            }
 
             // Sembunyikan judul & form, tampilkan konfirmasi saja
             document.getElementById('orderHeader').style.display = 'none';
@@ -987,11 +1042,29 @@
                 noteText = 'Pesanan Anda akan kami konfirmasi dan siapkan. Pembayaran dilakukan saat barang sampai (COD).';
             }
 
-            if (result.online) {
-                noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
+            if (!result.online) {
+                console.warn('Detail kegagalan sinkronisasi ke server bersama:', result.error);
+                noteText = window.location.protocol === 'file:'
+                    ? 'Mode uji lokal: halaman ini dibuka dari file di komputer, jadi pesanan hanya tersimpan di browser ini dan belum terkirim ke server. Setelah situs online (Vercel), pesanan akan masuk otomatis.'
+                    : '';
+                const wa = document.createElement('a');
+                wa.href = 'https://wa.me/62895635067289?text=' + encodeURIComponent('Halo Margaluyu Farm, nomor pesanan saya ' + orderId + '. Mohon dibantu diproses.');
+                wa.target = '_blank';
+                wa.rel = 'noopener';
+                wa.textContent = 'Bantuan Pesanan via WhatsApp';
+                wa.style.cssText = 'display:inline-block;margin-top:8px;font-weight:700;text-decoration:underline;';
+                noteEl.textContent = noteText;
+                noteEl.appendChild(document.createElement('br'));
+                noteEl.appendChild(wa);
+                const confirmCard = document.getElementById('orderConfirm');
+                confirmCard.style.display = 'block';
+                confirmCard.classList.remove('is-visible');
+                void confirmCard.offsetWidth;
+                confirmCard.classList.add('is-visible');
+                confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
+                return;
             } else {
-                // Hanya terjadi saat file HTML dibuka langsung di komputer.
-                noteText += ' (Mode lokal — belum tersimpan ke server online.)';
+                noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
             }
             noteEl.textContent = noteText;
 

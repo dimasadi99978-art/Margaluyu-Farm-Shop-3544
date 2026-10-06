@@ -1,40 +1,62 @@
 <!doctype html>
 <html lang="id">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cek Server Pesanan - Margaluyu Farm</title>
-<meta name="robots" content="noindex,nofollow">
-<style>
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f5faf6;margin:0;padding:30px;color:#234}.box{max-width:760px;margin:auto;background:#fff;padding:25px;border-radius:16px;box-shadow:0 5px 20px #0001}button{background:#0a3d38;color:#fff;border:0;padding:12px 18px;border-radius:9px;cursor:pointer;font-size:1em}button:disabled{opacity:.6}.ok{color:#16813d}.bad{color:#b3261e}.warn{color:#8a6500}pre{white-space:pre-wrap;background:#f5f5f5;padding:14px;border-radius:8px;overflow:auto}.note{margin-top:18px;background:#fff8e1;border:1px solid #f0d878;border-radius:10px;padding:14px 18px;font-size:.92em;color:#6b5300}.meta{margin-top:12px;font-size:.85em;color:#667}
-</style></head>
-<body><div class="box">
-<h1>Cek Server Pesanan</h1>
-<p>Memeriksa apakah fungsi API benar-benar berjalan di deployment Vercel, lalu menguji koneksi JSONBin. Tidak menampilkan data pelanggan.</p>
-<button id="btn">Tes Koneksi</button><div id="result" style="margin-top:18px"></div>
-<div class="meta" id="url"></div>
-<div class="note"><strong>Penting:</strong> halaman ini harus dibuka dari alamat <code>https://...</code> website yang sudah dipublish, bukan <code>file://...</code>. Jika API tidak ter-deploy, hasil sekarang akan membedakan masalah deployment dari masalah JSONBin.</div>
-</div>
-<script>
-const btn=document.getElementById('btn'),el=document.getElementById('result');
-document.getElementById('url').textContent='Halaman: '+location.href+' | API: '+new URL('/api/health',location.origin).href;
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-btn.onclick=async()=>{
- btn.disabled=true; el.innerHTML='Memeriksa API Vercel...';
- const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),15000);
- try{
-   const ping=new URL('/api/ping',location.origin).href;
-   const pingRes=await fetch(ping,{method:'GET',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
-   const pingText=await pingRes.text();
-   let pingJson={}; try{pingJson=pingText?JSON.parse(pingText):{}}catch(_){}
-   if(!pingRes.ok || !pingJson.success){ throw new Error('Endpoint /api/ping gagal: HTTP '+pingRes.status+' '+pingText.slice(0,300)); }
-   const api=new URL('/api/health',location.origin).href;
-   const r=await fetch(api,{method:'GET',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
-   const t=await r.text(); let j; try{j=t?JSON.parse(t):{}}catch(_){j={raw:t};}
-   if(r.ok && j.success && j.orders && j.orders.connected){el.innerHTML='<h3 class="ok">✓ Server, JSONBin, dan konfigurasi dasar aktif</h3><pre>'+esc(JSON.stringify(j,null,2))+'</pre>';} else if(r.ok){el.innerHTML='<h3 class="warn">⚠ API Vercel aktif, tetapi konfigurasi penyimpanan belum lengkap</h3><pre>'+esc(JSON.stringify(j,null,2))+'</pre>';} 
-   else{el.innerHTML='<h3 class="bad">✗ API Vercel mengembalikan error</h3><pre>HTTP '+r.status+'\n'+esc(JSON.stringify(j,null,2))+'</pre>';}
- }catch(e){
-   const msg=e.name==='AbortError'?'Timeout 15 detik: endpoint API tidak merespons.':e.message;
-   el.innerHTML='<h3 class="bad">✗ Endpoint API tidak dapat diakses</h3><pre>'+esc(msg)+'\n\nKemungkinan: /api tidak ikut ter-deploy, Root Directory Vercel salah, deployment gagal, atau domain yang dibuka bukan deployment yang berisi folder api/.</pre>';
- }finally{clearTimeout(timer);btn.disabled=false;}
-};
-</script></body></html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Cek Server Pesanan - Margaluyu Farm</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5faf6; margin: 0; padding: 30px; color: #234; }
+        .box { max-width: 700px; margin: auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 5px 20px #0001; }
+        button { background: #0a3d38; color: #fff; border: 0; padding: 12px 18px; border-radius: 9px; cursor: pointer; font-size: 1em; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .ok { color: #16813d; }
+        .bad { color: #b3261e; }
+        pre { white-space: pre-wrap; background: #f5f5f5; padding: 14px; border-radius: 8px; }
+        .note { margin-top: 18px; background: #fff8e1; border: 1px solid #f0d878; border-radius: 10px; padding: 14px 18px; font-size: 0.92em; color: #6b5300; }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Cek Server Pesanan</h1>
+        <p>Halaman ini memeriksa server Vercel, Environment Variables, penyimpanan JSONBin, dan email
+            notifikasi (tanpa menampilkan data pelanggan). Bila gagal, baca bagian <code>saran</code> pada hasilnya.</p>
+        <button id="btn">Tes Koneksi</button>
+        <div id="result" style="margin-top:18px"></div>
+
+        <div class="note">
+            <strong>"Gagal terhubung" / "Failed to fetch" itu wajar</strong> jika halaman ini dibuka langsung
+            dari file di komputer (alamatnya diawali <code>file://</code>), atau jika website belum
+            dipublikasikan. <code>/api/orders</code> adalah fungsi server yang hanya berjalan setelah situs
+            ini benar-benar online (misalnya sudah dipublikasikan di Vercel). Coba lagi setelah situs online,
+            dan pastikan ORDERS_MASTER_KEY serta ORDERS_BIN_ID sudah diisi di Vercel &rarr; Settings &rarr;
+            Environment Variables.
+        </div>
+    </div>
+    <script>
+        document.getElementById('btn').onclick = async () => {
+            const btn = document.getElementById('btn');
+            const el = document.getElementById('result');
+            btn.disabled = true;
+            el.innerHTML = 'Memeriksa...';
+            try {
+                const r = await fetch('/api/health', { cache: 'no-store' });
+                const t = await r.text();
+                let j;
+                try { j = JSON.parse(t); } catch (_) { j = { raw: t }; }
+                if (r.ok) {
+                    el.innerHTML = '<h3 class="ok">&#10003; Server terhubung</h3><pre>' + JSON.stringify(j, null, 2) + '</pre>';
+                } else {
+                    el.innerHTML = '<h3 class="bad">&#10007; Server merespons, tetapi konfigurasinya bermasalah</h3><pre>HTTP ' + r.status + '\n' + JSON.stringify(j, null, 2) + '</pre>';
+                }
+            } catch (e) {
+                el.innerHTML = '<h3 class="bad">&#10007; Gagal terhubung</h3><pre>' + e.message + '</pre>';
+            }
+            btn.disabled = false;
+        };
+    </script>
+</body>
+
+</html>

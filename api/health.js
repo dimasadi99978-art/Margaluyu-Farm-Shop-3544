@@ -1,74 +1,70 @@
-// Diagnosis server: membedakan API Vercel, konfigurasi Environment Variables,
-// koneksi JSONBin, dan konfigurasi email. Tidak pernah menampilkan secret.
-const API_ROOT = 'https://api.jsonbin.io/v3/b';
+// Diagnosis server (aman dibuka publik: tidak menampilkan data pelanggan maupun isi key).
+// Buka: https://DOMAIN-ANDA/api/health
+// Memeriksa: (1) Environment Variables terbaca, (2) JSONBin bisa dibaca, (3) sisa ruang penyimpanan,
+// (4) email notifikasi sudah dikonfigurasi.
 
-function send(res, status, payload) {
-  res.status(status);
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
-  return res.json(payload);
-}
+import { isEmailConfigured } from '../lib/email.js';
+
+const API_ROOT = 'https://api.jsonbin.io/v3/b';
+const MAX_BIN_CHARS = 90000;
 
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') return send(res, 204, {});
-  if (req.method !== 'GET') return send(res, 405, { success: false, error: 'Method Not Allowed' });
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
-  const masterKey = String(process.env.ORDERS_MASTER_KEY || '').trim();
-  const binId = String(process.env.ORDERS_BIN_ID || '').trim();
-  const resendKey = String(process.env.RESEND_API_KEY || '').trim();
-  const notifyEmail = String(process.env.NOTIFY_EMAIL || '').trim();
+  const masterKey = process.env.ORDERS_MASTER_KEY;
+  const binId = process.env.ORDERS_BIN_ID;
 
-  const result = {
-    success: false,
-    server: {
-      online: true,
-      runtime: 'vercel-node',
-      vercel: Boolean(process.env.VERCEL),
-      environment: process.env.VERCEL_ENV || 'unknown'
+  const report = {
+    server: 'ok',
+    env: {
+      ORDERS_MASTER_KEY: Boolean(masterKey),
+      ORDERS_BIN_ID: Boolean(binId),
+      ORDERS_ADMIN_KEY: Boolean(process.env.ORDERS_ADMIN_KEY),
+      CRON_SECRET: Boolean(process.env.CRON_SECRET),
+      RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
+      NOTIFY_EMAIL: Boolean(process.env.NOTIFY_EMAIL)
     },
-    orders: {
-      configured: Boolean(masterKey && binId),
-      connected: false
-    },
-    email: {
-      configured: Boolean(resendKey && notifyEmail)
-    }
+    penyimpanan: { status: 'belum dicek' },
+    email: { dikonfigurasi: isEmailConfigured() },
+    saran: []
   };
 
   if (!masterKey || !binId) {
-    result.error = 'API Vercel aktif, tetapi Environment Variables pesanan belum lengkap. Yang wajib: ORDERS_MASTER_KEY dan ORDERS_BIN_ID.';
-    return send(res, 200, result);
-  }
-
-  try {
-    const response = await fetch(`${API_ROOT}/${encodeURIComponent(binId)}/latest`, {
-      method: 'GET',
-      headers: { 'X-Master-Key': masterKey, 'Accept': 'application/json' },
-      cache: 'no-store'
-    });
-    const text = await response.text();
-    let data = {};
-    try { data = text ? JSON.parse(text) : {}; } catch (_) {}
-
-    if (!response.ok) {
-      result.error = `Environment Variables terbaca, tetapi JSONBin menolak koneksi (HTTP ${response.status}).`;
-      result.orders.detail = data?.message || data?.error || text.slice(0, 300);
-      return send(res, 200, result);
+    report.penyimpanan = { status: 'gagal', sebab: 'ORDERS_MASTER_KEY / ORDERS_BIN_ID belum terbaca di server.' };
+    report.saran.push('Isi ORDERS_MASTER_KEY dan ORDERS_BIN_ID di Vercel > Settings > Environment Variables (centang Production), lalu Redeploy.');
+  } else {
+    try {
+      const r = await fetch(`${API_ROOT}/${encodeURIComponent(binId)}/latest`, {
+        headers: { 'X-Master-Key': masterKey, 'Accept': 'application/json' },
+        cache: 'no-store'
+      });
+      const text = await r.text();
+      if (!r.ok) {
+        report.penyimpanan = { status: 'gagal', httpJSONBin: r.status, pesan: text.slice(0, 200) };
+        if (r.status === 401 || r.status === 403) report.saran.push('Master Key JSONBin ditolak. Salin ulang Master Key (bukan Access Key) dari jsonbin.io > API Keys.');
+        if (r.status === 404) report.saran.push('Bin ID tidak ditemukan. Periksa ORDERS_BIN_ID (ID bin, bukan nama bin).');
+      } else {
+        const data = JSON.parse(text);
+        const rec = data.record;
+        const list = Array.isArray(rec) ? rec : (rec && Array.isArray(rec.items) ? rec.items : []);
+        const size = JSON.stringify({ items: list }).length;
+        const pakai = Math.round(size / MAX_BIN_CHARS * 100);
+        report.penyimpanan = { status: 'ok', jumlahPesanan: list.length, terpakaiPersen: pakai };
+        if (pakai >= 80) report.saran.push('Penyimpanan JSONBin hampir penuh (' + pakai + '%). Hapus pesanan berstatus Selesai di Admin Pesanan.');
+      }
+    } catch (e) {
+      report.penyimpanan = { status: 'gagal', sebab: String(e && e.message || e) };
     }
-
-    const record = data?.record;
-    result.orders.connected = true;
-    result.orders.count = Array.isArray(record)
-      ? record.length
-      : (Array.isArray(record?.items) ? record.items.length : 0);
-    result.success = true;
-    return send(res, 200, result);
-  } catch (error) {
-    result.error = 'API Vercel aktif, tetapi koneksi dari Vercel ke JSONBin gagal.';
-    result.orders.detail = error?.message || String(error);
-    return send(res, 200, result);
   }
+
+  if (!report.email.dikonfigurasi) {
+    report.saran.push('Email belum aktif: isi RESEND_API_KEY dan NOTIFY_EMAIL di Vercel lalu Redeploy.');
+  }
+
+  const ok = report.penyimpanan.status === 'ok';
+  report.ringkasan = ok
+    ? 'Server dan penyimpanan pesanan berfungsi.' + (report.email.dikonfigurasi ? '' : ' Email belum aktif.')
+    : 'Ada masalah di penyimpanan pesanan, lihat bagian "penyimpanan" dan "saran".';
+  return res.status(ok ? 200 : 500).end(JSON.stringify(report, null, 2));
 }

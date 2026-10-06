@@ -186,15 +186,14 @@
                 let json = {};
                 try { json = bodyText ? JSON.parse(bodyText) : {}; } catch (_) { /* respons bukan JSON */ }
 
-                if (res.ok && json.success && json.orders && json.orders.connected) {
-                    log('BERHASIL. Server Vercel dan penyimpanan pesanan (JSONBin) tersambung.', 'ok');
-                    log('Jumlah data pesanan di penyimpanan: ' + (json.orders.count ?? 0), 'info');
-                    log('Notifikasi email: ' + (json.email && json.email.configured ? 'TERKONFIGURASI' : 'BELUM TERKONFIGURASI'), json.email && json.email.configured ? 'ok' : 'fail');
+                if (res.ok && json.penyimpanan && json.penyimpanan.status === 'ok') {
+                    log('BERHASIL. Server tersambung ke penyimpanan pesanan. Pesanan tersimpan: ' + json.penyimpanan.jumlahPesanan + ', ruang terpakai: ' + json.penyimpanan.terpakaiPersen + '%.', 'ok');
+                    log(json.email && json.email.dikonfigurasi ? 'Email notifikasi: sudah dikonfigurasi.' : 'Email notifikasi: BELUM dikonfigurasi (RESEND_API_KEY / NOTIFY_EMAIL).', json.email && json.email.dikonfigurasi ? 'ok' : 'fail');
                 } else {
-                    log('GAGAL (status ' + res.status + '): ' + (json.error || bodyText.slice(0, 500)), 'fail');
-                    if (json.orders && json.orders.detail) log('Detail JSONBin: ' + json.orders.detail, 'fail');
-                    if (json.email && json.email.note) log('Email: ' + json.email.note, json.email.configured ? 'ok' : 'fail');
+                    log('GAGAL (status ' + res.status + '):', 'fail');
+                    log(bodyText.slice(0, 800), 'fail');
                 }
+                (json.saran || []).forEach(function (t) { log('SARAN: ' + t, 'info'); });
             } catch (e) {
                 log('GAGAL (kesalahan jaringan): ' + e.message, 'fail');
                 log('Ini NORMAL jika halaman ini sedang dibuka langsung dari file komputer (file://), atau website belum dipublikasikan. Coba lagi setelah situs online.', 'info');

@@ -1,5 +1,5 @@
 // Perilaku menu hamburger: tutup saat memilih menu, klik di luar, atau menekan Escape.
-// Posisi dropdown diatur oleh CSS (menempel pada header), jadi tidak perlu hitungan JS lagi.
+// Posisi panel diatur oleh CSS (menempel pada header), jadi tidak perlu hitungan JS.
 (function () {
     function init() {
         var toggle = document.getElementById('nav-toggle');
@@ -13,7 +13,7 @@
         sync();
 
         header.addEventListener('click', function (e) {
-            if (e.target.closest && e.target.closest('header ul a')) close();
+            if (e.target.closest && e.target.closest('.menu-panel a')) close();
         });
         document.addEventListener('click', function (e) {
             if (toggle.checked && !header.contains(e.target)) close();
@@ -22,7 +22,7 @@
             if (e.key === 'Escape' && toggle.checked) {
                 close();
                 var label = header.querySelector('.nav-toggle-label');
-                if (label) label.focus && label.focus();
+                if (label && label.focus) label.focus();
             }
         });
     }

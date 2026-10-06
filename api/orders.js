@@ -2,9 +2,33 @@
 // Master Key hanya dibaca di server melalui Environment Variables Vercel.
 
 import { timingSafeEqual } from 'node:crypto';
-import { sendNotification, buildStrukEmail } from '../lib/email.js';
+import { sendNotification, buildStrukEmail, buktiAttachment } from '../lib/email.js';
 
 const API_ROOT = 'https://api.jsonbin.io/v3/b';
+
+// JSONBin gratis membatasi satu bin ±100KB. Foto bukti pembayaran (base64) cepat memenuhi batas itu
+// sehingga pesanan BERIKUTNYA gagal tersimpan. Batas aman kita: 90.000 karakter.
+const MAX_BIN_CHARS = 90000;
+
+function binSize(list) {
+  return JSON.stringify(wrap(list)).length;
+}
+
+// Buang foto bukti dari pesanan lama (yang paling lama dulu) sampai muat. Foto pesanan baru
+// dipertahankan; jika tetap tidak muat, foto pesanan baru juga dibuang (tetap dikirim lewat email).
+function fitToLimit(list, newId) {
+  const out = list.map(o => ({ ...o }));
+  const strip = o => { o.buktiPembayaran = null; o.buktiCatatan = 'Foto bukti dikirim ke email admin'; };
+  for (const o of out) {
+    if (binSize(out) <= MAX_BIN_CHARS) break;
+    if (o.buktiPembayaran && normalizeId(o.orderId) !== newId) strip(o);
+  }
+  if (binSize(out) > MAX_BIN_CHARS) {
+    const mine = out.find(o => normalizeId(o.orderId) === newId);
+    if (mine && mine.buktiPembayaran) strip(mine);
+  }
+  return binSize(out) <= MAX_BIN_CHARS ? out : null;
+}
 
 function unwrap(record) {
   if (Array.isArray(record)) return record;
@@ -245,19 +269,33 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
+      const newId = normalizeId(order.orderId);
+      const fotoBukti = order.buktiPembayaran;
       const merged = mergeOrders(current, [order]);
-      await jsonbinPut(masterKey, binId, merged);
+      const fitted = fitToLimit(merged, newId);
+      if (!fitted) {
+        return json(res, 507, { success: false, error: 'Penyimpanan pesanan penuh (batas JSONBin gratis). Admin: hapus pesanan berstatus Selesai di Admin Pesanan, atau upgrade JSONBin.' });
+      }
+      await jsonbinPut(masterKey, binId, fitted);
       const verify = await jsonbinGet(masterKey, binId);
-      const saved = verify.find(o => normalizeId(o.orderId) === normalizeId(order.orderId));
+      const saved = verify.find(o => normalizeId(o.orderId) === newId);
       if (!saved) {
         return json(res, 500, { success: false, error: 'Pesanan dikirim tetapi belum dapat diverifikasi di penyimpanan bersama.' });
       }
 
-      // Notifikasi email ke admin. Ditunggu (await) supaya benar-benar terkirim sebelum fungsi
-      // server berhenti, tetapi kegagalan kirim email TIDAK menggagalkan pesanan yang sudah tersimpan.
-      const emailResult = await sendNotification(buildStrukEmail(saved)).catch((error) => ({ sent: false, reason: 'exception', detail: error?.message || String(error) }));
+      // Email ke admin (ditunggu agar benar-benar terkirim sebelum fungsi berhenti). Kegagalan email
+      // TIDAK menggagalkan pesanan, tetapi hasilnya dikembalikan agar mudah didiagnosis.
+      const mail = buildStrukEmail(saved);
+      const emailResult = await sendNotification({
+        ...mail,
+        attachments: buktiAttachment(fotoBukti, saved.orderId)
+      }).catch(e => ({ sent: false, reason: 'exception', detail: String(e && e.message || e) }));
 
-      return json(res, 200, { success: true, order: saved, notification: { sent: Boolean(emailResult?.sent), reason: emailResult?.reason || null } });
+      return json(res, 200, {
+        success: true,
+        order: saved,
+        email: { sent: emailResult.sent === true, reason: emailResult.reason || null }
+      });
     }
 
     const idx = current.findIndex(o => normalizeId(o.orderId) === normalizeId(order.orderId));

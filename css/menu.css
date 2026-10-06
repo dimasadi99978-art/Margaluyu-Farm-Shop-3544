@@ -1,0 +1,89 @@
+/* Menu atas Margaluyu Farm - dipakai di semua halaman.
+   Satu file ini mengatur strip sosial media, header, tombol hamburger, dan panel menu. */
+
+/* ---------- Strip sosial media ---------- */
+.medsos { background: var(--forest-deep); padding: 9px 0; }
+.medsos ul { list-style: none; display: flex; justify-content: center; gap: 24px; margin: 0; padding: 0; }
+.medsos a { color: #fff; font-size: 15px; opacity: .85; transition: opacity .15s ease; }
+.medsos a:hover { opacity: 1; color: #fff; }
+
+/* ---------- Header ---------- */
+header.site-top {
+    background: rgba(251, 247, 238, .96);
+    -webkit-backdrop-filter: saturate(1.1) blur(6px); backdrop-filter: saturate(1.1) blur(6px);
+    position: sticky; top: 0; z-index: 999; box-shadow: 0 1px 0 var(--line);
+}
+header.site-top .container {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; position: relative; min-height: 72px;
+}
+header.site-top h1 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: .01em; }
+header.site-top h1 a { color: var(--forest); text-decoration: none; }
+
+/* ---------- Tombol hamburger ---------- */
+.nav-toggle { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.nav-toggle-label {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    gap: 5px; width: 42px; height: 42px; border-radius: 10px;
+    border: 1.5px solid var(--forest); background: #fff; cursor: pointer; flex: 0 0 42px;
+    transition: background-color .15s ease;
+}
+.nav-toggle-label:hover { background: var(--paper-alt); }
+.nav-toggle-label span { display: block; width: 18px; height: 2px; background: var(--forest); border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
+.nav-toggle:focus-visible + .nav-toggle-label { outline: 2px solid var(--forest); outline-offset: 2px; }
+.nav-toggle:checked + .nav-toggle-label span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle:checked + .nav-toggle-label span:nth-child(2) { opacity: 0; }
+.nav-toggle:checked + .nav-toggle-label span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- Panel menu ---------- */
+.menu-panel {
+    display: none;
+    position: absolute; top: calc(100% + 8px); right: 24px; z-index: 1000;
+    width: 340px; max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 130px); max-height: calc(100dvh - 130px);
+    overflow: hidden;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 18px 48px rgba(41, 35, 25, .16);
+    padding: 10px; font-family: var(--font-body);
+    animation: menu-in .16s ease-out;
+}
+.nav-toggle:checked + .nav-toggle-label + .menu-panel { display: flex; flex-direction: column; }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+.menu-cols { display: grid; grid-template-columns: 1fr; gap: 0; flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.menu-group { padding: 2px 0 4px; }
+.menu-group + .menu-group { border-top: 1px solid var(--line-soft); }
+.menu-label {
+    display: block; padding: 4px 12px 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
+}
+.menu-panel a.menu-link {
+    display: flex; align-items: center; min-height: 38px; padding: 0 12px; border-radius: 8px;
+    font-size: 15px; font-weight: 500; color: var(--ink); text-decoration: none; text-align: left;
+    transition: background-color .15s ease, color .15s ease;
+}
+.menu-panel a.menu-link:hover { background: var(--paper-alt); color: var(--forest); }
+.menu-panel a.menu-link.is-current {
+    background: #e8f0ea; color: var(--forest); font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--forest);
+}
+
+.menu-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 2px 2px; border-top: 1px solid var(--line-soft); margin-top: 6px; flex: 0 0 auto; }
+.menu-panel a.menu-btn {
+    display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 8px;
+    font-size: 14.5px; font-weight: 700; text-decoration: none; text-align: center;
+}
+.menu-panel a.menu-btn--primary { background: var(--forest); color: #fff; }
+.menu-panel a.menu-btn--primary:hover { background: var(--forest-deep); color: #fff; }
+.menu-panel a.menu-btn--ghost { background: #fff; color: var(--forest); border: 1.5px solid var(--forest); }
+.menu-panel a.menu-btn--ghost:hover { background: var(--paper-alt); }
+
+/* Layar lebar: panel dua kolom */
+@media (min-width: 900px) {
+    .menu-panel { width: 600px; right: 24px; padding: 14px; }
+    .menu-cols { grid-template-columns: 1fr 1fr; column-gap: 14px; row-gap: 0; }
+    .menu-group { border-top: 0 !important; padding: 4px 0 10px; }
+    .menu-panel a.menu-link { min-height: 42px; }
+}
+@media (max-width: 600px) { .menu-panel { right: 16px; } }
+@media (prefers-reduced-motion: reduce) { .menu-panel { animation: none; } }

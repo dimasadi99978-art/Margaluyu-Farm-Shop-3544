@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="mobile-responsive.css">
     <script src="nav-fix.js" defer></script>
     <link rel="stylesheet" href="justify.css">
+    <link rel="stylesheet" href="css/menu.css">
 </head>
 
 <body>
@@ -33,7 +34,7 @@
     </div>
 
     <!-- header -->
-    <header>
+    <header class="site-top">
         <div class="container">
             <h1><a href="index.html">Margaluyu Farm</a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
@@ -42,18 +43,36 @@
                 <span></span>
                 <span></span>
             </label>
-            <ul>
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="product.html">PRODUCT</a></li>
-                <li><a href="Pengenalan susu saanen.html">Informasi Susu Saanen</a></li>
-                <li><a href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a></li>
-                <li><a href="contact.html">CONTACT</a></li>
-                <li><a href="lacak-pesanan.html">LACAK PESANAN</a></li>
-                <li><a href="kandungan &amp; manfaat.html">KANDUNGAN &amp; MANFAAT</a></li>
-                <li class="active"><a href="penyajian.html" aria-current="page">CARA PENYAJIAN</a></li>
-                <li><a href="rating.html">RATING &amp; SARAN</a></li>
-                <li><a href="testimoni.html">TESTIMONI</a></li>
-            </ul>
+            <nav class="menu-panel" aria-label="Menu utama">
+                <div class="menu-cols">
+                    <div class="menu-group">
+                        <span class="menu-label">Utama</span>
+                        <a class="menu-link" href="index.html">Beranda</a>
+                        <a class="menu-link" href="product.html">Produk</a>
+                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Informasi</span>
+                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
+                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
+                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
+                        <a class="menu-link is-current" href="penyajian.html" aria-current="page">Cara Penyajian</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Ulasan</span>
+                        <a class="menu-link" href="testimoni.html">Testimoni</a>
+                        <a class="menu-link" href="rating.html">Rating &amp; Saran</a>
+                    </div>
+                    <div class="menu-group">
+                        <span class="menu-label">Lainnya</span>
+                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
+                    </div>
+                </div>
+                <div class="menu-actions">
+                    <a class="menu-btn menu-btn--primary" href="order sekarang.html">Pesan Sekarang</a>
+                    <a class="menu-btn menu-btn--ghost" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">WhatsApp</a>
+                </div>
+            </nav>
         </div>
     </header>
 

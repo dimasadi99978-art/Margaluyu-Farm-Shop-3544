@@ -1,21 +1,3 @@
-
-### Perilaku saat server gagal
-Pada versi revisi ini, website tidak lagi menampilkan nomor pesanan seolah-olah sudah diterima jika server online gagal menyimpan data. Pengiriman dicoba hingga 3 kali. Jika semuanya gagal, pelanggan diminta mencoba lagi dan pesanan tidak dianggap masuk ke sistem admin.
-
-
-## Penting saat upload ke Vercel
-Struktur project yang benar harus langsung seperti ini di **Root Directory** Vercel:
-- `index.html`
-- `api/orders.js`
-- `api/health.js`
-- `lib/email.js`
-- `orders-store.js`
-- dan file website lainnya.
-
-Jangan sampai hasil upload menjadi `mf_spssfix/api/orders.js` sementara Root Directory Vercel berada satu tingkat di atas folder `mf_spssfix`. Jika memakai ZIP, buka/extract ZIP lalu pilih **folder `mf_spssfix` sebagai project**, atau upload isi folder tersebut sebagai root project.
-
-Untuk memeriksa server, buka `/cek-pesanan-server.html` setelah deploy. Tes koneksi sekarang memakai `/api/health`, sehingga tidak lagi salah dianggap gagal hanya karena endpoint pesanan meminta nomor HP.
-
 # Margaluyu Farm
 
 ## Penyimpanan pesanan
@@ -84,10 +66,5 @@ Cek juga folder Spam/Promosi di Gmail.
 4. Buka Admin Pesanan: pesanan harus tampil. Lalu Admin Analitik > Muat Ulang Data. Jika masih kosong, kotak merah di atas halaman akan menyebutkan penyebabnya.
 5. Email: buka `/api/test-email?secret=NILAI_CRON_SECRET` dan baca hasilnya (lihat bagian Notifikasi email di atas).
 
-## Diagnosis deployment V2
-- `/api/ping` hanya mengecek apakah fungsi API Vercel benar-benar ter-deploy.
-- `/api/health` mengecek Environment Variables dan koneksi JSONBin tanpa menampilkan secret.
-- Jika `/api/ping` gagal: masalah deployment/routing Vercel, bukan JSONBin.
-- Jika `/api/ping` berhasil tetapi `/api/health` menunjukkan `configured:false`: isi Environment Variables Production lalu Redeploy.
-- Jika `configured:true` tetapi `connected:false`: nilai Master Key/Bin ID atau akses JSONBin bermasalah.
-- Jika `orders.connected:true` tetapi `email.configured:false`: pesanan tetap tersimpan, tetapi email belum dikonfigurasi.
+## Diagnosis cepat (baru)
+Buka `https://DOMAIN-ANDA/api/health` (atau `/cek-pesanan-server.html`). Hasilnya menyebut variabel Vercel mana yang belum terbaca, apakah JSONBin bisa diakses, berapa persen ruang penyimpanan terpakai, dan apakah email sudah dikonfigurasi. Struktur deploy yang benar: folder `api/`, `lib/`, `index.html` berada langsung di root repository (bukan di dalam subfolder).
