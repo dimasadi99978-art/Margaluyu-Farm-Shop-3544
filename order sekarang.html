@@ -998,7 +998,7 @@
                 wa.textContent = 'Kirim pesanan via WhatsApp';
                 wa.style.cssText = 'font-weight:700;text-decoration:underline;color:inherit;';
                 box.appendChild(wa);
-                if (result.error) {
+                if (result.error && /[?&]debug\b/.test(window.location.search)) {
                     const small = document.createElement('div');
                     small.style.cssText = 'margin-top:6px;font-size:12px;opacity:.8;';
                     small.textContent = 'Rincian teknis: ' + result.error;

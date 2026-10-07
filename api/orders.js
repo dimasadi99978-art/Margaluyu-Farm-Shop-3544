@@ -3,6 +3,7 @@
 
 import { timingSafeEqual } from 'node:crypto';
 import { sendNotification, buildStrukEmail, buktiAttachment } from '../lib/email.js';
+import { resolveOrdersBin, cleanEnv } from '../lib/bin.js';
 
 const API_ROOT = 'https://api.jsonbin.io/v3/b';
 
@@ -156,14 +157,21 @@ export default async function handler(req, res) {
     return json(res, 405, { success: false, error: 'Method Not Allowed' });
   }
 
-  const masterKey = process.env.ORDERS_MASTER_KEY;
-  const binId = process.env.ORDERS_BIN_ID;
-
-  if (!masterKey || !binId) {
+  const masterKey = cleanEnv(process.env.ORDERS_MASTER_KEY);
+  if (!masterKey) {
     return json(res, 500, {
       success: false,
-      error: 'Konfigurasi server belum lengkap. Atur ORDERS_MASTER_KEY dan ORDERS_BIN_ID di Vercel > Settings > Environment Variables, lalu Redeploy.'
+      error: 'ORDERS_MASTER_KEY belum diatur di Vercel > Settings > Environment Variables, lalu Redeploy.'
     });
+  }
+
+  // Bin pesanan ditentukan otomatis (ORDERS_BIN_ID bersifat opsional).
+  let binId;
+  try {
+    binId = (await resolveOrdersBin(masterKey, cleanEnv(process.env.ORDERS_BIN_ID))).binId;
+  } catch (err) {
+    console.error('Gagal menentukan bin pesanan:', err);
+    return json(res, 500, { success: false, error: err && err.message ? err.message : 'Gagal menentukan penyimpanan pesanan.' });
   }
 
   try {
@@ -206,12 +214,19 @@ export default async function handler(req, res) {
         return json(res, 200, { success: true, data });
       }
 
-      // Daftar lengkap (halaman admin)
+      // Daftar lengkap (halaman admin) WAJIB dilindungi kunci server.
+      // Pelacakan publik tetap tersedia melalui orderId + telepon di blok di atas.
+      if (!adminKey) {
+        return json(res, 503, {
+          success: false,
+          error: 'ORDERS_ADMIN_KEY belum diatur di Vercel. Daftar pesanan admin sengaja dikunci demi keamanan data pelanggan.'
+        });
+      }
       if (!isAdmin(req, adminKey)) {
         return json(res, 401, { success: false, error: 'Tidak diizinkan. Kata sandi admin diperlukan.' });
       }
       const data = await jsonbinGet(masterKey, binId);
-      return json(res, 200, { success: true, data, protected: Boolean(adminKey) });
+      return json(res, 200, { success: true, data, protected: true });
     }
 
     // Hapus pesanan (hanya yang berstatus "Selesai"). Wajib kunci admin dari server.

@@ -2,6 +2,8 @@
 // dan sudah lebih dari 6 bulan (180 hari) sejak status terakhir diperbarui.
 // Testimoni tidak disentuh karena memakai JSONBin terpisah.
 
+import { resolveOrdersBin, cleanEnv } from '../lib/bin.js';
+
 const API_ROOT = 'https://api.jsonbin.io/v3/b';
 const RETENTION_DAYS = 180; // 6 bulan
 
@@ -26,14 +28,17 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
-  const masterKey = process.env.ORDERS_MASTER_KEY;
-  const binId = process.env.ORDERS_BIN_ID;
-  if (!masterKey || !binId) {
-    return res.status(500).json({
-      success: false,
-      error: 'ORDERS_MASTER_KEY atau ORDERS_BIN_ID belum diatur di Vercel.'
-    });
+  const masterKey = (process.env.ORDERS_MASTER_KEY || '').trim().replace(/^["']+|["']+$/g, '').trim();
+  if (!masterKey) {
+    return res.status(500).json({ success: false, error: 'ORDERS_MASTER_KEY belum diatur di Vercel.' });
   }
+  let binId;
+  try {
+    binId = (await resolveOrdersBin(masterKey, cleanEnv(process.env.ORDERS_BIN_ID), { create: false })).binId;
+  } catch (e) {
+    return res.status(500).json({ success: false, error: e && e.message ? e.message : 'Gagal menentukan bin pesanan.' });
+  }
+  if (!binId) return res.status(200).json({ success: true, removed: 0, note: 'Belum ada bin pesanan.' });
 
   try {
     const getRes = await fetch(`${API_ROOT}/${binId}/latest`, {

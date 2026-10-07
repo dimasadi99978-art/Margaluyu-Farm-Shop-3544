@@ -13,7 +13,7 @@ Tambahkan Environment Variables berikut di Vercel Production:
 - `ORDERS_MASTER_KEY` = Master Key JSONBin untuk Bin Pesanan
 - `ORDERS_BIN_ID` = ID Bin Pesanan
 - `CRON_SECRET` = string rahasia acak minimal 16 karakter
-- `ORDERS_ADMIN_KEY` (opsional) = kata sandi tambahan agar daftar pesanan lengkap dan perubahan status di `/api/orders` hanya bisa diakses lewat halaman Admin. Jika dikosongkan, halaman Admin tetap terkunci lewat kata sandi lama (`ADMIN_PASSWORD` di `orders-config.js`), hanya saja proteksinya ada di sisi tampilan, bukan di server.
+- `ORDERS_ADMIN_KEY` = kata sandi admin yang wajib disimpan sebagai Environment Variable Vercel. Daftar pesanan lengkap dan perubahan status/hapus pesanan hanya dapat dilakukan melalui server dengan kunci ini. Jangan mengandalkan `ADMIN_PASSWORD` di frontend sebagai satu-satunya pengaman.
 
 Cron: `/api/cleanup-orders`
 Jadwal: setiap hari 17:00 UTC (00:00 WIB).
@@ -29,7 +29,7 @@ Di Vercel Production, pastikan Environment Variables berikut tersedia:
 - `ORDERS_MASTER_KEY`
 - `ORDERS_BIN_ID`
 - `CRON_SECRET`
-- `ORDERS_ADMIN_KEY` (opsional, lihat di atas)
+- `ORDERS_ADMIN_KEY` (wajib untuk akses admin)
 
 Karena versi sebelumnya pernah memuat Master Key di `orders-config.js`, Master Key lama sebaiknya segera di-rotate/revoke di JSONBin lalu ganti nilai `ORDERS_MASTER_KEY` di Vercel.
 
@@ -68,3 +68,9 @@ Cek juga folder Spam/Promosi di Gmail.
 
 ## Diagnosis cepat (baru)
 Buka `https://DOMAIN-ANDA/api/health` (atau `/cek-pesanan-server.html`). Hasilnya menyebut variabel Vercel mana yang belum terbaca, apakah JSONBin bisa diakses, berapa persen ruang penyimpanan terpakai, dan apakah email sudah dikonfigurasi. Struktur deploy yang benar: folder `api/`, `lib/`, `index.html` berada langsung di root repository (bukan di dalam subfolder).
+
+## Jika muncul "Konfigurasi server belum lengkap"
+Pesanan disimpan lewat server Vercel, jadi kunci JSONBin TIDAK dibaca dari `orders-config.js` (itu cara versi lama). Isi di Vercel > Settings > Environment Variables (Production): `ORDERS_MASTER_KEY` dan `ORDERS_BIN_ID`. Bin pesanan dibuat lewat `setup-testimoni.html` (Langkah 3), lalu **Redeploy**. Untuk email pesanan masuk tambahkan `RESEND_API_KEY` dan `NOTIFY_EMAIL`. Verifikasi di `/api/health`.
+
+## Update: Bin ID pesanan otomatis
+`ORDERS_BIN_ID` kini opsional. Server (`lib/bin.js`) memakai ORDERS_BIN_ID bila valid; jika tidak, mencari bin bernama "Margaluyu Farm - Pesanan" di akun JSONBin yang sama dengan Master Key; jika belum ada, membuatnya. Yang wajib hanya `ORDERS_MASTER_KEY`. Halaman Admin Pesanan membaca daftar lewat `/api/orders` yang sama, jadi otomatis memakai bin yang sama.

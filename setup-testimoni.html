@@ -126,8 +126,7 @@
         <h3>Langkah 1 — Ambil Master Key</h3>
         <p>Buka <a href="https://jsonbin.io" target="_blank">jsonbin.io</a>, daftar akun gratis, lalu buka menu
             <strong>API Keys</strong> dan salin <strong>X-Master-Key</strong> Anda. Tempel di bawah ini.</p>
-        <input type="text" id="masterKeyInput" placeholder="Tempel X-Master-Key di sini"
-            value="$2a$10$X0ip421qot.S.LRG6NImjOPINvtIZDClGj92HMwchCB8MnXfR60Ge">
+        <input type="text" id="masterKeyInput" placeholder="Tempel X-Master-Key di sini">
     </div>
 
     <div class="step">
@@ -154,12 +153,15 @@
         <button id="createOrdersBtn">Buat Penyimpanan Pesanan</button>
 
         <div class="result-box" id="resultBoxOrders">
-            <p><strong>Berhasil dibuat!</strong> Salin dua nilai ini ke file <code>orders-config.js</code>:</p>
-            <p>ORDERS_MASTER_KEY:</p>
+            <p><strong>Berhasil dibuat!</strong> Pesanan disimpan lewat server Vercel, jadi dua nilai ini diisi di
+                <strong>Vercel &gt; Project &gt; Settings &gt; Environment Variables</strong> (centang
+                <strong>Production</strong>), <u>bukan</u> di <code>orders-config.js</code>:</p>
+            <p>Name: <code>ORDERS_MASTER_KEY</code> &nbsp;&middot;&nbsp; Value:</p>
             <code id="outMasterKeyOrders"></code>
-            <p>ORDERS_BIN_ID:</p>
+            <button class="copy-btn" id="copyKeyOrders">Salin Master Key</button>
+            <p>Name: <code>ORDERS_BIN_ID</code> &nbsp;&middot;&nbsp; Value:</p>
             <code id="outBinIdOrders"></code>
-            <button class="copy-btn" id="copyBtnOrders">Salin Kode untuk orders-config.js</button>
+            <button class="copy-btn" id="copyBtnOrders">Salin Bin ID</button>
         </div>
 
         <div class="error-box" id="errorBoxOrders"></div>
@@ -167,10 +169,16 @@
 
     <div class="step">
         <h3>Langkah 4 — Selesai</h3>
-        <p>Buka file <code>testimoni-config.js</code> dan <code>orders-config.js</code>, tempelkan nilai-nilai di
-            atas ke masing-masing file, simpan, lalu upload ulang folder web ini ke hosting Anda. Jangan lupa juga
-            ganti <code>ADMIN_PASSWORD</code> di <code>orders-config.js</code> dengan kata sandi milik Anda sendiri
-            sebelum meng-upload, supaya halaman <code>admin-pesanan.html</code> hanya bisa dibuka oleh Anda.</p>
+        <p><strong>Testimoni:</strong> tempelkan nilai Langkah 2 ke <code>testimoni-config.js</code>, simpan, lalu
+            upload ulang folder web.</p>
+        <p><strong>Pesanan:</strong> isi di Vercel (Production) variabel berikut, lalu klik <strong>Redeploy</strong>
+            (variabel baru baru terbaca setelah deploy ulang):</p>
+        <ul>
+            <li><code>ORDERS_MASTER_KEY</code> (wajib). <code>ORDERS_BIN_ID</code> sekarang <strong>opsional</strong>: jika kosong atau salah, server mencari bin "Margaluyu Farm - Pesanan" di akun JSONBin Anda sendiri, atau membuatnya otomatis.</li>
+            <li><code>RESEND_API_KEY</code> dan <code>NOTIFY_EMAIL</code> agar email pesanan masuk (opsional, lihat README)</li>
+        </ul>
+        <p>Cek hasilnya di <code>/api/health</code> pada alamat situs Anda. Halaman ini sebaiknya dihapus dari
+            hosting setelah selesai.</p>
     </div>
 
     <script>
@@ -280,13 +288,16 @@
                 document.getElementById('outBinIdOrders').textContent = binId;
                 resultBox.classList.add('show');
 
-                document.getElementById('copyBtnOrders').onclick = function () {
-                    const code = `const ORDERS_MASTER_KEY = "${key}";\nconst ORDERS_BIN_ID = "${binId}";\nconst ADMIN_PASSWORD = "GANTI_DENGAN_KATA_SANDI_ANDA";`;
-                    navigator.clipboard.writeText(code).then(() => {
-                        this.textContent = 'Tersalin!';
-                        setTimeout(() => { this.textContent = 'Salin Kode untuk orders-config.js'; }, 2000);
-                    });
-                };
+                function salin(btnId, teks, label) {
+                    document.getElementById(btnId).onclick = function () {
+                        navigator.clipboard.writeText(teks).then(() => {
+                            this.textContent = 'Tersalin!';
+                            setTimeout(() => { this.textContent = label; }, 2000);
+                        });
+                    };
+                }
+                salin('copyKeyOrders', key, 'Salin Master Key');
+                salin('copyBtnOrders', binId, 'Salin Bin ID');
             } catch (e) {
                 errorBox.textContent = e.message || 'Terjadi kesalahan. Coba lagi.';
                 errorBox.classList.add('show');

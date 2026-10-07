@@ -128,7 +128,12 @@ const OrdersStore = (function () {
             let json = {};
             try { json = text ? JSON.parse(text) : {}; } catch (_) {}
             if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
-            return { success: true, order: json.order || order, error: null };
+            return {
+                success: true,
+                order: json.order || order,
+                email: json.email || { sent: false, reason: 'unknown' },
+                error: null
+            };
         } catch (e) {
             console.warn('Gagal menyimpan pesanan ke server:', e);
             return { success: false, order: null, error: e && e.message ? e.message : String(e) };
@@ -207,7 +212,13 @@ const OrdersStore = (function () {
         const synced = Object.assign({}, saved.order);
         delete synced.syncStatus;
         setLocal(mergeOrders(getLocal(), [synced]));
-        return { success: true, online: true, orderId, error: null };
+        return {
+            success: true,
+            online: true,
+            orderId,
+            email: saved.email || { sent: false, reason: 'unknown' },
+            error: null
+        };
     }
 
     async function findById(orderId, phone) {
