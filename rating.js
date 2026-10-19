@@ -290,6 +290,18 @@
             return;
         }
 
+        // Notifikasi email ke admin (tidak menggagalkan alur ini bila gagal).
+        try {
+            fetch('/api/notify-testimoni', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({}, dataBaru, {
+                    foto: (typeof dataBaru.foto === 'string' && dataBaru.foto.indexOf('data:image/') === 0) ? dataBaru.foto.slice(0, 40) : dataBaru.foto,
+                    tersimpan: !!(result && result.online), fotoDibuang: !!(result && result.fotoDibuang)
+                }))
+            }).catch(function () { /* notifikasi bersifat best-effort */ });
+        } catch (e) { /* abaikan */ }
+
         // Berhasil tersimpan di server bersama (terlihat oleh semua pengunjung) -> kartu sukses.
         // Jika tidak: jujur ke pengguna bahwa baru tersimpan di perangkat ini, dan akan dikirim ulang otomatis.
         form.reset();
@@ -306,9 +318,6 @@
             return;
         }
 
-        if (result && result.moderasi) {
-            showMsg('warn', 'Terima kasih! Ulasan Anda sudah kami terima dan akan tampil di halaman Testimoni setelah kami periksa.');
-        }
         if (result && result.fotoDibuang) {
             showMsg('warn', 'Ulasan Anda sudah terkirim dan tampil di beranda, tetapi fotonya tidak muat di penyimpanan gratis sehingga tidak ikut tampil.');
         }

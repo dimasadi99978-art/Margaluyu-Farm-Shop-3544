@@ -35,8 +35,8 @@
     --radius-lg: 10px;
     --shadow: 0 2px 4px rgba(41, 35, 25, 0.05), 0 10px 32px rgba(41, 35, 25, 0.08);
     --shadow-lift: 0 14px 40px rgba(41, 35, 25, 0.14);
-    --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
-    --font-head: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-head: 'Bricolage Grotesque','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 
 /* ---------- 2. Dasar ---------- */

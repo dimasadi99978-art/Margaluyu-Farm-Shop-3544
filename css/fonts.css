@@ -1,0 +1,26 @@
+/* Sistem tipografi (satu sumber, dimuat paling akhir)
+   Inter               : isi, deskripsi, navigasi, tombol, formulir
+   Bricolage Grotesque : judul utama, heading, subheading, angka harga */
+:root{--font-head:'Bricolage Grotesque','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}
+html body,body button,body input,body select,body textarea,body nav,body a{font-family:var(--font-body)}
+body{font-size:16px;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* Judul: Bricolage Grotesque, tegas tapi tidak berlebihan */
+h1,h2,h3,h4,.lp-hero h2,.lp-head h3,.pg-head h1,.pdx-name,.order-header h2,.menu-brand,.brand-name,.sf-brand,.footer-brand strong,.invoice-brand{font-family:var(--font-head)!important;font-weight:700;letter-spacing:-.02em!important;line-height:1.15}
+h1,.lp-hero h2{font-size:clamp(30px,4vw,42px)}
+h2,.lp-head h3,.order-header h2{font-size:clamp(23px,2.5vw,30px)}
+h3{font-size:clamp(19px,2vw,23px)}
+.pg-head h1,.pdx-name{font-size:clamp(24px,3vw,32px)}
+/* Subheading: Bricolage SemiBold */
+h4,h5,h6,summary,.lp-how b,.lp-steps b,.lp-why-grid b,.lp-nut b,.lp-facts-list dt,.lp-quote footer b,.menu-link .ml-t,.lp-cmp .tag{font-family:var(--font-head);font-weight:600;letter-spacing:-.01em}
+summary{font-size:17px}
+/* Angka penting */
+.lp-stat b,.lp-strip b,.lp-price b,.pdx-price b,.lp-badge-p b,.qris-total,.invoice-total{font-family:var(--font-head);font-weight:700;letter-spacing:-.02em}
+/* Label formulir dan sel tabel memakai Inter tebal */
+label,th{font-family:var(--font-body);font-weight:600}
+
+/* Batas ukuran terkecil agar teks pendukung tetap terbaca di HP */
+p,li,dd,td{font-size:max(1em,15px)}
+.lp-head p,.lp-hero p{font-size:16px}
+.lp-why-grid span,.lp-nut span,.lp-how .t,.lp-steps .t,.lp-facts-list dd,.lp-faq details p,.lp-cmp-list dd{font-size:15px}
+.lp-strip span,.lp-stat span,.lp-quote footer,.lp-note,.pg-status li,.track-hint,.crumb,.menu-link .ml-s,.menu-note,.ct-tx small{font-size:14px}

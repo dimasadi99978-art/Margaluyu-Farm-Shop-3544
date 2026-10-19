@@ -771,19 +771,6 @@
     
     
     <link rel="stylesheet" href="css/fonts.css">
-    <!-- SEO: ganti __SITE__ dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
-    <link rel="canonical" href="https://__SITE__/order%20sekarang.html">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Margaluyu Farm">
-    <meta property="og:locale" content="id_ID">
-    <meta property="og:url" content="https://__SITE__/order%20sekarang.html">
-    <meta property="og:title" content="Order Sekarang - Margaluyu Farm">
-    <meta property="og:description" content="Pesan susu kambing Saanen segar dari Margaluyu Farm. Bayar COD atau QRIS.">
-    <meta property="og:image" content="https://__SITE__/img/banner-home-crop.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Order Sekarang - Margaluyu Farm">
-    <meta name="twitter:description" content="Pesan susu kambing Saanen segar dari Margaluyu Farm. Bayar COD atau QRIS.">
-    <meta name="twitter:image" content="https://__SITE__/img/banner-home-crop.jpg">
 </head>
 
 <body>
@@ -828,9 +815,7 @@
                     <p>Isi formulir di bawah ini untuk memesan produk susu kambing Saanen kami. Setiap pesanan akan
                         mendapat nomor pesanan yang bisa dilacak statusnya kapan saja.</p>
                 </div>
-                <div id="stokBanner" role="status" style="display:none;margin:0 0 16px;padding:14px 16px;border-radius:8px;font-size:14px;line-height:1.55;"></div>
                 <form id="orderForm" novalidate data-stagger>
-                <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"><label>Jangan diisi<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
                     <div class="form-group rv">
                         <label for="nama">Nama Lengkap</label>
                         <input type="text" id="nama" name="nama" placeholder="Contoh: Fulan" required>
@@ -844,12 +829,6 @@
                         <input type="text" id="alamat" name="alamat"
                             placeholder="Contoh: Jl. Sudirman No. 354, Surabaya" required>
                     </div>
-                    <div class="form-group rv">
-                        <label for="zona">Area Pengiriman</label>
-                        <select id="zona" name="zona" required>
-                            <option value="">Memuat area...</option>
-                        </select>
-                    </div>
                     <div class="form-group" style="display:none">
                         <label for="produk">Produk</label>
                         <select id="produk" name="produk" required>
@@ -862,21 +841,6 @@
                         <label for="jumlah">Jumlah</label>
                         <input type="number" id="jumlah" name="jumlah" value="1" min="1" inputmode="numeric"
                             placeholder="Contoh: 5" required>
-                    </div>
-                    <div class="form-group rv">
-                        <label for="kodePromo">Kode Promo <small>(opsional)</small></label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="text" id="kodePromo" name="kodePromo" maxlength="30" autocomplete="off"
-                                placeholder="Masukkan kode" style="text-transform:uppercase;flex:1;">
-                            <button type="button" id="promoBtn" class="btn-submit" style="width:auto;padding:0 18px;margin:0;">Pakai</button>
-                        </div>
-                        <p id="promoMsg" aria-live="polite" style="margin:6px 0 0;font-size:13px;"></p>
-                    </div>
-                    <div class="invoice-box" id="rincianHarga" style="margin:0 0 16px;">
-                        <div class="invoice-row"><span>Harga</span><span id="rcSubtotal">Rp 0</span></div>
-                        <div class="invoice-row"><span>Ongkir</span><span id="rcOngkir">-</span></div>
-                        <div class="invoice-row" id="rcDiskonRow" style="display:none;"><span>Diskon</span><span id="rcDiskon">-</span></div>
-                        <div class="invoice-row invoice-total"><span>Total</span><span id="rcTotal">Rp 0</span></div>
                     </div>
                     <div class="form-group rv">
                         <label for="pesan">Catatan</label>
@@ -972,7 +936,7 @@
             </div>
         </div>
         <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html"
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="privasi.html"
                     style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan
                     Privasi</a></small>
         </div>
@@ -997,89 +961,13 @@
             return 'Rp ' + n.toLocaleString('id-ID');
         }
 
-        // Harga, stok, dan area diambil dari server (/api/config). Nilai akhir SELALU dihitung ulang server saat pesanan dibuat.
-        const zonaSelect = document.getElementById('zona');
-        const promoInput = document.getElementById('kodePromo');
-        const promoMsg = document.getElementById('promoMsg');
-        const stokBanner = document.getElementById('stokBanner');
-        let CONFIG = { products: [], zones: [] };
-        let promo = { kode: '', diskon: 0 };
-
-        function hitungRincian() {
+        function hitungTotal() {
             const selectedOption = produkSelect.options[produkSelect.selectedIndex];
             const harga = selectedOption ? parseInt(selectedOption.dataset.price || '0', 10) : 0;
             const jumlah = parseInt(jumlahInput.value || '0', 10);
-            const zona = CONFIG.zones.find(z => String(z.id) === zonaSelect.value);
-            const subtotal = (harga > 0 && jumlah > 0) ? harga * jumlah : 0;
-            const ongkir = zona ? zona.biaya : 0;
-            const diskon = Math.min(promo.diskon || 0, subtotal);
-            return { subtotal, ongkir, diskon, total: subtotal + ongkir - diskon, zonaDipilih: !!zona };
-        }
-
-        function hitungTotal() {
-            const r = hitungRincian();
-            qrisTotalEl.textContent = 'Total: ' + formatRupiah(r.total);
-            document.getElementById('rcSubtotal').textContent = formatRupiah(r.subtotal);
-            document.getElementById('rcOngkir').textContent = !r.zonaDipilih ? '-' : (r.ongkir === 0 ? 'Gratis' : formatRupiah(r.ongkir));
-            document.getElementById('rcDiskonRow').style.display = r.diskon > 0 ? 'flex' : 'none';
-            document.getElementById('rcDiskon').textContent = '- ' + formatRupiah(r.diskon);
-            document.getElementById('rcTotal').textContent = formatRupiah(r.total);
-            return r.total;
-        }
-
-        function setPromoMsg(text, ok) {
-            promoMsg.textContent = text || '';
-            promoMsg.style.color = ok ? '#1b6b3a' : '#b3261e';
-        }
-
-        async function terapkanPromo(silent) {
-            const kode = promoInput.value.trim().toUpperCase();
-            promo = { kode: '', diskon: 0 };
-            if (!kode) { setPromoMsg(''); hitungTotal(); return; }
-            if (!zonaSelect.value) { setPromoMsg('Pilih area pengiriman dulu, lalu pakai kode.', false); hitungTotal(); return; }
-            try {
-                const res = await fetch('/api/promo', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ produk: produkSelect.value, jumlah: parseInt(jumlahInput.value || '0', 10), zonaId: Number(zonaSelect.value), kodePromo: kode })
-                });
-                const j = await res.json().catch(() => ({}));
-                if (!res.ok) { setPromoMsg(j.error || 'Kode promo tidak dapat dipakai.', false); }
-                else { promo = { kode: j.kodePromo || kode, diskon: j.diskon || 0 }; setPromoMsg('Kode dipakai: hemat ' + formatRupiah(promo.diskon), true); }
-            } catch (e) { setPromoMsg('Gagal memeriksa kode. Coba lagi.', false); }
-            hitungTotal();
-        }
-
-        function tampilkanStok() {
-            const prod = CONFIG.products.find(p => p.nama === produkSelect.value) || CONFIG.products[0];
-            const submit = document.querySelector('#orderForm .btn-submit');
-            if (!prod) return;
-            if (!prod.tersedia) {
-                stokBanner.style.cssText += ';display:block;background:#fdf0ee;border:1px solid #e3b4ae;color:#8a1f18;';
-                stokBanner.textContent = 'Maaf, stok sedang habis. Silakan hubungi kami lewat WhatsApp untuk jadwal berikutnya.';
-                if (submit) submit.disabled = true;
-            } else if (prod.sisa) {
-                stokBanner.style.cssText += ';display:block;background:#fff8e6;border:1px solid #ecd9a0;color:#6b5200;';
-                stokBanner.textContent = 'Stok tinggal ' + prod.sisa + ' botol. Segera pesan sebelum habis.';
-            }
-            if (prod.tersedia) jumlahInput.max = String(prod.maks);
-        }
-
-        async function muatKonfigurasi() {
-            try {
-                const res = await fetch('/api/config', { cache: 'no-store' });
-                const j = await res.json();
-                if (!res.ok || !j.success) throw new Error(j.error || 'gagal');
-                CONFIG = j;
-                const opt = produkSelect.options[produkSelect.selectedIndex];
-                const prod = j.products.find(p => p.nama === produkSelect.value);
-                if (opt && prod) { opt.dataset.price = String(prod.harga); opt.textContent = prod.nama + ' - ' + formatRupiah(prod.harga); }
-                zonaSelect.innerHTML = '<option value="">Pilih area pengiriman</option>' +
-                    j.zones.map(z => '<option value="' + z.id + '">' + z.nama.replace(/</g, '&lt;') + ' - ' + (z.biaya === 0 ? 'Gratis ongkir' : formatRupiah(z.biaya)) + '</option>').join('');
-                tampilkanStok();
-            } catch (e) {
-                zonaSelect.innerHTML = '<option value="">Area belum dapat dimuat, muat ulang halaman</option>';
-            }
-            hitungTotal();
+            const total = (harga > 0 && jumlah > 0) ? harga * jumlah : 0;
+            qrisTotalEl.textContent = 'Total: ' + formatRupiah(total);
+            return total;
         }
 
         function toggleQris() {
@@ -1092,10 +980,7 @@
         }
         paymentRadios.forEach(r => r.addEventListener('change', toggleQris));
         produkSelect.addEventListener('change', hitungTotal);
-        jumlahInput.addEventListener('input', function () { hitungTotal(); if (promo.kode) terapkanPromo(true); });
-        zonaSelect.addEventListener('change', function () { hitungTotal(); if (promoInput.value.trim()) terapkanPromo(true); });
-        document.getElementById('promoBtn').addEventListener('click', function () { terapkanPromo(false); });
-        muatKonfigurasi();
+        jumlahInput.addEventListener('input', hitungTotal);
         toggleQris();
         buktiInput.addEventListener('change', function () {
             const file = this.files && this.files[0];
@@ -1173,10 +1058,6 @@
             const pembayaran = document.querySelector('input[name="pembayaran"]:checked').value;
 
             // Validasi sederhana
-            if (!zonaSelect.value) {
-                alert('Pilih area pengiriman terlebih dahulu.');
-                return;
-            }
             if (!nama || !telepon || !alamat || !produk || !jumlah) {
                 alert('Harap isi semua field yang wajib!');
                 return;
@@ -1220,8 +1101,7 @@
                 result = await OrdersStore.add({
                     nama, telepon, alamat, produk, jumlah, pesan,
                     metodePembayaran: pembayaran,
-                    zonaId: Number(zonaSelect.value),
-                    kodePromo: promo.kode || '',
+                    totalHarga: totalHarga,
                     buktiPembayaran: buktiPembayaran
                 });
             } catch (e) {
@@ -1294,8 +1174,7 @@
             document.getElementById('invAlamat').textContent = alamat;
             document.getElementById('invProdukNama').textContent = produk;
             document.getElementById('invJumlah').textContent = 'x' + jumlah;
-            const totalFinal = (result.order && result.order.totalHarga) || totalHarga;
-            document.getElementById('invTotal').textContent = totalFinal > 0 ? formatRupiah(totalFinal) : '-';
+            document.getElementById('invTotal').textContent = totalHarga > 0 ? formatRupiah(totalHarga) : '-';
             document.getElementById('invPembayaran').textContent = pembayaran;
 
             const noteEl = document.getElementById('confirmPaymentNote');

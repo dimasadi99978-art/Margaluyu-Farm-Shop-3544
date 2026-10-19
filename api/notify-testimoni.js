@@ -1,6 +1,6 @@
 // Endpoint kecil khusus untuk mengirim notifikasi email ke admin setiap kali ada
 // yang mengisi formulir Rating & Kritik/Saran. Tidak menyimpan apa pun di sini -
-// penyimpanan sebenarnya tetap lewat TestimoniStore (JSONBin) dari sisi browser seperti biasa.
+// penyimpanan sebenarnya lewat TestimoniStore (JSONBin) dan TestimoniMedia (Cloudinary) dari browser.
 // Endpoint ini sengaja dibuat terpisah dan ringan supaya tidak menyentuh Master Key JSONBin.
 
 import { sendNotification, esc } from '../lib/email.js';
@@ -21,7 +21,12 @@ export default async function handler(req, res) {
     const rating = Number(body.rating) || 0;
     const komentar = String(body.komentar || '').slice(0, 2000);
     const tanggal = String(body.tanggal || '').slice(0, 60);
-    const foto = typeof body.foto === 'string' && body.foto.startsWith('data:image/') ? 'Ya' : 'Tidak';
+    const isCloud = u => typeof u === 'string' && /^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_\-/.%,]+$/.test(u) && u.length <= 600;
+    const fotoUrl = isCloud(body.foto) ? body.foto : '';
+    const foto = fotoUrl ? `Ya (<a href="${esc(fotoUrl)}">lihat foto</a>)` : (typeof body.foto === 'string' && body.foto.startsWith('data:image/') ? 'Ya' : 'Tidak');
+    const tersimpan = body.tersimpan === true
+      ? 'Ya, sudah tersimpan di server dan tampil di halaman Testimoni.'
+      : '<strong style="color:#b3261e;">BELUM tersimpan di server</strong> (hanya di perangkat pengirim; akan dikirim ulang otomatis saat ia membuka situs lagi).';
 
     const bintang = rating > 0 ? '&#9733;'.repeat(rating) + '&#9734;'.repeat(5 - rating) + ` (${rating}/5)` : '(tanpa rating)';
 
@@ -32,7 +37,8 @@ export default async function handler(req, res) {
         <p><strong>Nama:</strong> ${esc(nama)}<br>
            <strong>Rating:</strong> ${bintang}<br>
            <strong>Tanggal:</strong> ${esc(tanggal)}<br>
-           <strong>Foto:</strong> ${foto}</p>
+           <strong>Foto:</strong> ${foto}<br>
+           <strong>Status simpan:</strong> ${tersimpan}</p>
         <p><strong>Isi:</strong><br>${esc(komentar).replace(/\n/g, '<br>')}</p>
         <p style="color:#666;font-size:13px;">Lihat semua ulasan di halaman Testimoni, atau data lengkapnya di halaman Admin &gt; Analitik.</p>
       `

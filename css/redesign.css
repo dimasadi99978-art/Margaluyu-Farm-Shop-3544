@@ -1,0 +1,343 @@
+/* Redesign: krem hangat + hijau tinta, Inter + Bricolage Grotesque (lihat fonts.css). Dimuat paling akhir. */
+:root{
+  --cream:#f6f5ee; --cream-2:#ecebdf; --paper:#fbfaf5; --ink:#12362e; --ink-2:#4b5f57; --muted:#6f7f77;
+  --sage:#8fb09b; --sage-soft:#dde6d5; --sage-mid:#c9d8c3; --rule:#dcdacb;
+  --forest:#12362e; --forest-deep:#0b2620; --accent:#4d7f63; --bg:var(--cream); --line:var(--rule);
+  --font-head: 'Bricolage Grotesque','Inter',system-ui,-apple-system,'Segoe UI',sans-serif; --font-body: 'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body,body.home{background:var(--cream);color:var(--ink);font-family:var(--font-body)}
+h1,h2,h3,h4{font-family:var(--font-head);color:var(--ink);letter-spacing:-.015em;font-weight:600}
+button,input,textarea,select{font-family:inherit}
+.lp-hero h2,.lp-head h3,.lp-sec h3,.pg-head h1,.pd-name,.brand-name,.sf-brand{font-weight:600}
+.pd-price b{font-weight:700}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,label:focus-visible{outline:3px solid var(--sage);outline-offset:3px}
+
+/* ---- Header + hamburger (semua ukuran layar) ---- */
+header.site-top.is-scrolled{background:rgba(246,245,238,.97);box-shadow:0 1px 0 var(--rule)}
+@media(min-width:900px){header.site-top.is-scrolled{background:rgba(246,245,238,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
+header.site-top .container{min-height:64px}
+.brand a,.brand-name{color:var(--ink)}
+@media(max-width:899px){.nav-toggle-label{width:44px;height:44px;border-radius:50%;background:var(--paper);border:1px solid var(--rule)}}
+.nav-toggle-label span{background:var(--ink)}
+@media(max-width:899px){.menu-panel{background:var(--cream)!important;border-radius:28px 0 0 28px}
+.menu-panel a.menu-link:hover{background:var(--cream-2)}
+.menu-panel a.menu-link.is-current{background:var(--sage-soft)}}
+@media(min-width:900px){.menu-panel a.menu-link{color:var(--ink-2)}.menu-panel a.menu-link:hover,.menu-panel a.menu-link.is-current{background:none;color:var(--ink)}.menu-panel a.menu-link::after{background:var(--ink)}}
+.menu-panel a.menu-cta,.lp-btn,.btn,.btn-buy{background:var(--ink);color:#fff;border-radius:999px}
+.menu-panel a.menu-cta:hover,.lp-btn:hover,.btn:hover,.btn-buy:hover{background:var(--forest-deep);color:#fff}
+.menu-panel a.menu-wa,.menu-close{background:var(--cream-2);color:var(--ink)}
+
+/* ---- Beranda ---- */
+.lp-sec,.lp-hero{background:var(--cream)}
+.lp-sec--tint{background:var(--cream-2)}
+.lp-sec h3,.lp-hero h2{color:var(--ink);font-weight:700}
+.lp-hero h2 .hl{color:inherit;background:none;font-style:normal}
+.lp-hero p,.lp-lead,.lp-sec p,.lp-sec li span{color:var(--ink-2)}
+.lp-btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink);border-radius:999px}
+.lp-btn-ghost:hover{background:var(--ink);color:#fff}
+.lp-facts b,.lp-stat b,.lp-price b{color:var(--ink)}
+.lp-subnav{background:rgba(246,245,238,.95)}
+.makna{padding:56px 0 64px}
+.makna .container{display:flex;flex-direction:column;align-items:center}
+.makna img{width:96px;height:auto;display:block;margin:0 0 24px}
+.makna p{max-width:54ch;margin:0;font-size:16.5px;line-height:1.75;text-align:justify;text-justify:inter-word;hyphens:auto;color:var(--ink-2)}
+.makna p strong{color:var(--ink)}
+
+/* ---- Hubungi kami (terpisah dari footer) ---- */
+.contact-band{padding:44px 0 28px}
+.contact-band h2{font-size:clamp(20px,2.4vw,24px);margin:0 0 4px}
+.contact-band .cb-sub{color:var(--ink-2);margin:0 0 18px;font-size:14.5px}
+.cb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cb-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.55);text-decoration:none;color:var(--ink);transition:background-color .15s}
+.cb-item:hover{background:rgba(255,255,255,.85)}
+.cb-ic{flex:0 0 36px;height:36px;border-radius:50%;background:rgba(143,176,155,.35);display:grid;place-items:center;color:var(--ink);font-size:15px}
+.cb-item small{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
+.cb-item b{font-size:14.5px;font-weight:600}
+@media(max-width:720px){.cb-grid{grid-template-columns:1fr}.contact-band{padding:36px 0 20px}}
+
+/* ---- Footer: tone senada, bukan hijau pekat ---- */
+footer.site-foot{background:transparent;color:var(--ink);padding:20px 0 20px}
+.sf-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px}
+.sf-brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:var(--ink);text-decoration:none}
+.sf-brand img{width:30px;height:30px}
+.sf-links{display:flex;flex-wrap:wrap;gap:6px 22px}
+.sf-links a{color:var(--ink);font-size:14.5px;font-weight:500;text-decoration:none;padding:6px 0}
+.sf-links a:hover{text-decoration:underline;text-underline-offset:4px}
+.sf-copy{margin:24px 0 0;padding-top:20px;border-top:1px solid rgba(18,54,46,.16);font-size:13.5px;color:var(--ink-2)}
+.sf-copy a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+/* ---- Pesan sekarang: paling bawah ---- */
+.final-cta{background:transparent;padding:48px 0 72px;text-align:center}
+.final-cta h2{font-size:clamp(22px,3vw,30px);margin:0 0 8px}
+.final-cta p{margin:0 0 24px;color:var(--ink-2)}
+.final-cta .lp-btn{display:inline-flex;min-width:min(100%,320px);height:52px;align-items:center;justify-content:center;font-size:16px;font-weight:700;text-decoration:none}
+
+/* ---- Judul halaman dalam ---- */
+.pg-head{padding-top:40px;padding-bottom:8px}
+.pg-head h1{font-size:clamp(28px,4vw,40px);margin:0 0 8px;font-weight:800}
+.pg-head p{margin:0;color:var(--ink-2);max-width:56ch;line-height:1.6}
+.crumb{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.crumb a{color:var(--muted)}
+
+/* ---- Produk ---- */
+.pd{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start;padding-top:32px;padding-bottom:56px}
+.pd-media{background:var(--sage-soft);border-radius:28px;padding:32px;display:grid;place-items:center;position:sticky;top:88px}
+.pd-media img{width:100%;max-width:360px;border-radius:16px;display:block}
+.pd-name{font-size:clamp(26px,3.4vw,36px);margin:0 0 8px;font-weight:800}
+.pd-lead{color:var(--ink-2);line-height:1.65;margin:0 0 20px}
+.pd-price{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.pd-price b{font-size:32px;font-weight:800}
+.pd-price span{color:var(--muted)}
+.pd-stock{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--accent);margin:0 0 22px}
+.pd-stock::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.pd-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.pd-actions a{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 28px;border-radius:999px;font-weight:700;text-decoration:none;font-size:15.5px}
+.pd-spec{margin:0;border-top:1px solid var(--rule)}
+.pd-spec div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.pd-spec dt{color:var(--muted);font-size:14px}
+.pd-spec dd{margin:0;font-weight:600;font-size:15px}
+.pd-why{background:var(--cream-2);padding:56px 0}
+.pd-why h2{font-size:clamp(22px,3vw,28px);margin:0 0 24px}
+.pd-why ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px 32px}
+.pd-why li b{display:block;font-size:16px;margin-bottom:6px}
+.pd-why li span{color:var(--ink-2);font-size:14.5px;line-height:1.6}
+@media(max-width:820px){.pd{grid-template-columns:1fr;gap:28px}.pd-media{position:static;padding:24px}.pd-why ul{grid-template-columns:1fr}.pd-spec div{grid-template-columns:120px 1fr}}
+
+/* ---- Lacak pesanan ---- */
+.tk{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:56px;padding-top:32px;padding-bottom:64px;align-items:start}
+.tk-side{background:var(--sage-soft);border-radius:28px;padding:28px}
+.tk-side h2{font-size:18px;margin:0 0 16px}
+.tk-side ol{margin:0;padding:0;list-style:none;display:grid;gap:16px;counter-reset:s}
+.tk-side li{display:grid;grid-template-columns:28px 1fr;gap:12px;counter-increment:s;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+.tk-side li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+.tk-side li b{display:block;color:var(--ink)}
+.tk-help{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--sage);font-size:14px;color:var(--ink-2)}
+.tk-help a{color:var(--ink);font-weight:700}
+.tk-main .track-card{background:transparent!important;padding:0!important;max-width:none}
+.tk-main .track-form{flex-direction:column;gap:12px}
+.tk-main .track-form .btn{width:100%;height:52px;font-weight:700;font-size:16px}
+.tk-main input.input{height:54px;background:var(--paper)!important;border:1.5px solid var(--rule)!important;border-radius:16px;padding:0 18px;font-size:16px;color:var(--ink)}
+.tk-main input.input:focus{border-color:var(--ink)!important;box-shadow:0 0 0 4px rgba(18,54,46,.1)!important}
+.track-mode-link{background:none;border:0;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 0;font-family:inherit}
+.track-hint{color:var(--muted)}
+.tk-main .result-box{margin-top:28px;background:var(--paper)!important;border:1px solid var(--rule)!important;border-radius:24px;padding:28px 24px}
+.stepper::before{background:var(--rule)}
+.stepper .progress-line{background:var(--accent)}
+.step .dot{border-color:var(--rule);background:var(--paper)}
+.step.done .dot{background:var(--accent);border-color:var(--accent)}
+.step.current .dot{background:var(--ink);border-color:var(--ink);box-shadow:0 0 0 5px rgba(18,54,46,.12)}
+.step.done .label,.step.current .label{color:var(--ink)}
+.status-note{background:var(--sage-soft);color:var(--ink);border-radius:14px;text-align:left;font-weight:600}
+@media(max-width:860px){.tk{grid-template-columns:1fr;gap:28px}.tk-side{order:2}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.final-cta p{text-align:center}
+
+/* Gradasi halus: krem menurun ke hijau sage, tanpa batas keras */
+.end-zone{background:linear-gradient(180deg,var(--cream) 0%,#e4ebdc 20%,#c7d9c6 52%,#a3c0ac 100%)}
+.lp-sec--tint,.pd-why{background:linear-gradient(180deg,var(--cream) 0,var(--cream-2) 90px,var(--cream-2) calc(100% - 90px),var(--cream) 100%)}
+.makna{background:var(--cream)}
+
+.sf-social{display:flex;flex-wrap:wrap;gap:8px}
+.sf-social a{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 12px;border-radius:999px;background:rgba(255,255,255,.55);color:var(--ink);font-size:14px;font-weight:600;text-decoration:none;transition:background-color .15s}
+.sf-social a:hover{background:rgba(255,255,255,.9)}
+.sf-social i{font-size:16px}
+
+/* ===== Halaman produk ===== */
+.pdx{max-width:1000px;margin:0 auto;padding:20px 20px 40px;display:grid;grid-template-columns:1fr;gap:20px;align-items:center}
+.pdx-media{border-radius:14px;overflow:hidden;box-shadow:0 6px 18px rgba(18,54,46,.16);margin:0 auto;width:100%;max-width:240px}
+.pdx-media img{display:block;width:100%;height:auto}
+.pdx-name{font-size:21px;line-height:1.25;color:var(--ink);margin:0 0 8px;font-weight:700}
+.pdx-lead{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin:0 0 14px;font-weight:400}
+.pdx-price{display:flex;align-items:baseline;gap:6px;margin:0 0 10px}
+.pdx-price b{font-size:22px;font-weight:700;color:var(--ink)}
+.pdx-price span{color:var(--muted);font-size:13.5px;font-weight:400}
+.pdx-stock{display:flex;align-items:center;gap:6px;margin:0 0 14px;font-size:13.5px;font-weight:400;color:var(--accent)}
+.pdx-btn{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:14.5px;text-decoration:none;margin-bottom:16px}
+.pdx-check,.pdx-info{list-style:none;margin:0;padding:0}
+.pdx-check li{position:relative;padding:0 0 0 24px;margin:0 0 8px;font-size:14px;color:var(--ink-2);font-weight:400}
+.pdx-check li::before{content:'\2713';position:absolute;left:0;top:-1px;color:var(--accent);font-weight:700;font-size:15px}
+.pdx-info{margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
+.pdx-info li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.55;color:var(--ink-2);font-weight:400}
+.pdx-info i{color:var(--accent);margin-top:3px;width:18px;text-align:center}
+@media(min-width:820px){
+.pdx{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;padding:36px 24px 56px}
+.pdx-media{max-width:320px;border-radius:24px;box-shadow:0 14px 36px rgba(18,54,46,.16)}
+.pdx-name{font-size:26px}
+.pdx-lead{font-size:15.5px}
+.pdx-price b{font-size:26px}
+.pdx-btn{height:44px;font-size:15px}
+.pdx-check li,.pdx-info li{font-size:14.5px}
+}
+/* Judul, sub judul, dan sub-sub judul tebal; isi biasa */
+h1,h2,h3,h4,.pg-head h1,.lp-head h3,.lp-sec h3,.lp-hero h2,.pd-name,.sf-brand,.brand-name{font-weight:700}
+.lp-how b,.lp-know-list b,.lp-lines b,.cb-item b,.pd-why li b,.pd-spec dt,summary{font-weight:700}
+.lp-lead,.lp-sec p,.lp-how .t,.lp-know-list .t,.lp-lines span,.pg-head p{font-weight:400}
+/* Lacak pesanan tanpa kolom samping */
+.tk{grid-template-columns:minmax(0,1fr)!important;max-width:640px;margin-left:auto;margin-right:auto}
+
+/* ===== Kartu kontak ===== */
+.ct-cards{display:grid;gap:10px;margin-top:18px}
+.ct-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--paper);border:1px solid var(--rule);border-radius:14px;text-decoration:none;color:var(--ink);transition:border-color .15s,box-shadow .15s,transform .15s}
+.ct-card:hover{border-color:var(--ink);box-shadow:0 6px 16px rgba(18,54,46,.1);transform:translateY(-1px)}
+.ct-ic{flex:0 0 38px;height:38px;border-radius:50%;background:var(--sage-soft);color:var(--ink);display:grid;place-items:center;font-size:16px}
+.ct-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ct-tx small{font-size:12px;color:var(--muted);font-weight:400}
+.ct-tx b{font-size:14.5px;font-weight:700;overflow-wrap:anywhere}
+.ct-go{font-size:12px;color:var(--muted)}
+
+/* ===== Beranda: tombol dan produk lebih kecil ===== */
+.lp-btn,.lp-btn-ghost{min-height:40px;padding:0 20px;font-size:14px}
+.lp-actions{gap:8px}
+.lp-product .lp-head h3{font-size:clamp(19px,2.2vw,24px)}
+.lp-product .lp-head p{font-size:14.5px}
+.lp-price b{font-size:26px}
+.lp-price span{font-size:13.5px}
+.lp-plain{font-size:14.5px}
+@media(max-width:560px){
+.lp-actions .lp-btn,.lp-actions .lp-btn-ghost{flex:0 0 auto;width:auto;min-height:38px;padding:0 18px;font-size:13.5px}
+.lp-price b{font-size:22px}
+.lp-product .lp-head h3{font-size:18px}
+.lp-plain{font-size:14px}
+}
+
+/* ===== Lacak pesanan: lebih ringkas ===== */
+.pg-head{padding-top:28px}
+.pg-head h1{font-size:clamp(20px,2.4vw,26px);font-weight:700;margin:0 0 6px}
+.pg-head p{font-size:14.5px}
+.crumb{font-size:12.5px;margin:0 0 10px}
+.tk{max-width:520px!important;padding-top:20px;padding-bottom:48px}
+.tk-main .track-form{gap:10px}
+.tk-main input.input{height:46px;border-radius:12px;padding:0 14px;font-size:15px}
+.tk-main .track-form .btn{height:44px;font-size:15px;border-radius:12px}
+.track-hint{font-size:13.5px;margin:8px 0 0}
+.track-mode-link{font-size:13.5px;padding:4px 0}
+.tk-main .result-box{margin-top:20px;border-radius:18px;padding:20px 16px}
+.stepper{margin:18px 0 6px}
+@media(max-width:560px){
+.pg-head{padding-top:20px}
+.tk{padding-left:16px;padding-right:16px}
+.tk-main input.input{font-size:16px}
+.tk-main .result-box{padding:16px 10px;border-radius:16px}
+.step .dot{width:32px;height:32px;font-size:13px}
+.stepper::before,.stepper .progress-line{top:15px}
+.step .label{font-size:10.5px;line-height:1.3;padding:0 2px}
+.status-note{font-size:13.5px;padding:10px 12px}
+.order-summary{max-width:100%!important;font-size:12.5px}
+.print-row .btn{width:100%}
+}
+
+/* Footer selalu menempel di dasar halaman pendek */
+main{flex:1 0 auto}
+.end-zone{margin-top:auto}
+/* Lacak: form sejajar dengan judul */
+.tk{max-width:1240px!important;width:100%;margin-left:auto!important;margin-right:auto!important}
+.tk-main{max-width:520px;width:100%}
+
+/* =====================================================================
+   Beranda: ritme jarak antarbagian (rapi, ringkas, tidak monoton)
+   ===================================================================== */
+/* jarak diatur per bagian */
+.lp-sec{padding:56px 0}
+.lp-sec--tint,.lp-sec--tint[id]{background:linear-gradient(180deg,var(--cream) 0,var(--cream-2) 110px,var(--cream-2) calc(100% - 110px),var(--cream) 100%)}   /* menyatu, bukan kotak */
+#cara-pesan{padding:44px 0}
+.lp-head{max-width:640px;margin:0 0 24px}
+.lp-head h3{font-size:clamp(23px,2.5vw,30px);margin:0 0 6px}
+.lp-head p{font-size:15.5px;line-height:1.6}
+.makna{padding:44px 0 52px}
+@media(max-width:700px){
+.lp-sec{padding:36px 0}
+#cara-pesan{padding:32px 0}
+.lp-head{margin-bottom:18px}
+.makna{padding:32px 0 40px}
+}
+
+/* Nomor langkah: lencana bulat (pengganti angka pucat besar) */
+.lp-how .n,.lp-steps .n{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;font-size:15px;font-weight:700;letter-spacing:0;line-height:1;margin:0 0 10px}
+.lp-how{gap:28px}
+.lp-steps{gap:28px}
+.lp-how b,.lp-steps b{font-size:16.5px}
+.lp-how span.t,.lp-steps span.t{font-size:14.5px;line-height:1.6}
+@media(max-width:900px){
+.lp-how > div{grid-template-columns:44px 1fr}
+.lp-how .n{grid-row:1/3;margin:0;font-size:15px}
+}
+
+/* Produk di beranda */
+.lp-stock{display:flex;align-items:center;gap:6px;margin:0 0 12px;font-size:13.5px;color:var(--accent)}
+.lp-product .lp-plain{margin-bottom:16px}
+
+/* Kenapa memilih: kisi 2 kolom dengan ikon */
+.lp-why{gap:48px}
+.lp-why-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:20px 28px}
+.lp-why-grid li{position:relative;padding:0}
+.lp-why-grid .ic{display:block;width:24px;height:24px;margin-bottom:6px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.lp-why-grid b{display:block;font-size:15.5px;color:var(--ink);margin-bottom:2px}
+.lp-why-grid span{display:block;font-size:14px;line-height:1.55;color:var(--ink-2)}
+@media(max-width:700px){.lp-why-grid{grid-template-columns:1fr;gap:16px}}
+
+/* Kambing Saanen: daftar fakta */
+.lp-goat{gap:48px}
+.lp-facts-list{margin:0;display:grid;gap:12px}
+.lp-facts-list > div{display:grid;grid-template-columns:92px 1fr;gap:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.lp-facts-list dt{font-weight:700;color:var(--ink);font-size:14.5px}
+.lp-facts-list dd{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.6}
+.lp-stats{margin:4px 0 18px}
+
+/* Tautan di dalam kalimat */
+.lp-inlink{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--sage)}
+.lp-inlink:hover{text-decoration-color:var(--ink)}
+.lp-faq details[id]{scroll-margin-top:120px}
+
+/* =====================================================================
+   Semua tulisan isi dibuat rata kanan-kiri (justify)
+   ===================================================================== */
+main p,main li,main dd,
+.lp-how .t,.lp-steps .t,.lp-nut span,.lp-lines span,.lp-why-grid span,.lp-know-list .t,
+.pdx-lead,.pdx-check li,.pdx-info li,.ct-card small,
+.lp-faq details p,.lp-note,.lp-testi p,.makna p{text-align:justify!important;text-justify:inter-word}
+/* Baris yang memang dirancang rata tengah tetap tengah di baris terakhir */
+.lp-faq-more span,.order-header p,.qris-box p,.order-confirm p{text-align-last:center}
+/* Sel tabel dan tombol tetap seperti semula */
+table td,table th,.lp-btn,.lp-btn-ghost,.lp-stat span{text-align:left!important}
+
+/* Menyatu di HP: gradasi lebih pendek */
+@media(max-width:700px){.lp-sec--tint,.lp-sec--tint[id]{background:linear-gradient(180deg,var(--cream) 0,var(--cream-2) 64px,var(--cream-2) calc(100% - 64px),var(--cream) 100%)}}
+
+/* Kenapa memilih: lebih kecil dan rapi */
+.lp-why{grid-template-columns:minmax(0,220px) 1fr;gap:44px;align-items:center}
+.lp-arch{max-width:220px;justify-self:center}
+.lp-arch img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+.lp-why .lp-head{margin-bottom:18px}
+.lp-why .lp-head h3{font-size:clamp(21px,2.2vw,26px)}
+.lp-why .lp-head p{font-size:14.5px;line-height:1.6}
+.lp-why-grid{gap:16px 36px}
+.lp-why-grid li{display:grid;grid-template-columns:22px 1fr;column-gap:10px;align-items:start}
+.lp-why-grid .ic{grid-row:1/3;width:20px;height:20px;margin:1px 0 0}
+.lp-why-grid b{font-size:14.5px;margin:0 0 2px}
+.lp-why-grid span{font-size:13.5px;line-height:1.55}
+@media(max-width:700px){
+.lp-why{grid-template-columns:1fr;gap:20px}
+.lp-arch{max-width:180px;justify-self:start}
+.lp-why-grid{grid-template-columns:1fr;gap:14px}
+}
+
+/* Logo: tanpa bingkai/kotak */
+.brand a,.brand a:focus,.brand a:focus-visible,.brand a:active,.menu-brand,.menu-brand:focus,.menu-brand:focus-visible,.sf-brand,.sf-brand:focus,.sf-brand:focus-visible{outline:none!important;box-shadow:none!important;background:none!important;border-radius:0}
+
+/* Lacak pesanan: rata tengah, ringkas */
+body:has(.tk) .pg-head{text-align:center;padding-bottom:0}
+body:has(.tk) .pg-head p{text-align:center!important;text-align-last:center;margin-left:auto;margin-right:auto}
+.pg-ic{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--sage-soft);color:var(--ink);font-size:20px;margin:8px 0 10px}
+.pg-status{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0}
+.pg-status li{padding:5px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--paper);font-size:12.5px;color:var(--ink-2);text-align:center!important}
+.tk{padding-top:18px;padding-bottom:36px;justify-content:center}
+.tk-main{margin:0 auto;max-width:460px}
+.tk-main .track-hint,.tk-main .track-mode-link{text-align:center!important}
+
+/* Lacak: form lebih sempit, ada ruang di kiri-kanan (HP) */
+.tk{padding-left:20px!important;padding-right:20px!important;box-sizing:border-box}
+.tk-main{width:100%;max-width:400px}
+.tk-main input.input{height:44px;font-size:15px}
+.tk-main .track-form .btn{height:42px}
+.tk-main .track-hint{font-size:12.5px}
+@media(max-width:560px){body:has(.tk) .pg-head{padding-left:20px;padding-right:20px}}

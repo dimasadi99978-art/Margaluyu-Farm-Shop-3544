@@ -110,12 +110,8 @@
         sum.appendChild(el('hr'));
         sum.appendChild(row(order.produk || '-', order.jumlah ? 'x' + order.jumlah : '-'));
         sum.appendChild(el('hr'));
-        if (order.subtotal != null && order.ongkir != null) {
-            sum.appendChild(row('Ongkir', Number(order.ongkir) === 0 ? 'Gratis' : rupiah(order.ongkir)));
-            if (Number(order.diskon) > 0) sum.appendChild(row('Diskon' + (order.kodePromo ? ' (' + order.kodePromo + ')' : ''), '- ' + rupiah(order.diskon)));
-        }
         sum.appendChild(row('Total', order.totalHarga ? rupiah(order.totalHarga) : 'Rp 0', 'invoice-total'));
-        sum.appendChild(row('Pembayaran', (order.metodePembayaran || '-') + (order.statusPembayaran ? ' (' + order.statusPembayaran + ')' : '')));
+        sum.appendChild(row('Pembayaran', order.metodePembayaran || '-'));
         sum.appendChild(row('Status', order.status || 'Dikonfirmasi'));
 
         document.getElementById('statusNote').textContent = STATUS_LABELS[order.status] || order.status || '';
@@ -259,13 +255,13 @@
     // Unduh struk sebagai gambar JPG (rancangan struk ada di receipt-image.js).
     document.getElementById('saveImgBtn').addEventListener('click', function () {
         var sum = document.getElementById('orderSummary'); if (!sum) return;
-        var m = {}, produk = '', qty = 1, known = ['Tanggal', 'Nama', 'No. HP', 'Alamat', 'Total', 'Pembayaran', 'Status', 'Ongkir'];
+        var m = {}, produk = '', qty = 1, known = ['Tanggal', 'Nama', 'No. HP', 'Alamat', 'Total', 'Pembayaran', 'Status'];
         Array.prototype.forEach.call(sum.querySelectorAll('.invoice-row'), function (r) {
             var l = r.children[0].textContent.trim(), v = r.children[1].textContent.trim();
-            if (l.indexOf('Diskon') === 0) m['Diskon'] = v; else if (known.indexOf(l) > -1) m[l] = v; else { produk = l; qty = parseInt(String(v).replace(/\D/g, ''), 10) || 1; }
+            if (known.indexOf(l) > -1) m[l] = v; else { produk = l; qty = parseInt(String(v).replace(/\D/g, ''), 10) || 1; }
         });
         var idEl = sum.querySelector('.invoice-id'), total = parseInt(String(m['Total'] || '').replace(/\D/g, ''), 10) || 0;
-        MFReceipt.download({ id: idEl ? idEl.textContent.trim() : 'pesanan', tanggal: m['Tanggal'] || '-', nama: m['Nama'] || '-', hp: m['No. HP'] || '-', alamat: m['Alamat'] || '-', produk: produk || '-', qty: qty, unit: qty ? Math.round(((total - (parseInt(String(m['Ongkir'] || '').replace(/\D/g, ''), 10) || 0) + (parseInt(String(m['Diskon'] || '').replace(/\D/g, ''), 10) || 0))) / qty) : total, total: total, bayar: m['Pembayaran'] || '-', status: m['Status'] || 'Dikonfirmasi' });
+        MFReceipt.download({ id: idEl ? idEl.textContent.trim() : 'pesanan', tanggal: m['Tanggal'] || '-', nama: m['Nama'] || '-', hp: m['No. HP'] || '-', alamat: m['Alamat'] || '-', produk: produk || '-', qty: qty, unit: qty ? Math.round(total / qty) : total, total: total, bayar: m['Pembayaran'] || '-', status: m['Status'] || 'Dikonfirmasi' });
     });
     forgotOrderBtn.addEventListener('click', function () { setPhoneOnlyMode(!phoneOnlyMode); });
 

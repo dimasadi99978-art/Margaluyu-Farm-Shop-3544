@@ -204,8 +204,15 @@
                 btn.disabled = true;
                 try {
                     var check = await OrdersStore.verifyAdmin(val);
-                    if (check.ok) return enterPanel();
-                    errEl.textContent = check.error || 'Login gagal.';
+                    if (check.ok && check.protectedByServer) return enterPanel();
+                    if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
+                        OrdersStore.setAdminKey('');
+                        errEl.textContent = 'Kata sandi salah.';
+                        return;
+                    }
+                    if (val === ADMIN_PASSWORD) return enterPanel();
+                    OrdersStore.setAdminKey('');
+                    errEl.textContent = 'Kata sandi salah.';
                 } finally { btn.disabled = false; }
             });
             $('passwordInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('loginBtn').click(); });

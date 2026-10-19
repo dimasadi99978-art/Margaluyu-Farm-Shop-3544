@@ -1,77 +1,98 @@
-/* Menu atas Margaluyu Farm - dipakai di semua halaman.
-   Satu file ini mengatur strip sosial media, header, tombol hamburger, dan panel menu. */
+/* Header & menu Margaluyu Farm (semua halaman).
+   Header menyatu dengan halaman: tanpa garis pembatas, bayangan lembut hanya saat di-scroll.
+   Desktop (>= 900px): menu terbuka di header + tombol "Pesan sekarang".
+   HP/tablet: panel samping hijau tua dari kanan. */
 
-/* ---------- Strip sosial media ---------- */
-.medsos { background: var(--forest-deep); padding: 9px 0; }
-.medsos ul { list-style: none; display: flex; justify-content: center; gap: 24px; margin: 0; padding: 0; }
-.medsos a { color: #fff; font-size: 15px; opacity: .85; transition: opacity .15s ease; }
-.medsos a:hover { opacity: 1; color: #fff; }
-
-/* ---------- Header ---------- */
 header.site-top {
-    background: rgba(251, 247, 238, .96);
-    -webkit-backdrop-filter: saturate(1.1) blur(6px); backdrop-filter: saturate(1.1) blur(6px);
-    position: sticky; top: 0; z-index: 999; box-shadow: 0 1px 0 var(--line);
+    position: sticky; top: 0; z-index: 999;
+    background: transparent; border: 0; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none; filter: none; transform: none;
+    transition: background-color .3s ease, box-shadow .3s ease;
 }
-header.site-top .container {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; position: relative; min-height: 72px;
-}
-header.site-top h1 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: .01em; }
-header.site-top h1 a { color: var(--forest); text-decoration: none; }
-
-/* ---------- Tombol hamburger ---------- */
-.nav-toggle { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
-.nav-toggle-label {
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    gap: 5px; width: 42px; height: 42px; border-radius: 10px;
-    border: 1.5px solid var(--forest); background: #fff; cursor: pointer; flex: 0 0 42px;
-    transition: background-color .15s ease;
-}
-.nav-toggle-label:hover { background: var(--paper-alt); }
-.nav-toggle-label span { display: block; width: 18px; height: 2px; background: var(--forest); border-radius: 2px; transition: transform .2s ease, opacity .2s ease; }
-.nav-toggle:focus-visible + .nav-toggle-label { outline: 2px solid var(--forest); outline-offset: 2px; }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(2) { opacity: 0; }
-.nav-toggle:checked + .nav-toggle-label span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* ---------- Panel menu ---------- */
-.menu-panel {
-    display: none;
-    position: absolute; top: calc(100% + 8px); right: 24px; z-index: 1000;
-    width: 340px; max-width: calc(100vw - 32px);
-    max-height: calc(100vh - 130px); max-height: calc(100dvh - 130px);
-    overflow: hidden;
-    background: #fff; border: 1px solid var(--line); border-radius: 14px;
-    box-shadow: 0 18px 48px rgba(41, 35, 25, .16);
-    padding: 10px; font-family: var(--font-body);
-    animation: menu-in .16s ease-out;
-}
-.nav-toggle:checked + .nav-toggle-label + .menu-panel { display: flex; flex-direction: column; }
-@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-
-.menu-cols { display: grid; grid-template-columns: 1fr; gap: 0; flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
-.menu-group { padding: 2px 0 4px; }
-.menu-group + .menu-group { border-top: 1px solid var(--line-soft); }
-.menu-label {
-    display: block; padding: 4px 12px 6px;
-    font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
-}
-.menu-panel a.menu-link {
-    display: flex; align-items: center; min-height: 38px; padding: 0 12px; border-radius: 8px;
-    font-size: 15px; font-weight: 500; color: var(--ink); text-decoration: none; text-align: left;
-    transition: background-color .15s ease, color .15s ease;
-}
-.menu-panel a.menu-link:hover { background: var(--paper-alt); color: var(--forest); }
-.menu-panel a.menu-link.is-current {
-    background: #e8f0ea; color: var(--forest); font-weight: 700;
-    box-shadow: inset 3px 0 0 var(--forest);
-}
-
-/* Layar lebar: tetap satu kolom vertikal, sedikit lebih longgar */
+header.site-top.is-scrolled { background: rgba(255,255,255,.94); box-shadow: 0 10px 32px rgba(20, 44, 38, .07); }
 @media (min-width: 900px) {
-    .menu-panel { width: 320px; right: 24px; padding: 12px; }
-    .menu-panel a.menu-link { min-height: 40px; }
+    header.site-top.is-scrolled { background: rgba(255,255,255,.86); -webkit-backdrop-filter: saturate(1.3) blur(12px); backdrop-filter: saturate(1.3) blur(12px); }
 }
-@media (max-width: 600px) { .menu-panel { right: 16px; } }
-@media (prefers-reduced-motion: reduce) { .menu-panel { animation: none; } }
+header.site-top .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; position: static; transition: min-height .3s ease; }
+header.site-top.is-scrolled .container { min-height: 58px; }
+
+.brand { margin: 0; font-size: inherit; line-height: 1; }
+.brand a { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--forest); }
+.brand-mark { width: 34px; height: 34px; display: block; }
+.brand-name { font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: -0.015em; }
+
+/* ---------- Hamburger ---------- */
+.nav-toggle { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.nav-toggle-label { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 42px; height: 42px; margin-right: -8px; border: 0; border-radius: 50%; background: transparent; cursor: pointer; flex: 0 0 42px; transition: background-color .2s ease; }
+.nav-toggle-label:hover { background: rgba(10, 61, 56, .07); }
+.nav-toggle-label span { display: block; height: 2px; background: var(--forest); border-radius: 2px; transition: width .25s ease; }
+.nav-toggle-label span:nth-child(1) { width: 22px; }
+.nav-toggle-label span:nth-child(2) { width: 16px; align-self: flex-end; margin-right: 10px; }
+.nav-toggle-label span:nth-child(3) { width: 22px; }
+.nav-toggle-label:hover span:nth-child(2) { width: 22px; margin-right: 10px; }
+.nav-toggle:focus-visible + .nav-toggle-label { outline: 2px solid var(--forest); outline-offset: 2px; }
+.menu-backdrop, .menu-head, .menu-note { display: none; }
+
+/* ---------- Menu desktop ---------- */
+.menu-panel { display: flex; align-items: center; gap: 4px; font-family: var(--font-body); }
+.menu-panel a.menu-link { position: relative; display: inline-flex; align-items: center; height: 38px; padding: 0 14px; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none; transition: color .15s ease; }
+.menu-panel a.menu-link::after { content: ''; position: absolute; left: 50%; bottom: 2px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--forest); transform: scale(0); transition: transform .25s cubic-bezier(.3,1.6,.5,1); }
+.menu-panel a.menu-link:hover { color: var(--forest); }
+.menu-panel a.menu-link.is-current { color: var(--forest); font-weight: 600; }
+.menu-panel a.menu-link.is-current::after, .menu-panel a.menu-link:hover::after { transform: scale(1); }
+.menu-foot { display: flex; align-items: center; gap: 10px; margin-left: 12px; }
+.menu-panel a.menu-cta { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 999px; background: var(--forest); color: #fff; font-size: 14.5px; font-weight: 600; text-decoration: none; transition: background-color .15s ease, transform .15s ease; }
+.menu-panel a.menu-cta:hover { background: var(--forest-deep); color: #fff; transform: translateY(-1px); }
+.menu-panel a.menu-wa { display: none; }
+
+/* ---------- Panel samping (HP & tablet): terang, ringkas, dengan keterangan tiap menu ---------- */
+.menu-link .ml-s { display: none; }
+@media (max-width: 899px) {
+    header.site-top .container { min-height: 58px; }
+    header.site-top.is-scrolled .container { min-height: 54px; }
+    .brand-mark { width: 30px; height: 30px; }
+    .brand-name { font-size: 17px; }
+    .nav-toggle-label { display: flex; }
+
+    .menu-backdrop { display: block; position: fixed; inset: 0; background: rgba(8, 26, 22, .42); opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 1; }
+    .nav-toggle:checked ~ .menu-backdrop { opacity: 1; pointer-events: auto; }
+
+    .menu-panel {
+        position: fixed; top: 0; right: 0; bottom: 0; z-index: 2; width: min(80vw, 296px);
+        display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+        background: #fbf8f1; color: var(--ink); padding: 0 14px 18px; overflow-y: auto;
+        border-radius: 24px 0 0 24px; box-shadow: -24px 0 60px rgba(8, 26, 22, .18);
+        transform: translateX(104%); visibility: hidden;
+        transition: transform .36s cubic-bezier(.22,.8,.26,1), visibility 0s linear .36s;
+    }
+    .nav-toggle:checked ~ .menu-panel { transform: none; visibility: visible; transition-delay: 0s; }
+
+    .menu-head { display: flex; align-items: center; justify-content: space-between; height: 58px; margin: 0 4px 10px; }
+    .menu-brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--forest); font-family: var(--font-head); font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+    .menu-brand img { width: 26px; height: 26px; display: block; }
+    .menu-close { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--forest); background: rgba(10, 61, 56, .07); transition: background-color .2s ease; }
+    .menu-close:hover { background: rgba(10, 61, 56, .13); }
+    .menu-close svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+    .menu-panel a.menu-link { height: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 10px 14px; border-radius: 14px; font-family: var(--font-body); color: var(--ink);
+        opacity: 0; transform: translateX(14px); transition: background-color .2s ease, opacity .35s ease, transform .35s cubic-bezier(.22,.8,.26,1); }
+    .nav-toggle:checked ~ .menu-panel a.menu-link { opacity: 1; transform: none; transition-delay: calc(var(--i, 1) * 50ms + 100ms); }
+    .menu-panel a.menu-link::after { display: none; }
+    .menu-link .ml-t { font-size: 16.5px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.25; }
+    .menu-link .ml-s { display: block; font-size: 12.5px; font-weight: 400; color: var(--muted); line-height: 1.3; }
+    .menu-panel a.menu-link:hover { background: #f1f5ee; color: var(--ink); }
+    .menu-panel a.menu-link.is-current { background: #e3efe0; color: var(--forest); }
+    .menu-panel a.menu-link.is-current .ml-t { color: var(--forest); }
+    .menu-panel a.menu-link.is-current .ml-s { color: #4d6b5a; }
+
+    .menu-foot { flex-direction: column; align-items: stretch; margin: auto 0 0; padding: 20px 4px 0; gap: 8px; }
+    .menu-panel a.menu-cta { height: 44px; font-size: 15px; }
+    .menu-panel a.menu-wa { display: flex; align-items: center; justify-content: center; height: 44px; border-radius: 999px; background: rgba(10, 61, 56, .07); color: var(--forest); font-weight: 600; font-size: 14.5px; text-decoration: none; transition: background-color .2s ease; }
+    .menu-panel a.menu-wa:hover { background: rgba(10, 61, 56, .13); }
+    .menu-note { display: block; margin: 14px 4px 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); text-align: left; }
+    html.menu-open body { overflow: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .menu-panel, .menu-backdrop, header.site-top, .menu-panel a.menu-link, .nav-toggle-label span { transition: none; }
+    .menu-panel a.menu-link { opacity: 1; transform: none; }
+}

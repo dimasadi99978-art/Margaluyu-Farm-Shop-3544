@@ -1,0 +1,5 @@
+/* Struk di layar: judul serif, nomor pesanan berkotak, total berlatar hijau tua */
+.order-summary .invoice-brand,.invoice-box .invoice-brand{font-family:var(--font-head);font-weight:700;font-size:21px;letter-spacing:-.005em}
+.order-summary .invoice-id,.invoice-box .invoice-id{background:#f3f6ef;border:1px solid #dbe6d6;border-radius:10px;padding:9px 10px;font-weight:700;letter-spacing:.03em}
+.order-summary .invoice-total,.invoice-box .invoice-total{background:#12362e;border-radius:10px;padding:11px 14px;margin-top:10px}
+.order-summary .invoice-total span,.invoice-box .invoice-total span{color:#fff!important}

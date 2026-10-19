@@ -19,14 +19,6 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me; object-src 'none'"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=31536000; includeSubDomains"
         }
       ]
     },
@@ -49,7 +41,7 @@
       ]
     },
     {
-      "source": "/admin-pengaturan.html",
+      "source": "/setup-testimoni.html",
       "headers": [
         {
           "key": "X-Robots-Tag",

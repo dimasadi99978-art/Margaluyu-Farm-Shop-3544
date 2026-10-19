@@ -244,7 +244,7 @@
             <div class="toolbar">
                 <h1>Daftar Pesanan</h1>
                 <div style="display:flex;gap:8px;align-items:center;">
-                    <a href="admin-analitik.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Lihat Analitik &rarr;</a> &nbsp; <a href="admin-pengaturan.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Stok, Ongkir, Promo &amp; Testimoni &rarr;</a>
+                    <a href="admin-analitik.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Lihat Analitik &rarr;</a>
                     <button class="refresh-btn" id="refreshBtn">Muat Ulang</button>
                     <button class="refresh-btn" id="exportCsvBtn" type="button">Unduh CSV</button>
                 </div>
@@ -276,7 +276,8 @@
             if (!refreshTimer) refreshTimer = setInterval(loadOrders, 30000); // auto-refresh tiap 30 detik (satu timer saja)
         }
 
-        // Login: kata sandi diperiksa SERVER (ORDERS_ADMIN_KEY di Vercel). Browser hanya menerima token sesi 8 jam.
+        // Login: bila server memakai ORDERS_ADMIN_KEY, kata sandi diperiksa oleh server.
+        // Jika belum diaktifkan, perilaku lama dipertahankan (dibandingkan dengan ADMIN_PASSWORD).
         document.getElementById('loginBtn').addEventListener('click', async function () {
             const btn = this;
             const errEl = document.getElementById('loginError');
@@ -285,8 +286,23 @@
             btn.disabled = true;
             try {
                 const check = await OrdersStore.verifyAdmin(val);
-                if (check.ok) return enterAdmin();
-                errEl.textContent = check.error || 'Login gagal.';
+                if (check.ok && check.protectedByServer) return enterAdmin();
+                if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
+                    OrdersStore.setAdminKey('');
+                    errEl.textContent = 'Kata sandi salah.';
+                    errEl.style.display = 'block';
+                    return;
+                }
+                // Server menolak membuka daftar karena ORDERS_ADMIN_KEY belum diisi di Vercel.
+                if (!check.ok && /ORDERS_ADMIN_KEY/i.test(check.error || '')) {
+                    errEl.textContent = 'Daftar pesanan terkunci: isi variabel ORDERS_ADMIN_KEY di Vercel (Settings > Environment Variables) dengan kata sandi admin, lalu Redeploy.';
+                    errEl.style.display = 'block';
+                    return;
+                }
+                // Server belum memakai kata sandi admin: pakai pemeriksaan lama
+                if (val === ADMIN_PASSWORD) return enterAdmin();
+                OrdersStore.setAdminKey('');
+                errEl.textContent = 'Kata sandi salah.';
                 errEl.style.display = 'block';
             } finally {
                 btn.disabled = false;
@@ -415,15 +431,6 @@
             });
         }
 
-        document.addEventListener('click', async function (e) {
-            const btn = e.target.closest && e.target.closest('[data-action="update-pay"]');
-            if (!btn) return;
-            btn.disabled = true;
-            const r = await OrdersStore.updatePayment(btn.dataset.orderId, btn.dataset.pay);
-            if (!r.success) alert('Status pembayaran belum berubah: ' + (r.error || 'Terjadi kesalahan.'));
-            await loadOrders();
-        });
-
         async function loadOrders() {
             const listEl = document.getElementById('ordersList');
             if (!allOrders.length) {
@@ -468,11 +475,7 @@
             const id = order.orderId || '';
             const info = (order.produk || 'pesanan') + (order.jumlah ? ' x' + order.jumlah : '') + (order.totalHarga ? ', total Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : '');
             const lacak = location.origin + '/lacak-pesanan.html?id=' + encodeURIComponent(id);
-            const bayarMsg = {
-                'Lunas': 'Halo Kak ' + nama + ', pembayaran pesanan ' + id + ' sudah kami terima. Terima kasih!',
-                'Ditolak': 'Halo Kak ' + nama + ', bukti pembayaran pesanan ' + id + ' belum bisa kami verifikasi. Mohon kirim ulang bukti transfer/QRIS lewat chat ini.'
-            }[order.statusPembayaran];
-            const pesan = bayarMsg || {
+            const pesan = {
                 'Dikonfirmasi': 'Halo Kak ' + nama + ', kami dari Margaluyu Farm. Pesanan Anda ' + id + ' (' + info + ') sudah kami terima dan akan segera kami proses.',
                 'Dikemas': 'Halo Kak ' + nama + ', pesanan Anda ' + id + ' sedang kami kemas dan akan segera dikirim.',
                 'Dikirim': 'Halo Kak ' + nama + ', pesanan Anda ' + id + ' sedang dalam pengiriman. Mohon ditunggu ya, Kak.',
@@ -492,15 +495,6 @@
                 return `<button data-action="update-status" data-order-id="${esc(orderId)}" data-status="${esc(s)}"
                     class="${isActive ? 'active-status' : ''}" ${isActive ? 'disabled' : ''}>${esc(s)}</button>`;
             }).join('');
-
-            const bayar = order.statusPembayaran || (order.metodePembayaran === 'QRIS' ? 'Menunggu verifikasi' : 'Bayar saat terima');
-            const payButtons = order.metodePembayaran === 'QRIS'
-                ? '<div class="status-buttons" style="margin-top:6px;"><span style="font-size:0.85em;color:#555;align-self:center;">Pembayaran:</span>' +
-                  OrdersStore.PAYMENT_STEPS.map(s => {
-                      const act = s === bayar;
-                      return `<button data-action="update-pay" data-order-id="${esc(orderId)}" data-pay="${esc(s)}" class="${act ? 'active-status' : ''}" ${act ? 'disabled' : ''}>${esc(s)}</button>`;
-                  }).join('') + '</div>'
-                : '';
 
             const bukti = safeImgSrc(order.buktiPembayaran);
             const buktiHtml = bukti
@@ -527,12 +521,11 @@
                         <strong>${esc(order.nama || '-')}</strong> — ${esc(order.telepon || '-')}<br>
                         ${esc(order.alamat || '-')}<br>
                         Produk: ${esc(order.produk || '-')} x${esc(order.jumlah || '-')} · ${esc(order.langganan || '-')}<br>
-                        Pembayaran: ${esc(order.metodePembayaran || '-')} (${esc(bayar)})${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${esc(order.tanggal || '-')}
+                        Pembayaran: ${esc(order.metodePembayaran || '-')}${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${esc(order.tanggal || '-')}
                         ${order.pesan ? '<br>Catatan: ' + esc(order.pesan) : ''}
                         ${buktiHtml}
                     </div>
                     <div class="status-buttons">${buttons}</div>
-                    ${payButtons}
                     ${contactRow(order, status)}
                     ${status === 'Selesai' && order.orderId ? `<div class="select-row"><label><input type="checkbox" data-select-id="${esc(order.orderId)}" ${selected.has(order.orderId) ? 'checked' : ''}> Pilih untuk dihapus</label></div>` : ''}
                 </div>
