@@ -30,6 +30,14 @@
         return Math.max(0, Math.min(5, n));
     }
 
+    // Foto boleh berupa data URL kecil (cara lama) atau alamat gambar Cloudinary akun kita.
+    function safeFoto(v) {
+        if (typeof v !== 'string') return '';
+        if (/^data:image\/(jpeg|png|webp);base64,/i.test(v) && v.length <= 180000) return v;
+        if (typeof TestimoniMedia !== 'undefined' && TestimoniMedia.isSafeUrl(v)) return v;
+        return '';
+    }
+
     function normalize(item, isRemote) {
         if (!item || typeof item !== 'object') return null;
         var komentar = String(item.komentar == null ? '' : item.komentar).trim();
@@ -40,7 +48,7 @@
             rating: rating,
             komentar: komentar || '(Tidak ada catatan tambahan)',
             tanggal: String(item.tanggal || '').trim(),
-            foto: (typeof item.foto === 'string' && /^data:image\/(jpeg|png|webp);base64,/i.test(item.foto) && item.foto.length <= 180000) ? item.foto : '',
+            foto: safeFoto(item.foto),
             // Kunci hanya untuk testimoni asli dari pelanggan (bisa dihapus admin); testimoni bawaan tidak punya kunci.
             key: isRemote && typeof TestimoniStore !== 'undefined' ? TestimoniStore.keyOf(item) : ''
         };

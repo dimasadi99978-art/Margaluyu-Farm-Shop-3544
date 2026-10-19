@@ -130,6 +130,10 @@
             line-height: 1.5;
         }
 
+        .contact-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .contact-row a { padding: 8px 14px; border-radius: 10px; font-size: 0.88em; font-weight: 600; text-decoration: none; }
+        .contact-wa { background: #1f9d55; color: #fff; }
+        .contact-tel { border: 1px solid #1f9d55; color: #1f6b3d; background: #fff; }
         .status-buttons {
             display: flex;
             gap: 8px;
@@ -221,6 +225,9 @@
         }
     </style>
     <link rel="stylesheet" href="mobile-responsive.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -237,8 +244,9 @@
             <div class="toolbar">
                 <h1>Daftar Pesanan</h1>
                 <div style="display:flex;gap:8px;align-items:center;">
-                    <a href="admin-analitik.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Lihat Analitik &rarr;</a>
+                    <a href="admin-analitik.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Lihat Analitik &rarr;</a> &nbsp; <a href="admin-pengaturan.html" style="font-size:0.85em;color:#0a3d38;text-decoration:underline;">Stok, Ongkir, Promo &amp; Testimoni &rarr;</a>
                     <button class="refresh-btn" id="refreshBtn">Muat Ulang</button>
+                    <button class="refresh-btn" id="exportCsvBtn" type="button">Unduh CSV</button>
                 </div>
             </div>
             <input type="text" id="searchInput" placeholder="Cari nama, nomor HP, atau nomor pesanan..."
@@ -268,8 +276,7 @@
             if (!refreshTimer) refreshTimer = setInterval(loadOrders, 30000); // auto-refresh tiap 30 detik (satu timer saja)
         }
 
-        // Login: bila server memakai ORDERS_ADMIN_KEY, kata sandi diperiksa oleh server.
-        // Jika belum diaktifkan, perilaku lama dipertahankan (dibandingkan dengan ADMIN_PASSWORD).
+        // Login: kata sandi diperiksa SERVER (ORDERS_ADMIN_KEY di Vercel). Browser hanya menerima token sesi 8 jam.
         document.getElementById('loginBtn').addEventListener('click', async function () {
             const btn = this;
             const errEl = document.getElementById('loginError');
@@ -278,17 +285,8 @@
             btn.disabled = true;
             try {
                 const check = await OrdersStore.verifyAdmin(val);
-                if (check.ok && check.protectedByServer) return enterAdmin();
-                if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
-                    OrdersStore.setAdminKey('');
-                    errEl.textContent = 'Kata sandi salah.';
-                    errEl.style.display = 'block';
-                    return;
-                }
-                // Server belum memakai kata sandi admin: pakai pemeriksaan lama
-                if (val === ADMIN_PASSWORD) return enterAdmin();
-                OrdersStore.setAdminKey('');
-                errEl.textContent = 'Kata sandi salah.';
+                if (check.ok) return enterAdmin();
+                errEl.textContent = check.error || 'Login gagal.';
                 errEl.style.display = 'block';
             } finally {
                 btn.disabled = false;
@@ -417,6 +415,15 @@
             });
         }
 
+        document.addEventListener('click', async function (e) {
+            const btn = e.target.closest && e.target.closest('[data-action="update-pay"]');
+            if (!btn) return;
+            btn.disabled = true;
+            const r = await OrdersStore.updatePayment(btn.dataset.orderId, btn.dataset.pay);
+            if (!r.success) alert('Status pembayaran belum berubah: ' + (r.error || 'Terjadi kesalahan.'));
+            await loadOrders();
+        });
+
         async function loadOrders() {
             const listEl = document.getElementById('ordersList');
             if (!allOrders.length) {
@@ -448,6 +455,33 @@
             }
         }
 
+        function waNumber(phone) {
+            let d = String(phone || '').replace(/\D/g, '');
+            if (d.startsWith('0')) d = '62' + d.slice(1);
+            else if (d.startsWith('8')) d = '62' + d;
+            return d.length >= 10 ? d : '';
+        }
+        function contactRow(order, status) {
+            const wa = waNumber(order.telepon);
+            if (!wa) return '';
+            const nama = String(order.nama || 'Pelanggan').trim();
+            const id = order.orderId || '';
+            const info = (order.produk || 'pesanan') + (order.jumlah ? ' x' + order.jumlah : '') + (order.totalHarga ? ', total Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : '');
+            const lacak = location.origin + '/lacak-pesanan.html?id=' + encodeURIComponent(id);
+            const bayarMsg = {
+                'Lunas': 'Halo Kak ' + nama + ', pembayaran pesanan ' + id + ' sudah kami terima. Terima kasih!',
+                'Ditolak': 'Halo Kak ' + nama + ', bukti pembayaran pesanan ' + id + ' belum bisa kami verifikasi. Mohon kirim ulang bukti transfer/QRIS lewat chat ini.'
+            }[order.statusPembayaran];
+            const pesan = bayarMsg || {
+                'Dikonfirmasi': 'Halo Kak ' + nama + ', kami dari Margaluyu Farm. Pesanan Anda ' + id + ' (' + info + ') sudah kami terima dan akan segera kami proses.',
+                'Dikemas': 'Halo Kak ' + nama + ', pesanan Anda ' + id + ' sedang kami kemas dan akan segera dikirim.',
+                'Dikirim': 'Halo Kak ' + nama + ', pesanan Anda ' + id + ' sedang dalam pengiriman. Mohon ditunggu ya, Kak.',
+                'Selesai': 'Halo Kak ' + nama + ', terima kasih sudah memesan di Margaluyu Farm. Pesanan ' + id + ' telah selesai. Kami senang bila Kakak berkenan memberi ulasan.'
+            }[status] || ('Halo Kak ' + nama + ', kami dari Margaluyu Farm terkait pesanan ' + id + '.');
+            const href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(pesan + '\n\nCek status pesanan: ' + lacak);
+            return `<div class="contact-row"><a class="contact-wa" href="${esc(href)}" target="_blank" rel="noopener">Hubungi via WhatsApp</a><a class="contact-tel" href="tel:+${wa}">Telepon</a></div>`;
+        }
+
         function renderOrderCard(order) {
             order = order || {};
             const orderId = order.orderId || '(tanpa nomor)';
@@ -458,6 +492,15 @@
                 return `<button data-action="update-status" data-order-id="${esc(orderId)}" data-status="${esc(s)}"
                     class="${isActive ? 'active-status' : ''}" ${isActive ? 'disabled' : ''}>${esc(s)}</button>`;
             }).join('');
+
+            const bayar = order.statusPembayaran || (order.metodePembayaran === 'QRIS' ? 'Menunggu verifikasi' : 'Bayar saat terima');
+            const payButtons = order.metodePembayaran === 'QRIS'
+                ? '<div class="status-buttons" style="margin-top:6px;"><span style="font-size:0.85em;color:#555;align-self:center;">Pembayaran:</span>' +
+                  OrdersStore.PAYMENT_STEPS.map(s => {
+                      const act = s === bayar;
+                      return `<button data-action="update-pay" data-order-id="${esc(orderId)}" data-pay="${esc(s)}" class="${act ? 'active-status' : ''}" ${act ? 'disabled' : ''}>${esc(s)}</button>`;
+                  }).join('') + '</div>'
+                : '';
 
             const bukti = safeImgSrc(order.buktiPembayaran);
             const buktiHtml = bukti
@@ -484,15 +527,42 @@
                         <strong>${esc(order.nama || '-')}</strong> — ${esc(order.telepon || '-')}<br>
                         ${esc(order.alamat || '-')}<br>
                         Produk: ${esc(order.produk || '-')} x${esc(order.jumlah || '-')} · ${esc(order.langganan || '-')}<br>
-                        Pembayaran: ${esc(order.metodePembayaran || '-')}${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${esc(order.tanggal || '-')}
+                        Pembayaran: ${esc(order.metodePembayaran || '-')} (${esc(bayar)})${order.totalHarga ? ' · Total: Rp ' + Number(order.totalHarga).toLocaleString('id-ID') : ''} · Tanggal: ${esc(order.tanggal || '-')}
                         ${order.pesan ? '<br>Catatan: ' + esc(order.pesan) : ''}
                         ${buktiHtml}
                     </div>
                     <div class="status-buttons">${buttons}</div>
+                    ${payButtons}
+                    ${contactRow(order, status)}
                     ${status === 'Selesai' && order.orderId ? `<div class="select-row"><label><input type="checkbox" data-select-id="${esc(order.orderId)}" ${selected.has(order.orderId) ? 'checked' : ''}> Pilih untuk dihapus</label></div>` : ''}
                 </div>
             `;
         }
+    </script>
+    <script>
+        // Cadangan data: unduh semua pesanan sebagai CSV (dibuka di Excel/Google Sheets). Foto bukti tidak disertakan.
+        (function () {
+            var btn = document.getElementById('exportCsvBtn');
+            if (!btn) return;
+            function cell(v) {
+                var t = v == null ? '' : String(v);
+                if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; // cegah injeksi rumus di spreadsheet
+                return '"' + t.replace(/"/g, '""') + '"';
+            }
+            btn.addEventListener('click', function () {
+                var list = (typeof allOrders !== 'undefined' && allOrders.length) ? allOrders.slice().reverse() : [];
+                if (!list.length) { alert('Belum ada pesanan untuk diunduh.'); return; }
+                var keys = [];
+                list.forEach(function (o) { Object.keys(o).forEach(function (k) { if (k !== 'buktiPembayaran' && keys.indexOf(k) === -1) keys.push(k); }); });
+                var rows = [keys.map(cell).join(',')].concat(list.map(function (o) { return keys.map(function (k) { return cell(o[k]); }).join(','); }));
+                var blob = new Blob(['\ufeff' + rows.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'pesanan-margaluyu-' + new Date().toISOString().slice(0, 10) + '.csv';
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+            });
+        })();
     </script>
 </body>
 

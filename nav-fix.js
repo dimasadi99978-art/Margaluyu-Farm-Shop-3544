@@ -1,12 +1,20 @@
-// Perilaku menu hamburger: tutup saat memilih menu, klik di luar, atau menekan Escape.
-// Posisi panel diatur oleh CSS (menempel pada header), jadi tidak perlu hitungan JS.
+// Perilaku header: menu HP (tutup saat pilih tautan / klik latar / Esc), bayangan saat di-scroll.
 (function () {
     function init() {
         var toggle = document.getElementById('nav-toggle');
-        var header = document.querySelector('header');
-        if (!toggle || !header) return;
+        var header = document.querySelector('header.site-top') || document.querySelector('header');
+        if (!header) return;
 
-        function sync() { toggle.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false'); }
+        function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8); }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        if (!toggle) return;
+        var root = document.documentElement;
+        function sync() {
+            toggle.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false');
+            root.classList.toggle('menu-open', toggle.checked);
+        }
         function close() { if (toggle.checked) { toggle.checked = false; sync(); } }
 
         toggle.addEventListener('change', sync);
@@ -25,7 +33,7 @@
                 if (label && label.focus) label.focus();
             }
         });
+        window.addEventListener('resize', function () { if (window.innerWidth >= 900) close(); });
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-    else init();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

@@ -4,467 +4,694 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Margaluyu Farm 354</title>
+    <title>Margaluyu Farm 354 - Susu Saanen Segar</title>
+    <meta name="description"
+        content="Susu kambing Saanen segar dari Margaluyu Farm. Botol 500 ml Rp 20.000, dijaga tetap dingin, gratis ongkir Surabaya Timur.">
+    <meta name="theme-color" content="#0a3d38">
+    <meta property="og:title" content="Margaluyu Farm 354 - Susu Kambing Saanen Segar">
+    <meta property="og:description"
+        content="Botol 500 ml Rp 20.000, dijaga tetap dingin, gratis ongkir Surabaya Timur.">
+    <meta property="og:image" content="https://__SITE__/img/banner-home-crop.jpg">
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--ink);
-            background: var(--bg);
-        }
-
-        /* ===== Hero (bagian atas): foto dan teks dipisah, tidak ada teks/lapisan gelap di atas foto ===== */
-        .hero { background: #fff; padding: 44px 0 52px; border-bottom: 1px solid var(--line); }
-        .hero .hero-inner {
-            display: grid; grid-template-columns: 5fr 6fr; gap: 56px; align-items: center;
-        }
-        .hero-text h2 {
-            font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
-            font-size: clamp(30px, 3.6vw, 46px);
-            font-weight: 700; line-height: 1.12; letter-spacing: -0.025em;
-            color: var(--forest); margin: 0 0 18px; text-wrap: balance;
-        }
-        .hero-text p { font-size: 17px; color: var(--ink-soft); max-width: 46ch; text-align: left; margin-bottom: 26px; }
-        .hero-text .harga { color: var(--ink); font-weight: 700; }
-        .hero-photo img { display: block; width: 100%; height: auto; border-radius: 6px; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 60%; }
-        .hero-aksi { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-        .hero-btn {
-            display: inline-block; font-size: 15.5px; font-weight: 600; padding: 12px 24px; border-radius: 6px;
-            background: var(--forest); color: #fff; transition: background-color .15s ease;
-        }
-        .hero-btn:hover { background: var(--forest-deep); }
-        .hero-link { color: var(--forest); font-weight: 600; font-size: 15.5px; padding: 12px 6px; text-decoration: underline; text-underline-offset: 4px; }
-
-        /* ===== Buttons ===== */
-        .btn-primary,
-        .btn-outline {
-            display: inline-block;
-            padding: 12px 26px;
-            border-radius: var(--radius);
-            font-size: 15px;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .btn-primary {
-            background: #fff;
-            color: var(--forest);
-        }
-
-        .btn-primary:hover {
-            background: var(--paper-alt);
-        }
-
-        .btn-outline {
-            border: 1.5px solid rgba(255, 255, 255, 0.6);
-            color: #fff;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: #fff;
-        }
-
-        .cta-close .btn-primary {
-            background: var(--forest);
-            color: #fff;
-        }
-
-        .cta-close .btn-primary:hover {
-            background: var(--forest-deep);
-        }
-
-        /* ===== Split (foto + teks, berselang-seling) ===== */
-        .split {
-            padding: 56px 0;
-            background: #fff;
-        }
-
-        .split-alt {
-            background: var(--paper-alt);
-        }
-
-        .split-inner {
-            display: flex;
-            align-items: center;
-            gap: 48px;
-        }
-
-        .split-alt .split-inner {
-            flex-direction: row-reverse;
-        }
-
-        .split-text,
-        .split-media {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .split-text p {
-            margin-bottom: 15px;
-            line-height: 1.7;
-            color: var(--ink-soft);
-            font-size: 15.5px;
-        }
-
-        .split-text h3 {
-            font-size: clamp(22px, 3vw, 28px);
-            margin-bottom: 12px;
-            color: var(--forest);
-        }
-
-        .split-text a {
-            color: var(--forest);
-            font-weight: 600;
-            text-decoration: underline;
-        }
-
-        .split-media img {
-            width: 100%;
-            max-width: 380px;
-            display: block;
-            margin: 0 auto;
-            border-radius: var(--radius-lg);
-        }
-
-        /* Kartu logo: persegi sempurna, putih, bayangan lembut */
-        .split-media .logo-card {
-            position: relative;
-            width: min(320px, calc(100vw - 48px));
-            aspect-ratio: 1 / 1;
-            margin: 0 auto;
-            background: #fff;
-            border: 1px solid #e7e1d3;
-            border-radius: 22px;
-            box-shadow: var(--shadow-lift);
-        }
-
-        .split-media .logo-card img {
-            position: absolute;
-            inset: 34px;
-            width: calc(100% - 68px);
-            height: calc(100% - 68px);
-            max-width: none;
-            object-fit: contain;
-            border-radius: 0;
-        }
-
-        .price-tag {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--forest);
-            margin: 6px 0 18px;
-        }
-
-        .price-tag span {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--muted);
-        }
-
-        /* ===== Facts row (horizontal, tanpa card) ===== */
-        .facts {
-            padding: 56px 0;
-            background: #fff;
-        }
-
-        .facts-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 28px;
-            margin-top: 28px;
-        }
-
-        .facts-item {
-            flex: 1;
-            text-align: center;
-            padding: 0 16px;
-            border-left: 1px solid var(--line);
-        }
-
-        .facts-item:first-child {
-            border-left: none;
-        }
-
-        .facts-item i {
-            font-size: 22px;
-            color: var(--forest);
-            margin-bottom: 10px;
-        }
-
-        .facts-item h4 {
-            font-size: 16px;
-            margin-bottom: 6px;
-            color: var(--forest);
-        }
-
-        .facts-item p {
-            font-size: 13.5px;
-            color: var(--muted);
-            line-height: 1.55;
-        }
-
-        /* ===== Foto full-width ===== */
-        .full-bleed {
-            position: relative;
-        }
-
-        .full-bleed img {
-            display: block;
-            width: 100%;
-            height: 320px;
-            object-fit: cover;
-        }
-
-        .full-bleed-caption {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            padding: 18px 22px;
-            background: linear-gradient(to top, rgba(5, 38, 35, 0.75), transparent);
-            color: #fff;
-            font-size: 14.5px;
-            margin: 0;
-        }
-
-        /* ===== CTA penutup ===== */
-        .cta-close {
-            padding: 56px 0;
-            background: var(--paper-alt);
-            text-align: center;
-        }
-
-        .cta-close h3 {
-            font-size: clamp(22px, 3vw, 26px);
-            margin-bottom: 8px;
-            color: var(--forest);
-        }
-
-        .cta-close p {
-            color: var(--muted);
-            margin-bottom: 22px;
-        }
-
-        /* ===== Responsivitas ===== */
-        @media (max-width: 900px) {
-
-            .split-inner,
-            .split-alt .split-inner {
-                flex-direction: column;
-            }
-
-            .split-media img {
-                max-width: 300px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero { padding: 0 0 36px; }
-            .hero .hero-inner { grid-template-columns: 1fr; gap: 24px; padding: 0; max-width: none; }
-            .hero-photo { order: -1; }
-            .hero-photo img { border-radius: 0; aspect-ratio: 4 / 3; }
-            .hero-text { padding: 0 20px; }
-
-            .split {
-                padding: 40px 0;
-            }
-
-            .facts-row {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .facts-item {
-                border-left: none;
-                border-top: 1px solid var(--line);
-                padding-top: 16px;
-            }
-
-            .facts-item:first-child {
-                border-top: none;
-                padding-top: 0;
-            }
-
-            .full-bleed img {
-                height: 220px;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="mobile-responsive.css">
-    <script src="nav-fix.js" defer></script>
-    <link rel="stylesheet" href="justify.css">
+    <link rel="stylesheet" href="css/landing.css">
     <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <script src="reveal.js"></script>
+    <noscript>
+        <style>
+            .rv {
+                opacity: 1 !important;
+                transform: none !important
+            }
+        </style>
+    </noscript>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "name": "Margaluyu Farm 354",
+          "description": "Peternakan kambing Saanen penghasil susu segar di Surabaya.",
+          "telephone": "+62895635067289",
+          "image": "img/banner-home-web.jpg",
+          "address": { "@type": "PostalAddress", "addressLocality": "Surabaya", "addressRegion": "Jawa Timur", "addressCountry": "ID" },
+          "areaServed": "Surabaya Timur",
+          "sameAs": [
+            "https://www.instagram.com/margaluyufarm354",
+            "https://www.tiktok.com/@margaluyu.farm.35",
+            "https://www.youtube.com/@margaluyufarm354"
+          ]
+        },
+        {
+          "@type": "Product",
+          "name": "Susu Kambing Saanen 500 ml",
+          "description": "Susu kambing Saanen segar, murni tanpa pengawet, dikirim dalam keadaan dingin.",
+          "image": "img/poster-produk-web.jpg",
+          "brand": { "@type": "Brand", "name": "Margaluyu Farm" },
+          "offers": { "@type": "Offer", "priceCurrency": "IDR", "price": "20000", "availability": "https://schema.org/InStock" }
+        }
+      ]
+    }
+    </script>
+    
+    <link rel="stylesheet" href="css/redesign.css">
+    <link rel="stylesheet" href="css/landing-pro.css">
+    
+    <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti __SITE__ dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://__SITE__/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://__SITE__/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Margaluyu Farm 354 - Susu Saanen Segar">
+    <meta name="twitter:description" content="Susu kambing Saanen segar dari Margaluyu Farm. Botol 500 ml Rp 20.000, dijaga tetap dingin, gratis ongkir Surabaya Timur.">
+    <meta name="twitter:image" content="https://__SITE__/img/banner-home-crop.jpg">
 </head>
 
-<body>
-    <!-- Medsos -->
-    <div class="medsos">
-        <div class="container">
-            <ul>
-                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
-                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
-                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
-                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
-            </ul>
-        </div>
-    </div>
-
+<body class="home">
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <symbol id="i-drop" viewBox="0 0 24 24">
+            <path d="M12 3c3.5 4.2 6 7.2 6 10.5a6 6 0 0 1-12 0C6 10.2 8.5 7.2 12 3z" />
+        </symbol>
+        <symbol id="i-leaf" viewBox="0 0 24 24">
+            <path d="M5 19c0-9 5-14 14-14 0 9-5 14-14 14z" />
+            <path d="M5 19c3-4 6-7 10-9" />
+        </symbol>
+        <symbol id="i-snow" viewBox="0 0 24 24">
+            <path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9" />
+            <path d="M9.5 4.5L12 6.5l2.5-2M9.5 19.5l2.5-2 2.5 2" />
+        </symbol>
+        <symbol id="i-truck" viewBox="0 0 24 24">
+            <path d="M3 7h11v9H3z" />
+            <path d="M14 10h4l3 3v3h-7z" />
+            <circle cx="7" cy="17.5" r="1.8" />
+            <circle cx="17" cy="17.5" r="1.8" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <path d="M5 12.5l4.5 4.5L19 7.5" />
+        </symbol>
+        <symbol id="i-smile" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M8.5 14c1 1.5 2.2 2.2 3.5 2.2s2.5-.7 3.5-2.2" />
+            <path d="M9 9.5h.01M15 9.5h.01" />
+        </symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24">
+            <path d="M12 3l9 5-9 5-9-5 9-5z" />
+            <path d="M3 13l9 5 9-5" />
+        </symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24">
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+        </symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24">
+            <path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15L6 17z" />
+            <path d="M10 21h4" />
+        </symbol>
+        <symbol id="i-dumbbell" viewBox="0 0 24 24">
+            <path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12" />
+        </symbol>
+        <symbol id="i-blocks" viewBox="0 0 24 24">
+            <rect x="4" y="14" width="16" height="5" rx="1" />
+            <rect x="7" y="9" width="10" height="5" rx="1" />
+            <rect x="9.5" y="4" width="5" height="5" rx="1" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" />
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+            <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+            <path d="M9 12l2 2 4-4" />
+        </symbol>
+        <symbol id="i-dropminus" viewBox="0 0 24 24">
+            <path d="M12 3c3.5 4.2 6 7.2 6 10.5a6 6 0 0 1-12 0C6 10.2 8.5 7.2 12 3z" />
+            <path d="M9.5 14h5" />
+        </symbol>
+        <symbol id="i-fridge" viewBox="0 0 24 24">
+            <rect x="6" y="3" width="12" height="18" rx="2" />
+            <path d="M6 11h12M9 7v1.5M9 14v3" />
+        </symbol>
+        <symbol id="i-pot" viewBox="0 0 24 24">
+            <path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6z" />
+            <path d="M9 4c0 1.5-1 1.5-1 3M13 4c0 1.5-1 1.5-1 3M17 4c0 1.5-1 1.5-1 3" />
+        </symbol>
+        <symbol id="i-glass" viewBox="0 0 24 24">
+            <path d="M7 4h10l-1.2 15a2 2 0 0 1-2 1.8h-3.6a2 2 0 0 1-2-1.8L7 4z" />
+            <path d="M7.6 10h8.8" />
+        </symbol>
+        <symbol id="i-box" viewBox="0 0 24 24">
+            <path d="M3 8l9-5 9 5v8l-9 5-9-5V8z" />
+            <path d="M3 8l9 5 9-5M12 13v8" />
+        </symbol>
+        <symbol id="i-mountain" viewBox="0 0 24 24">
+            <path d="M3 19l6-10 4 6 2-3 6 7H3z" />
+        </symbol>
+        <symbol id="i-scale" viewBox="0 0 24 24">
+            <path d="M5 8h14l1.5 11h-17L5 8z" />
+            <path d="M9 8a3 3 0 0 1 6 0" />
+        </symbol>
+        <symbol id="i-bottle" viewBox="0 0 24 24">
+            <path d="M10 3h4v3l2 3v11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9l2-3V3z" />
+            <path d="M8 13h8" />
+        </symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24">
+            <rect x="4" y="5" width="16" height="15" rx="2" />
+            <path d="M4 10h16M8 3v4M16 3v4" />
+        </symbol>
+        <symbol id="i-coffee" viewBox="0 0 24 24">
+            <path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z" />
+            <path d="M16 10h2a2 2 0 0 1 0 4h-2M8 3v3M12 3v3" />
+        </symbol>
+        <symbol id="i-jar" viewBox="0 0 24 24">
+            <rect x="6" y="8" width="12" height="12" rx="3" />
+            <path d="M8 8V5h8v3M9 14h6" />
+        </symbol>
+        <symbol id="i-apple" viewBox="0 0 24 24">
+            <circle cx="12" cy="14" r="6" />
+            <path d="M12 8c0-2 1-3 3-3" />
+        </symbol>
+        <symbol id="i-bar" viewBox="0 0 24 24">
+            <rect x="5" y="4" width="14" height="16" rx="2" />
+            <path d="M5 9h14M5 14h14M10 4v16" />
+        </symbol>
+        <symbol id="i-wa" viewBox="0 0 24 24">
+            <path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20z" />
+            <path d="M9.3 9.2c.4 2.4 2.5 4.5 5 5l1.2-1.3-1.8-1-.9.7a4 4 0 0 1-1.8-1.8l.7-.9-1-1.8-1.4 1.1z" />
+        </symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24">
+            <path d="M4 5h16v11H9l-5 4V5z" />
+        </symbol>
+        <symbol id="i-star" viewBox="0 0 24 24">
+            <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z" fill="currentColor"
+                stroke="none" />
+        </symbol>
+    </svg>
     <!-- header -->
     <header class="site-top">
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <h1 class="brand"><a href="index.html"><img class="brand-mark" src="img/logo-mark.png" alt="" width="34"
+                        height="34"><span class="brand-name">Margaluyu Farm</span></a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
-            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
+            <label for="nav-toggle" class="nav-toggle-label"
+                aria-hidden="true"><span></span><span></span><span></span></label>
+            <label for="nav-toggle" class="menu-backdrop" aria-hidden="true"></label>
             <nav class="menu-panel" aria-label="Menu utama">
-                <div class="menu-cols">
-                    <div class="menu-group">
-                        <span class="menu-label">Utama</span>
-                        <a class="menu-link is-current" href="index.html" aria-current="page">Beranda</a>
-                        <a class="menu-link" href="product.html">Produk</a>
-                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Informasi</span>
-                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
-                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
-                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
-                        <a class="menu-link" href="penyajian.html">Cara Penyajian</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Ulasan</span>
-                        <a class="menu-link" href="testimoni.html">Testimoni</a>
-                        <a class="menu-link" href="rating.html">Rating &amp; Saran</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Lainnya</span>
-                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
-                    </div>
+                <div class="menu-head"><a class="menu-brand" href="index.html"><img src="img/logo-mark.png" alt=""
+                            width="26" height="26">Margaluyu Farm</a><label for="nav-toggle" class="menu-close"
+                        aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg></label></div>
+                <a class="menu-link is-current" style="--i:1" href="index.html" aria-current="page"><span
+                        class="ml-t">Beranda</span><span class="ml-s">Susu Saanen segar</span></a>
+                <a class="menu-link" style="--i:2" href="product.html"><span class="ml-t">Produk</span><span
+                        class="ml-s">Harga dan detail</span></a>
+                <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak
+                        Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
+                <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span
+                        class="ml-s">WhatsApp dan kontak</span></a>
+                <div class="menu-foot">
+                    <a class="menu-cta" href="order sekarang.html">Pesan sekarang</a>
+                    <a class="menu-wa"
+                        href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
+                        target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
                 </div>
+                <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
             </nav>
         </div>
     </header>
-
-    <!-- Hero -->
-    <section class="hero">
-        <div class="container hero-inner">
-            <div class="hero-text">
-                <h2>Susu kambing Saanen segar dari peternakan kami</h2>
-                <p>Botol 500 ml, <span class="harga">Rp 20.000</span>. Susu dijaga tetap dingin sampai diterima,
-                    dan pesanan bisa Anda lacak kapan saja dengan nomor pesanan.</p>
-                <div class="hero-aksi">
-                    <a class="hero-btn" href="order sekarang.html">Pesan sekarang</a>
-                    <a class="hero-link" href="product.html">Lihat produk</a>
-                </div>
-            </div>
-            <div class="hero-photo">
-                <img src="img/banner-home-crop.jpg" alt="Susu kambing Saanen segar dari Margaluyu Farm">
-            </div>
-        </div>
-    </section>
-
-    <!-- Tentang Kami -->
-    <section class="split">
-        <div class="container split-inner">
-            <div class="split-text">
-                <span class="eyebrow">Tentang Kami</span>
-                <p><strong>Margaluyu Farm</strong> adalah nama yang kami gunakan untuk usaha peternakan sapi dan
-                    kambing yang kami jalankan.</p>
-                <p>Nama <strong>&ldquo;Margaluyu&rdquo;</strong> kami pilih sebagai satu kesatuan. Dalam bahasa
-                    Sunda, <em>margaluyu</em> berkaitan dengan jalan atau cara untuk mencapai keadaan yang luyu,
-                    yaitu sesuai dan selaras. Bagi kami, nama ini menjadi doa agar setiap langkah dalam menjalankan
-                    usaha tetap berada di jalan yang baik dan membawa manfaat.</p>
-                <p>Kata <strong>&ldquo;Farm&rdquo;</strong> berarti peternakan, sehingga Margaluyu Farm mewakili
-                    usaha peternakan yang kami jalankan.</p>
-                <p>Logo kami memakai siluet sapi dan kambing karena keduanya adalah ternak yang kami pelihara.
-                    Salah satunya kambing Saanen, yang kami jadikan penghasil susu. Ingin tahu lebih jauh tentang
-                    kambing ini?
-                    <a href="Pengenalan Kambing Saanen.html">Baca selengkapnya di sini</a>.
-                </p>
-            </div>
-            <div class="split-media">
-                <div class="logo-card">
-                    <img src="img/logo-mf.png" alt="Logo Margaluyu Farm">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Keunggulan -->
-    <section class="facts">
+    <div class="lp-progress" id="lpProgress" aria-hidden="true"></div>
+    <nav class="lp-subnav" id="lpSubnav" aria-label="Isi halaman" aria-hidden="true">
         <div class="container">
-            <span class="eyebrow eyebrow-center">Mengapa Memilih Susu Saanen?</span>
-            <div class="facts-row">
-                <div class="facts-item">
-                    <i class="fas fa-glass-whiskey"></i>
-                    <h4>Murni</h4>
-                    <p>Tanpa bahan tambahan atau pengawet.</p>
-                </div>
-                <div class="facts-item">
-                    <i class="fas fa-wind"></i>
-                    <h4>Bau Lebih Ringan</h4>
-                    <p>Aroma prengus susu kambing jauh lebih ringan dibanding jenis lain.</p>
-                </div>
-                <div class="facts-item">
-                    <i class="fas fa-snowflake"></i>
-                    <h4>Rantai Dingin Terjaga</h4>
-                    <p>Susu dijaga tetap segar hingga diterima.</p>
-                </div>
-                <div class="facts-item">
-                    <i class="fas fa-comments"></i>
-                    <h4>Respons Cepat</h4>
-                    <p>Pertanyaan dan kendala dapat disampaikan melalui WhatsApp</p>
-                </div>
-            </div>
+            <a href="#kenapa">Kualitas</a>
+            <a href="#cara-pesan">Cara pesan</a>
+            <a href="#perbandingan">Perbandingan</a>
+            <a href="#kambing">Kambing</a>
+            <a href="#kandungan">Kandungan</a>
+            <a href="#penyajian">Penyajian</a>
+            <a href="#testimoni">Ulasan</a>
+            <a href="#faq">FAQ</a>
         </div>
-    </section>
+    </nav>
 
-    <!-- Footer -->
-    <!-- footer -->
-    <footer>
-        <div class="container footer-inner">
-            <div class="footer-col footer-brand">
-                <strong>Margaluyu Farm</strong>
-                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk
-                    kebutuhan kurban dan akikah.</p>
-                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
-                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
-                </a>
+    <main>
+        <!-- Hero -->
+        <section class="lp-hero">
+            <div class="container">
+                <div class="lp-hero-text">
+                    <a class="lp-proof" id="lpProof" href="#testimoni" hidden></a>
+                    <h2>Susu Saanen <span class="hl">segar</span></h2>
+                    <p>Susu kambing Saanen memiliki rasa creamy dan segar, tanpa bau prengus. Rasanya cocok untuk yang
+                        baru pertama kali mencoba susu kambing. Susu dikirim dalam keadaan segar agar kualitasnya tetap
+                        terjaga.</p>
+                    <div class="lp-actions">
+                        <a class="lp-btn" href="order sekarang.html">Pesan sekarang</a>
+                        <a class="lp-btn-ghost" href="product.html">Lihat produk</a>
+                    </div>
+                </div>
+                <div class="lp-hero-photo">
+                    <img src="img/banner-home-web.jpg"
+                        alt="Tiga botol dan segelas susu kambing Saanen segar di meja kayu" width="1100" height="572">
+                    <a class="lp-badge" href="order sekarang.html"><span class="lp-badge-p"><small>Harga</small><b>Rp 20.000 <em>/ botol 500 ml</em></b></span><span class="lp-badge-s"><i></i>Stok tersedia</span></a>
+                </div>
+                <ul class="lp-strip" data-stagger>
+                    <li class="rv"><b>Manis & Creamy</b><span>Memiliki rasa manis alami tanpa aroma prengus yang menyengat.</span></li>
+                    <li class="rv"><b>Pengiriman</b><span>Susu diperah dan dikirim pada hari yang sama.</span></li>
+                    <li class="rv"><b>Ongkir Gratis</b><span>ongkir area Surabaya Timur</span></li>
+                    <li class="rv"><b>100% Murni</b><span>murni, halal, tanpa pengawet</span></li>
+                </ul>
             </div>
-            <div class="footer-col">
-                <h4 class="footer-heading">Ikuti Kami</h4>
-                <div class="footer-social">
-                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
-                            class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
-                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
-                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
-                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </section>
+
+        <!-- Kenapa -->
+        <section class="lp-sec lp-sec--tint" id="kenapa">
+            <div class="container">
+                <div class="lp-why">
+                    <div class="lp-arch rv"><img src="img/susu-freezer-web.jpg"
+                            alt="Botol susu Saanen dalam freezer berisi es" loading="lazy" width="900" height="846">
+                    </div>
+                    <div>
+                        <div class="lp-head rv" style="margin-bottom:20px">
+                            <h3>Kenapa memilih susu Saanen kami?</h3>
+                            <p>Susu diperah dan dikirim pada hari yang sama dalam kondisi dingin untuk menjaga
+                                kesegarannya hingga sampai ke rumah Anda.
+                            </p>
+                        </div>
+                        <ul class="lp-why-grid" data-stagger>
+                            <li class="rv"><svg class="ic" aria-hidden="true">
+                                    <use href="#i-leaf" />
+                                </svg><b>Murni, tanpa pengawet</b><span>Tanpa bahan tambahan apa pun</span></li>
+                            <li class="rv"><svg class="ic" aria-hidden="true">
+                                    <use href="#i-smile" />
+                                </svg><b>Manis dan creamy</b><span>Susu kambing Saanen memiliki rasa manis alami tanpa
+                                    bau prengus yang menyengat.</span></li>
+                            <li class="rv"><svg class="ic" aria-hidden="true">
+                                    <use href="#i-bottle" />
+                                </svg><b>Segar sampai rumah</b><span>Susu diperah dan dikirim pada hari yang sama untuk
+                                    menjaga kesegarannya.</span></li>
+                            <li class="rv"><svg class="ic" aria-hidden="true">
+                                    <use href="#i-shield" />
+                                </svg><b>100% Halal</b><span>Diproduksi secara higienis dan halal.</span></li>
+                            <li class="rv"><svg class="ic" aria-hidden="true">
+                                    <use href="#i-truck" />
+                                </svg><b>Gratis ongkir</b><span>Untuk area Surabaya Timur, tanpa minimal
+                                    pembelian.</span></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
-        </div>
-    </footer>
+        </section>
+
+        <!-- Cara pesan -->
+        <section class="lp-sec" id="cara-pesan">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Pesan dalam tiga langkah</h3>
+                </div>
+                <div class="lp-how" data-stagger>
+                    <div class="rv"><span class="n">1</span><b>Isi formulir</b><span class="t">Lengkapi formulir dengan
+                            nama, nomor HP, alamat, dan jumlah botol.</span></div>
+                    <div class="rv"><span class="n">2</span><b>Pilih pembayaran</b><span class="t">Pilih COD (bayar saat
+                            pesanan diterima) atau QRIS.</span></div>
+                    <div class="rv"><span class="n">3</span><b>Terima Pesanan</b><span class="t">Susu dikirim dalam
+                            keadaan dingin. Status pesanan dapat dipantau menggunakan nomor pesanan.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Perbandingan -->
+        <section class="lp-sec lp-sec--tint" id="perbandingan">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Saanen dibanding susu lain</h3>
+                    <p>Ketuk salah satu jenis susu untuk melihat rasa, aroma, dan teksturnya.</p>
+                </div>
+                <div class="lp-faq lp-cmp" data-stagger>
+<details class="rv" open><summary>Susu Saanen<span class="tag">Pilihan kami</span></summary><dl class="lp-cmp-list"><div><dt>Rasa</dt><dd>Manis, creamy</dd></div><div><dt>Aroma</dt><dd>Ringan dan tidak menyengat</dd></div><div><dt>Tekstur</dt><dd>Creamy</dd></div></dl></details>
+<details class="rv"><summary>Susu Etawa</summary><dl class="lp-cmp-list"><div><dt>Rasa</dt><dd>Khas susu kambing</dd></div><div><dt>Aroma</dt><dd>Cenderung lebih kuat</dd></div><div><dt>Tekstur</dt><dd>Lebih kental</dd></div></dl></details>
+<details class="rv"><summary>Susu Sapi</summary><dl class="lp-cmp-list"><div><dt>Rasa</dt><dd>Gurih, sedikit manis</dd></div><div><dt>Aroma</dt><dd>Netral</dd></div><div><dt>Tekstur</dt><dd>Cair</dd></div></dl></details>
+</div>
+            </div>
+        </section>
+
+        <!-- Kambing -->
+        <section class="lp-sec" id="kambing">
+            <div class="container">
+                <div class="lp-goat">
+                    <div>
+                        <div class="lp-head rv" style="margin-bottom:18px">
+                            <h3>Kambing Saanen</h3>
+                            <p>Dijuluki &ldquo;ratu kambing perah&rdquo; karena produksi susunya yang tinggi dibanding
+                                jenis kambing lain.</p>
+                        </div>
+                        <div class="lp-stats rv">
+                            <div class="lp-stat"><b>65&ndash;80</b><span>kg, berat betina dewasa</span></div>
+                            <div class="lp-stat"><b>3&ndash;4</b><span>liter susu per hari, rata-rata</span></div>
+                            <div class="lp-stat"><b>&plusmn;10</b><span>bulan masa laktasi</span></div>
+                        </div>
+                        <dl class="lp-facts-list rv">
+                            <div>
+                                <dt>Asal</dt>
+                                <dd>Lembah Saanen, Pegunungan Alpen, Swiss.</dd>
+                            </div>
+                            <div>
+                                <dt>Ciri fisik</dt>
+                                <dd>Bulu putih atau krem yang pendek, tubuh besar dan tegap, biasanya tidak bertanduk.
+                                </dd>
+                            </div>
+                            <div>
+                                <dt>Sifat</dt>
+                                <dd>Tenang, jinak, dan mudah ditangani saat diperah.</dd>
+                            </div>
+                            <div>
+                                <dt>Perawatan</dt>
+                                <dd>Kulitnya peka terhadap terik matahari, sehingga perlu kandang yang teduh dan
+                                    ventilasi baik.</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="lp-goat-photo rv"><img src="img/kambing-saanen-web.jpg"
+                            alt="Kambing Saanen putih berdiri di kandang kayu" loading="lazy" width="720" height="720">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kandungan -->
+        <section class="lp-sec lp-sec--tint" id="kandungan">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Kandungan susu Saanen</h3>
+                </div>
+                <div class="lp-nut" data-stagger>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-dumbbell" />
+                        </svg><b>Protein</b><span>3&ndash;4 g per 100 ml, mudah dicerna.</span></div>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-drop" />
+                        </svg><b>Lemak mudah diserap</b><span>Mengandung asam lemak rantai sedang.</span></div>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-sun" />
+                        </svg><b>Vitamin</b><span>A, D, E, dan B kompleks.</span></div>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-blocks" />
+                        </svg><b>Mineral tulang</b><span>Kalsium, fosfor, dan magnesium.</span></div>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-dropminus" />
+                        </svg><b>Laktosa lebih rendah</b><span>&plusmn;4&ndash;4,5 g per 100 ml, sedikit di bawah susu
+                            sapi.</span></div>
+                    <div class="rv"><svg class="ic" aria-hidden="true">
+                            <use href="#i-shield" />
+                        </svg><b>Selenium dan zinc</b><span>Menunjang daya tahan tubuh.</span></div>
+                </div>
+                <p class="lp-note rv">Berdasarkan literatur ilmiah (USDA dan jurnal gizi). Susu kambing adalah pangan,
+                    bukan obat. Tidak untuk bayi di bawah 12 bulan. Penderita alergi susu atau intoleransi laktosa
+                    sebaiknya berkonsultasi ke dokter.</p>
+            </div>
+        </section>
+
+        <!-- Penyajian -->
+        <section class="lp-sec" id="penyajian">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Cara penyajian</h3>
+                </div>
+                <div class="lp-steps" data-stagger>
+                    <div class="rv"><span class="n">01</span><b>Cairkan</b><span class="t">Jika susu masih beku, rendam
+                            botol dalam air selama 10 menit untuk mempercepat pencairan.</span></div>
+                    <div class="rv"><span class="n">02</span><b>Sajikan</b><span class="t">Nikmati susu dalam keadaan
+                            dingin atau <a class="lp-inlink" href="#faq-hangat">hangat sesuai selera</a>.</span></div>
+                    <div class="rv"><span class="n">03</span><b>Simpan</b><span class="t">Simpan susu di kulkas pada
+                            suhu 2&ndash;4&deg;C
+                            selama maksimal 3 hari atau di Freezer pada suhu &minus;18&deg;C hingga 3 bulan.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ulasan -->
+        <section class="lp-sec lp-sec--tint" id="testimoni">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Ulasan Pelanggan</h3>
+                </div>
+                <div class="lp-rate rv" id="lpRate" hidden></div>
+                <div class="lp-testi" id="lpTesti" aria-live="polite"></div>
+                <div class="lp-actions lp-testi-actions rv">
+                    <a class="lp-btn" href="rating.html">Tulis ulasan</a>
+                    <a class="lp-btn-ghost" href="testimoni.html">Lihat semua ulasan</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="lp-sec" id="faq">
+            <div class="container">
+                <div class="lp-head rv">
+                    <h3>Pertanyaan yang sering ditanyakan</h3>
+                </div>
+                <div class="lp-faq" data-stagger>
+                    <details class="rv">
+                        <summary>Apakah susu Saanen berbau prengus?</summary>
+                        <p>Susu kambing Saanen memiliki rasa creamy dan segar, tanpa bau prengus atau rasa amis. Susu
+                            dikirim dalam keadaan segar agar kualitasnya tetap terjaga.</p>
+                    </details>
+                    <details class="rv">
+                        <summary>Masa simpan susu</summary>
+                        <p>Suhu ruang (cair): ±2 jam</p>
+                        <p>Di kulkas (2&ndash;4&deg;C) hingga 3 hari</p>
+                        <p>Di freezer (&minus;18&deg;C) hingga 3 bulan</p>
+                    </details>
+                    <details class="rv">
+                        <summary>Berapa harga dan ukurannya?</summary>
+                        <p>Rp 20.000 per botol 500 ml.</p>
+                    </details>
+                    <details class="rv">
+                        <summary>Apakah ada ongkos kirim?</summary>
+                        <p>Gratis ongkos kirim untuk wilayah Surabaya Timur.</p>
+                    </details>
+                    <details class="rv">
+                        <summary>Bagaimana cara melakukan pembayaran?</summary>
+                        <p>COD (bayar saat susu diterima) atau QRIS. Untuk QRIS, unggah bukti pembayaran di formulir
+                            pesanan.</p>
+                    </details>
+                    <details class="rv">
+                        <summary>Apakah susu ini aman untuk bayi?</summary>
+                        <p>Tidak untuk bayi di bawah 12 bulan. Penderita alergi susu atau intoleransi laktosa sebaiknya
+                            berkonsultasi ke dokter terlebih dahulu.</p>
+                    </details>
+                    <details class="rv" id="faq-hangat">
+                        <summary>Apakah susu kambing Saanen bisa disajikan hangat?</summary>
+                        <p>Bisa. Panaskan susu dengan api kecil sambil diaduk perlahan agar tidak menggumpal. Cukup
+                            panaskan hingga muncul buih-buih kecil dan hindari merebus susu hingga mendidih.</p>
+                    </details>
+                </div>
+                <div class="lp-faq-more rv">
+                    <span>Masih ada pertanyaan?</span>
+                    <a class="lp-btn-ghost"
+                        href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
+                        target="_blank" rel="noopener">Hubungi Kami</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="makna" id="tentang">
+            <div class="container"><img src="img/logo-mf.png" alt="Logo Margaluyu Farm" width="112" height="150">
+                <p><strong>Margaluyu Farm</strong> adalah usaha peternakan sapi dan kambing kami. Salah satunya kambing
+                    Saanen, yang kami jadikan penghasil susu. Nama &ldquo;Margaluyu&rdquo; kami pilih sebagai doa agar
+                    setiap langkah usaha selaras dan membawa manfaat.</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="end-zone">
+        <footer class="site-foot">
+            <div class="container">
+                <div class="sf-row"><a class="sf-brand" href="index.html"><img src="img/logo-mark.png" alt="" width="30"
+                            height="30">Margaluyu Farm</a>
+                    <nav class="sf-social" aria-label="Media sosial"><a
+                            href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"><i
+                                class="fab fa-instagram" aria-hidden="true"></i>Instagram</a><a
+                            href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"><i
+                                class="fab fa-tiktok" aria-hidden="true"></i>TikTok</a><a
+                            href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"><i
+                                class="fab fa-youtube" aria-hidden="true"></i>YouTube</a></nav>
+                </div>
+                <p class="sf-copy">&copy; 2026 Margaluyu Farm. Seluruh hak dilindungi. <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html">Kebijakan
+                        privasi</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="lp-sticky" id="lpSticky" aria-hidden="true">
+        <a class="lp-btn" href="order sekarang.html" tabindex="-1">Pesan sekarang &middot; Rp 20.000</a>
+        <a class="wa"
+            href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20susu%20Saanen"
+            target="_blank" rel="noopener" aria-label="Tanya lewat WhatsApp" tabindex="-1"><svg class="ic"
+                aria-hidden="true" style="width:24px;height:24px">
+                <use href="#i-wa" />
+            </svg></a>
+    </div>
+
+    <script src="nav-fix.js" defer></script>
+    <script src="testimoni-config.js"></script>
+    <script src="testimoni-store.js"></script>
+    <script src="testimoni-static.js"></script>
+    <script src="testimoni-media.js"></script>
+    <script src="landing.js"></script>
+    <script>
+        // Ulasan terbaru + rata-rata rating (data sama dengan halaman Testimoni).
+        (function () {
+            var box = document.getElementById('lpTesti');
+            var rate = document.getElementById('lpRate');
+            var SVG = 'http://www.w3.org/2000/svg';
+
+            function icon(id, cls) {
+                var s = document.createElementNS(SVG, 'svg');
+                s.setAttribute('class', 'ic ' + (cls || ''));
+                s.setAttribute('aria-hidden', 'true');
+                var u = document.createElementNS(SVG, 'use');
+                u.setAttribute('href', '#i-' + id);
+                s.appendChild(u);
+                return s;
+            }
+            function stars(n) {
+                var w = document.createElement('span');
+                w.className = 'lp-stars';
+                w.setAttribute('role', 'img');
+                w.setAttribute('aria-label', 'Rating ' + n + ' dari 5');
+                for (var i = 1; i <= 5; i++) w.appendChild(icon('star', i <= n ? '' : 'off'));
+                return w;
+            }
+            function safeFoto(v) {
+                if (typeof v !== 'string') return '';
+                if (/^data:image\/(jpeg|png|webp);base64,/i.test(v) && v.length <= 180000) return v;
+                if (typeof TestimoniMedia !== 'undefined' && TestimoniMedia.isSafeUrl(v)) return v;
+                return '';
+            }
+            function norm(x) {
+                if (!x || typeof x !== 'object') return null;
+                var nama = String(x.nama || '').trim().slice(0, 60) || 'Anonim';
+                var rating = Math.max(0, Math.min(5, parseInt(x.rating, 10) || 0));
+                var komentar = String(x.komentar || '').trim().slice(0, 600);
+                if (komentar === '(Tidak ada catatan tambahan)') komentar = '';
+                return { nama: nama, rating: rating, komentar: komentar, tanggal: String(x.tanggal || '').slice(0, 40), foto: safeFoto(x.foto) };
+            }
+
+            async function run() {
+                var remote = [];
+                try { remote = (await TestimoniStore.load()).data || []; } catch (e) { /* tampilkan data statis saja */ }
+                var statics = (typeof TESTIMONI_STATIS !== 'undefined' && Array.isArray(TESTIMONI_STATIS)) ? TESTIMONI_STATIS : [];
+                var all = remote.slice().reverse().map(norm).concat(statics.slice().reverse().map(norm)).filter(Boolean);
+
+                var rated = all.filter(function (t) { return t.rating > 0; });
+                if (rated.length) {
+                    var avg = rated.reduce(function (a, t) { return a + t.rating; }, 0) / rated.length;
+                    var big = document.createElement('span');
+                    big.className = 'big';
+                    big.textContent = avg.toFixed(1).replace('.', ',');
+                    var small = document.createElement('small');
+                    small.textContent = 'dari 5, berdasarkan ' + rated.length + ' ulasan';
+                    rate.textContent = '';
+                    rate.appendChild(big);
+                    rate.appendChild(stars(Math.round(avg)));
+                    rate.appendChild(small);
+                    rate.hidden = false;
+
+                    // Bukti sosial singkat di hero
+                    var proof = document.getElementById('lpProof');
+                    if (proof) {
+                        proof.textContent = '';
+                        proof.appendChild(stars(Math.round(avg)));
+                        var pt = document.createElement('span');
+                        var pb = document.createElement('b');
+                        pb.textContent = avg.toFixed(1).replace('.', ',');
+                        pt.appendChild(pb);
+                        pt.appendChild(document.createTextNode(' dari ' + rated.length + ' ulasan pelanggan'));
+                        proof.appendChild(pt);
+                        proof.hidden = false;
+                    }
+                }
+
+                var show = all.filter(function (t) { return t.komentar.length >= 3; }).slice(0, 3);
+                box.textContent = '';
+                if (!show.length) {
+                    var empty = document.createElement('div');
+                    empty.className = 'lp-testi-empty';
+                    empty.textContent = 'Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.';
+                    box.style.display = 'block';
+                    box.appendChild(empty);
+                    return;
+                }
+                show.forEach(function (t) {
+                    var card = document.createElement('article');
+                    card.className = 'lp-quote';
+                    if (t.rating > 0) card.appendChild(stars(t.rating));
+                    if (t.foto) {
+                        var img = document.createElement('img');
+                        img.src = t.foto; img.alt = 'Foto dari ' + t.nama; img.loading = 'lazy';
+                        card.appendChild(img);
+                    }
+                    var p = document.createElement('p');
+                    p.textContent = '\u201C' + t.komentar + '\u201D';
+                    card.appendChild(p);
+                    var f = document.createElement('footer');
+                    var b = document.createElement('b'); b.textContent = t.nama;
+                    var d = document.createElement('span'); d.textContent = t.tanggal;
+                    f.appendChild(b); f.appendChild(d);
+                    card.appendChild(f);
+                    if (window.MFReveal) window.MFReveal.add(card);
+                    box.appendChild(card);
+                });
+            }
+            run();
+        })();
+
+        // Bar "Pesan sekarang" di HP: muncul setelah hero, hilang saat sampai di bagian penutup/footer.
+        (function () {
+            var bar = document.getElementById('lpSticky');
+            var hero = document.querySelector('.lp-hero');
+            var end = document.getElementById('pesan');
+            if (!bar || !hero || !end) return;
+            function update() {
+                var h = hero.getBoundingClientRect().bottom;
+                var e = end.getBoundingClientRect().top;
+                var on = window.innerWidth <= 900 && h < 0 && e > window.innerHeight - 40;
+                bar.classList.toggle('is-on', on);
+                bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+                Array.prototype.forEach.call(bar.querySelectorAll('a'), function (a) { a.tabIndex = on ? 0 : -1; });
+                document.body.classList.toggle('has-sticky', on);
+            }
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+    </script>
+
+    <script>
+        // Tautan ke pertanyaan FAQ: buka jawabannya otomatis.
+        (function () {
+            function bukaFaq() {
+                var id = location.hash.slice(1);
+                if (!id) return;
+                var el = document.getElementById(id);
+                if (el && el.tagName === 'DETAILS') {
+                    el.open = true;
+                    setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60);
+                }
+            }
+            window.addEventListener('hashchange', bukaFaq);
+            document.addEventListener('DOMContentLoaded', bukaFaq);
+        })();
+    </script>
+    <script src="stok-badge.js"></script>
 </body>
 
 </html>

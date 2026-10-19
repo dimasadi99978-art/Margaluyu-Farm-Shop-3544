@@ -4,97 +4,113 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rating & Saran - Margaluyu Farm</title>
+    <title>Tulis Ulasan - Margaluyu Farm</title>
     <meta name="theme-color" content="#0a3d38">
     <link rel="stylesheet" href="css/style-rating.css">
     <link rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="justify.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/menu.css">
-    <style>@media (max-width: 900px) { body { padding-bottom: 0; } }</style>
+    <style>
+        @media (max-width: 900px) { body { padding-bottom: 0; } }
+        .ct { padding: 32px 0 56px; background: #fff; }
+        .ct-grid { display: block; }
+        .ct-form { max-width: 600px; }
+        .ct h3 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.02em; font-size: 22px; color: var(--forest); margin: 0 0 12px; text-align: left; }
+        .ct-sub { margin: -6px 0 20px; color: var(--ink-soft); text-align: left; }
+        .ct-wa { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 46px; padding: 0 20px;
+            background: #1f8f4a; color: #fff; font-weight: 600; font-size: 15px; border-radius: 999px; text-decoration: none; transition: background-color .15s ease; }
+        .ct-wa:hover { background: #197a3e; color: #fff; }
+        .ct-wa svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .ct-list { margin: 20px 0 0; }
+        .ct-list > div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 12px 0; }
+        .ct-list dt { color: var(--muted); font-size: 14px; padding-top: 1px; }
+        .ct-list dd { margin: 0; font-size: 15px; }
+        .ct-list a { color: var(--ink); text-decoration: underline; text-decoration-color: #b8c9b8; text-underline-offset: 4px; }
+        .ct-list a:hover { color: var(--forest); text-decoration-color: var(--forest); }
+        .ct-form .form-card { max-width: none; margin: 0; padding: 24px; }
+        .anon-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--ink-soft); cursor: pointer; }
+        .anon-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--forest); flex: 0 0 auto; }
+        .anon-row small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
+        #ratingForm input:disabled { background: var(--paper-alt); color: var(--muted); cursor: not-allowed; }
+        @media (max-width: 900px) { .ct { padding: 22px 0 44px; } .ct-grid { grid-template-columns: 1fr; } .ct-form .form-card { padding: 22px 18px; } }
+    </style>
+    
+    <link rel="stylesheet" href="css/ui.css">
+    <script src="reveal.js"></script>
+    <noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+    <style>.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}.js .rv.is-in{opacity:1;transform:none}@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}</style>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <meta name="description" content="Tulis ulasan dan saran Anda tentang susu Saanen Margaluyu Farm.">
+    
+    
+    
+    <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti __SITE__ dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://__SITE__/rating.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://__SITE__/rating.html">
+    <meta property="og:title" content="Tulis Ulasan - Margaluyu Farm">
+    <meta property="og:description" content="Tulis ulasan dan saran Anda tentang susu Saanen Margaluyu Farm.">
+    <meta property="og:image" content="https://__SITE__/img/banner-home-crop.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tulis Ulasan - Margaluyu Farm">
+    <meta name="twitter:description" content="Tulis ulasan dan saran Anda tentang susu Saanen Margaluyu Farm.">
+    <meta name="twitter:image" content="https://__SITE__/img/banner-home-crop.jpg">
 </head>
 
 <body>
-    <!-- Medsos -->
-    <div class="medsos">
-        <div class="container">
-            <ul>
-                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
-                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
-                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
-                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
-            </ul>
-        </div>
-    </div>
-
     <!-- header -->
     <header class="site-top">
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <h1 class="brand"><a href="index.html"><img class="brand-mark" src="img/logo-mark.png" alt="" width="34" height="34"><span class="brand-name">Margaluyu Farm</span></a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
-            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true"><span></span><span></span><span></span></label>
+            <label for="nav-toggle" class="menu-backdrop" aria-hidden="true"></label>
             <nav class="menu-panel" aria-label="Menu utama">
-                <div class="menu-cols">
-                    <div class="menu-group">
-                        <span class="menu-label">Utama</span>
-                        <a class="menu-link" href="index.html">Beranda</a>
-                        <a class="menu-link" href="product.html">Produk</a>
-                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Informasi</span>
-                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
-                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
-                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
-                        <a class="menu-link" href="penyajian.html">Cara Penyajian</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Ulasan</span>
-                        <a class="menu-link" href="testimoni.html">Testimoni</a>
-                        <a class="menu-link is-current" href="rating.html" aria-current="page">Rating &amp; Saran</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Lainnya</span>
-                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
-                    </div>
+                <div class="menu-head"><a class="menu-brand" href="index.html"><img src="img/logo-mark.png" alt="" width="26" height="26">Margaluyu Farm</a><label for="nav-toggle" class="menu-close" aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></label></div>
+                <a class="menu-link" style="--i:1" href="index.html"><span class="ml-t">Beranda</span><span class="ml-s">Susu Saanen segar</span></a>
+                <a class="menu-link" style="--i:2" href="product.html"><span class="ml-t">Produk</span><span class="ml-s">Harga dan detail</span></a>
+                <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
+                <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span class="ml-s">WhatsApp dan kontak</span></a>
+                <div class="menu-foot">
+                    <a class="menu-cta" href="order sekarang.html">Pesan sekarang</a>
+                    <a class="menu-wa" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
                 </div>
+                <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
             </nav>
         </div>
     </header>
-    <div id="main" tabindex="-1"></div>
+<div id="main" tabindex="-1"></div>
 
     <section class="page-hero page-hero--plain">
         <div class="container">
-            <h2>Rating &amp; Saran</h2>
-            <p>Bagikan penilaian, kritik, dan saran Anda tentang susu Saanen kami. Masukan Anda akan menjadi bahan
-                evaluasi dan ditampilkan di halaman Testimoni.</p>
+            <h2>Tulis ulasan</h2>
+            <p>Ceritakan pengalaman Anda dengan susu Saanen kami. Boleh tanpa nama.</p>
         </div>
     </section>
 
-    <main class="section">
-        <div class="container">
+    <main class="ct">
+        <div class="container ct-grid">
+
+            <section class="ct-form rv" id="rating" aria-label="Formulir ulasan">
+
             <div class="form-card">
-                <div class="form-head">
-                    <h3>Ceritakan pengalaman Anda</h3>
-                </div>
 
                 <form id="ratingForm" novalidate>
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"><label>Jangan diisi<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
                     <div class="field">
                         <label for="nama">Nama</label>
                         <input class="input" type="text" id="nama" name="nama" placeholder="Contoh: Fulan"
                             maxlength="60" autocomplete="name" required>
                         <div class="error" id="namaError" role="alert"></div>
+                        <label class="anon-row" for="anonim">
+                            <input type="checkbox" id="anonim" name="anonim">
+                            <span>Kirim sebagai anonim<small>Nama tidak ditampilkan; ulasan tampil sebagai &ldquo;Anonim&rdquo;.</small></span>
+                        </label>
                     </div>
 
                     <fieldset class="field star-field">
@@ -133,7 +149,7 @@
                     <div class="field">
                         <label for="foto">Foto <span class="opt">(opsional)</span></label>
                         <input class="input file-input" type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp">
-                        <div class="help">Tambahkan foto pengalaman Anda. Foto yang dikirim akan ditampilkan bersama ulasan di halaman Testimoni.</div>
+                        <div class="help">Tambahkan foto pengalaman Anda. Foto yang dikirim akan ditampilkan bersama ulasan di beranda.</div>
                         <div class="photo-preview" id="photoPreview" hidden>
                             <button type="button" class="photo-preview-trigger" id="photoPreviewTrigger" aria-label="Pratinjau foto yang dipilih">
                                 <img id="photoPreviewImg" alt="Pratinjau foto ulasan" loading="lazy" decoding="async">
@@ -149,7 +165,7 @@
                         <div>
                             <strong>Terima kasih!</strong>
                             <p>Rating dan masukan Anda berhasil diberikan.</p>
-                            <a href="testimoni.html" class="btn btn--sm">Lihat Testimoni</a>
+                            <a href="index.html#testimoni" class="btn btn--sm">Lihat Ulasan</a>
                         </div>
                     </div>
                     <button type="submit" class="btn" id="submitBtn">Kirim</button>
@@ -169,7 +185,7 @@
             </div>
             <div class="footer-col">
                 <h4 class="footer-heading">Menu</h4>
-                <div class="footer-links"><a href="product.html">Produk</a><a href="order sekarang.html">Pesan Sekarang</a><a href="lacak-pesanan.html">Lacak Pesanan</a><a href="testimoni.html">Testimoni</a><a href="contact.html">Hubungi Kami</a></div>
+                <div class="footer-links"><a href="index.html">Beranda</a><a href="product.html">Produk</a><a href="order sekarang.html">Pesan Sekarang</a><a href="lacak-pesanan.html">Lacak Pesanan</a><a href="contact.html">Hubungi Kami</a></div>
             </div>
             <div class="footer-col">
                 <h4 class="footer-heading">Ikuti Kami</h4>
@@ -182,7 +198,7 @@
             </div>
         </div>
         <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan Privasi</a></small>
         </div>
     </footer>
     <script src="nav-fix.js" defer></script>
@@ -190,6 +206,7 @@
 
     <script src="testimoni-config.js"></script>
     <script src="testimoni-store.js"></script>
+    <script src="testimoni-media.js"></script>
     <dialog class="photo-lightbox" id="ratingPhotoLightbox" aria-label="Pratinjau foto">
         <div class="photo-lightbox-shell">
             <div class="photo-lightbox-toolbar">

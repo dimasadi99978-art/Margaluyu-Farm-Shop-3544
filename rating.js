@@ -11,6 +11,19 @@
 
     var namaEl = document.getElementById('nama');
     var namaError = document.getElementById('namaError');
+    var anonEl = document.getElementById('anonim');
+
+    // Opsi anonim: nama tidak diisi dan ulasan tampil sebagai "Anonim".
+    function syncAnon() {
+        if (!anonEl) return;
+        namaEl.disabled = anonEl.checked;
+        if (anonEl.checked) {
+            namaEl.value = '';
+            namaEl.classList.remove('is-invalid');
+            namaError.textContent = '';
+        }
+    }
+    if (anonEl) anonEl.addEventListener('change', syncAnon);
     var komentarEl = document.getElementById('komentar');
     var kritikSaranEl = document.getElementById('kritiksaran');
     var fotoEl = document.getElementById('foto');
@@ -28,7 +41,15 @@
     var hint = document.getElementById('starHint');
     var busy = false;
     var fotoData = '';
-    var MAX_PHOTO_BYTES = 120 * 1024;
+    var mediaOn = typeof TestimoniMedia !== 'undefined' && TestimoniMedia.isConfigured();
+    // Foto yang diunggah ke Cloudinary boleh lebih besar. Tanpa Cloudinary, foto disimpan langsung di
+    // data testimoni (JSONBin gratis hanya ±100KB per bin), jadi harus sangat kecil.
+    var MAX_PHOTO_BYTES = mediaOn ? 150 * 1024 : 20 * 1024;
+
+    // Kirim ulang masukan yang sebelumnya gagal terkirim (jika ada).
+    if (typeof TestimoniStore !== 'undefined' && TestimoniStore.isConfigured()) {
+        TestimoniStore.syncPending().catch(function () {});
+    }
 
     function showMsg(kind, text) {
         msg.className = 'form-msg notice notice--' + kind;
@@ -77,25 +98,29 @@
                 var img = new Image();
                 img.onerror = function () { reject(new Error('Foto tidak dapat diproses.')); };
                 img.onload = function () {
-                    var maxSide = 1000;
-                    var scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
-                    var canvas = document.createElement('canvas');
-                    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
-                    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
-                    var ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    var quality = 0.78;
-                    var dataUrl = canvas.toDataURL('image/jpeg', quality);
-                    // Turunkan kualitas bertahap agar data tetap ringan untuk penyimpanan bersama.
-                    while (dataUrl.length * 0.75 > MAX_PHOTO_BYTES && quality > 0.45) {
-                        quality -= 0.08;
-                        dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    var sides = mediaOn ? [1000, 800] : [640, 520, 440, 360, 300];
+                    var result = '';
+                    for (var si = 0; si < sides.length; si++) {
+                        var maxSide = sides[si];
+                        var scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+                        var canvas = document.createElement('canvas');
+                        canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+                        canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                        var quality = 0.78;
+                        var dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        // Turunkan kualitas bertahap agar data tetap ringan.
+                        while (dataUrl.length * 0.75 > MAX_PHOTO_BYTES && quality > 0.45) {
+                            quality -= 0.08;
+                            dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        }
+                        if (dataUrl.length * 0.75 <= MAX_PHOTO_BYTES) { result = dataUrl; break; }
                     }
-                    if (dataUrl.length * 0.75 > MAX_PHOTO_BYTES) {
+                    if (!result) {
                         reject(new Error('Ukuran foto masih terlalu besar. Pilih foto yang lebih kecil.'));
                         return;
                     }
-                    resolve(dataUrl);
+                    resolve(result);
                 };
                 img.src = reader.result;
             };
@@ -206,7 +231,8 @@
         clearMsg();
         if (successCard) successCard.hidden = true;
 
-        var nama = namaEl.value.trim();
+        var anon = !!(anonEl && anonEl.checked);
+        var nama = anon ? 'Anonim' : namaEl.value.trim();
         var rating = selectedRating();
         var komentar = komentarEl.value.trim();
         var kritikSaran = kritikSaranEl.value.trim();
@@ -241,6 +267,19 @@
             foto: fotoData || ''
         };
 
+        // Jika Cloudinary dikonfigurasi, foto diunggah ke sana dan hanya alamatnya yang disimpan.
+        // Jika gagal, form TIDAK dikosongkan sehingga isian tidak hilang.
+        try {
+            if (mediaOn && fotoData) {
+                var f = await TestimoniMedia.upload(fotoData, 'image');
+                dataBaru.foto = f.url;
+            }
+        } catch (e) {
+            setBusy(false);
+            showMsg('error', (e && e.message ? e.message : 'Unggahan foto gagal.') + ' Isian Anda masih tersimpan di formulir; silakan coba lagi atau hapus foto lalu kirim.');
+            return;
+        }
+
         var result;
         try {
             result = await TestimoniStore.add(dataBaru);
@@ -251,26 +290,28 @@
             return;
         }
 
-        // Notifikasi email ke admin. Sengaja tidak menunggu (fire-and-forget) dan tidak pernah
-        // menggagalkan alur ini - masukan pelanggan sudah aman tersimpan di atas, terlepas dari
-        // email ini berhasil terkirim atau tidak (misalnya karena belum online / belum dikonfigurasi).
-        try {
-            fetch('/api/notify-testimoni', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dataBaru)
-            }).catch(function () { /* diamkan - notifikasi bersifat best-effort */ });
-        } catch (e) { /* fetch tidak tersedia / halaman dibuka dari file lokal - abaikan */ }
-
+        // Berhasil tersimpan di server bersama (terlihat oleh semua pengunjung) -> kartu sukses.
+        // Jika tidak: jujur ke pengguna bahwa baru tersimpan di perangkat ini, dan akan dikirim ulang otomatis.
         form.reset();
+        syncAnon();
         clearPhoto();
         hint.textContent = 'Ketuk bintang untuk memberi nilai';
-
         setBusy(false);
 
-        // Selalu tampilkan kartu konfirmasi setelah data berhasil disimpan.
-        // Jika server bersama sedang tidak tersedia, data tetap tersimpan di
-        // perangkat ini dan tetap dapat ditampilkan di halaman Testimoni.
+        if (result && !result.online && TestimoniStore.isConfigured()) {
+            showMsg('warn', 'Masukan Anda sudah kami simpan di perangkat ini, tetapi BELUM terkirim ke server sehingga belum tampil untuk umum. ' +
+                'Jangan hapus data browser; kami akan mencoba mengirim ulang otomatis saat Anda membuka halaman Rating atau beranda lagi dengan koneksi yang baik.');
+            if (result.error) console.warn('Detail kegagalan sinkronisasi testimoni:', result.error);
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (result && result.moderasi) {
+            showMsg('warn', 'Terima kasih! Ulasan Anda sudah kami terima dan akan tampil di halaman Testimoni setelah kami periksa.');
+        }
+        if (result && result.fotoDibuang) {
+            showMsg('warn', 'Ulasan Anda sudah terkirim dan tampil di beranda, tetapi fotonya tidak muat di penyimpanan gratis sehingga tidak ikut tampil.');
+        }
         if (successCard) {
             successCard.hidden = false;
             successCard.classList.remove('is-visible');
@@ -279,9 +320,6 @@
             successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
             showMsg('success', 'Terima kasih! Rating dan masukan Anda berhasil diberikan.');
-        }
-        if (result && !result.online && result.error) {
-            console.warn('Detail kegagalan sinkronisasi testimoni:', result.error);
         }
         if (!successCard) msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });

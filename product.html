@@ -10,268 +10,118 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Tambah Google Fonts untuk kreativitas font yang readable -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Tambahan CSS untuk inovasi: animasi dan layout fokus produk tunggal -->
-    <style>
-        .produk {
-            padding: 56px 0 64px;
-        }
 
-        .product-detail {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 48px;
-        }
-
-        .product-image {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .product-image img {
-            width: 100%;
-            max-width: 340px;
-            height: auto;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: block;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .product-detail {
-                flex-direction: column;
-                gap: 32px;
-            }
-
-            .product-image img {
-                max-width: 280px;
-            }
-        }
-
-        .product-info {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .product-info h3 {
-            font-family: 'Fraunces', serif;
-            font-weight: 500;
-            font-size: 24px;
-            color: var(--forest);
-            margin-bottom: 12px;
-        }
-
-        .product-info p {
-            font-family: 'Inter', sans-serif;
-            color: var(--ink-soft);
-            line-height: 1.7;
-            font-size: 15.5px;
-        }
-
-        .product-info .stock {
-            color: var(--accent-deep);
-            font-size: 14px;
-            margin: 12px 0 20px;
-        }
-
-        .price {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--forest);
-            margin: 12px 0 6px;
-        }
-
-        .price span {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--muted);
-        }
-
-        .btn-buy {
-            background: var(--forest);
-            color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.15s ease;
-        }
-
-        .btn-buy:hover {
-            background: var(--forest-deep);
-        }
-
-        .benefits-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 26px;
-        }
-
-        .benefits-list li {
-            margin-bottom: 11px;
-            padding-left: 26px;
-            position: relative;
-            color: var(--ink-soft);
-            font-size: 14.5px;
-        }
-
-        .benefits-list li::before {
-            content: '✓';
-            color: var(--accent-deep);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
-
-        .shipping-note {
-            margin-top: 48px;
-            padding-top: 28px;
-            border-top: 1px solid var(--line);
-            color: var(--ink-soft);
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .shipping-note i {
-            color: var(--accent-deep);
-            margin-right: 6px;
-        }
-    </style>
     <link rel="stylesheet" href="mobile-responsive.css">
-    <link rel="stylesheet" href="justify.css">
     <link rel="stylesheet" href="css/menu.css">
+    
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <meta name="description"
+        content="Susu kambing Saanen 500 ml Rp 20.000 dari Margaluyu Farm. Murni tanpa pengawet, dikirim dingin.">
+    <meta name="theme-color" content="#0a3d38">
+    
+    <link rel="stylesheet" href="css/redesign.css">
+    
+    <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti __SITE__ dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://__SITE__/product.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://__SITE__/product.html">
+    <meta property="og:title" content="Produk Kami - Margaluyu Farm">
+    <meta property="og:description" content="Susu kambing Saanen 500 ml Rp 20.000 dari Margaluyu Farm. Murni tanpa pengawet, dikirim dingin.">
+    <meta property="og:image" content="https://__SITE__/img/banner-home-crop.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Produk Kami - Margaluyu Farm">
+    <meta name="twitter:description" content="Susu kambing Saanen 500 ml Rp 20.000 dari Margaluyu Farm. Murni tanpa pengawet, dikirim dingin.">
+    <meta name="twitter:image" content="https://__SITE__/img/banner-home-crop.jpg">
 </head>
 
 <body>
 
-    <!-- Medsos -->
-    <div class="medsos">
-        <div class="container">
-            <ul>
-                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
-                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
-                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
-                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
-            </ul>
-        </div>
-    </div>
-
     <!-- header -->
     <header class="site-top">
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <h1 class="brand"><a href="index.html"><img class="brand-mark" src="img/logo-mark.png" alt="" width="34"
+                        height="34"><span class="brand-name">Margaluyu Farm</span></a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
-            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
+            <label for="nav-toggle" class="nav-toggle-label"
+                aria-hidden="true"><span></span><span></span><span></span></label>
+            <label for="nav-toggle" class="menu-backdrop" aria-hidden="true"></label>
             <nav class="menu-panel" aria-label="Menu utama">
-                <div class="menu-cols">
-                    <div class="menu-group">
-                        <span class="menu-label">Utama</span>
-                        <a class="menu-link" href="index.html">Beranda</a>
-                        <a class="menu-link is-current" href="product.html" aria-current="page">Produk</a>
-                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Informasi</span>
-                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
-                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
-                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
-                        <a class="menu-link" href="penyajian.html">Cara Penyajian</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Ulasan</span>
-                        <a class="menu-link" href="testimoni.html">Testimoni</a>
-                        <a class="menu-link" href="rating.html">Rating &amp; Saran</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Lainnya</span>
-                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
-                    </div>
+                <div class="menu-head"><a class="menu-brand" href="index.html"><img src="img/logo-mark.png" alt=""
+                            width="26" height="26">Margaluyu Farm</a><label for="nav-toggle" class="menu-close"
+                        aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg></label></div>
+                <a class="menu-link" style="--i:1" href="index.html"><span class="ml-t">Beranda</span><span
+                        class="ml-s">Susu Saanen segar</span></a>
+                <a class="menu-link is-current" style="--i:2" href="product.html" aria-current="page"><span
+                        class="ml-t">Produk</span><span class="ml-s">Harga dan detail</span></a>
+                <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak
+                        Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
+                <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span
+                        class="ml-s">WhatsApp dan kontak</span></a>
+                <div class="menu-foot">
+                    <a class="menu-cta" href="order sekarang.html">Pesan sekarang</a>
+                    <a class="menu-wa"
+                        href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
+                        target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
                 </div>
+                <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
             </nav>
         </div>
     </header>
-
-    <!-- banner produk -->
-    <section class="page-hero page-hero--photo"
-        style="background-image: linear-gradient(180deg, rgba(5, 38, 35, 0.72) 0%, rgba(5, 38, 35, 0.62) 45%, rgba(5, 38, 35, 0.88) 100%), url('SUSU DALAM FREEZER.jpeg')">
-        <div class="container">
-            <h2>Produk Kami</h2>
-            <p>Susu kambing Saanen segar, tanpa bahan tambahan.</p>
-        </div>
-    </section>
-
-    <!-- detail produk -->
-    <section class="produk">
-        <div class="container">
-            <div class="product-detail">
-                <div class="product-image">
-                    <img src="poster-susu-saanen.png" alt="Susu Saanen 500ml">
-                </div>
-                <div class="product-info">
-                    <h3>Susu Saanen 500ml</h3>
-                    <p>Susu segar dari kambing Saanen, dengan tekstur yang ringan dan rasa yang lembut.
-                    </p>
-                    <div class="price">Rp 20.000 <span>/ botol 500 ml</span></div>
-                    <p class="stock"><i class="fas fa-check-circle"></i> Stok tersedia</p>
-                    <button class="btn-buy" onclick="window.location.href='order sekarang.html'">Beli Sekarang</button>
-                    <ul class="benefits-list">
-                        <li>Tinggi protein</li>
-                        <li>Mengandung vitamin dan mineral alami</li>
-                        <li>Mendukung kesehatan tulang dan pencernaan</li>
-                        <li>Bebas pengawet, 100% alami</li>
-                        <li>100% Halal</li>
-                    </ul>
-                </div>
-            </div>
-            <p class="shipping-note"><i class="fas fa-truck"></i> Gratis ongkir untuk area Surabaya Timur tanpa minimal
-                pembelian.</p>
-        </div>
-    </section>
-
-    <!-- footer -->
-    <footer>
-        <div class="container footer-inner">
-            <div class="footer-col footer-brand">
-                <strong>Margaluyu Farm</strong>
-                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
-                    kurban dan akikah.</p>
-                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
-                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
-                </a>
-            </div>
-            <div class="footer-col">
-                <h4 class="footer-heading">Ikuti Kami</h4>
-                <div class="footer-social">
-                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
-                            class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
-                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
-                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
-                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                </div>
+    <main>
+        <div class="container pdx">
+            <div class="pdx-media"><img src="poster-susu-saanen.png" alt="Poster Susu Kambing Saanen Murni 500 ml"
+                    width="340" height="340"></div>
+            <div class="pdx-body">
+                <h1 class="pdx-name">Susu Saanen 500ml</h1>
+                <p class="pdx-lead">Susu segar dari kambing Saanen dengan rasa manis dan tekstur creamy.</p>
+                <div class="pdx-price"><b>Rp 20.000</b><span>/ botol 500 ml</span></div>
+                <p class="pdx-stock"><i class="fas fa-check-circle" aria-hidden="true"></i> Stok tersedia</p>
+                <a class="pdx-btn" href="order sekarang.html">Beli Sekarang</a>
+                <ul class="pdx-check">
+                    <li>Tinggi protein</li>
+                    <li>Mengandung vitamin dan mineral alami</li>
+                    <li>Mendukung kesehatan tulang dan pencernaan</li>
+                    <li>Bebas pengawet, 100% murni</li>
+                    <li>100% Halal</li>
+                </ul>
+                <ul class="pdx-info">
+                    <li><i class="fas fa-truck" aria-hidden="true"></i><span>Gratis ongkir untuk area Surabaya Timur
+                            tanpa minimal pembelian</span></li>
+                </ul>
             </div>
         </div>
-        <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
-        </div>
-    </footer>
+    </main>
 
+    <div class="end-zone">
+        <footer class="site-foot">
+            <div class="container">
+                <div class="sf-row"><a class="sf-brand" href="index.html"><img src="img/logo-mark.png" alt="" width="30"
+                            height="30">Margaluyu Farm</a>
+                    <nav class="sf-social" aria-label="Media sosial"><a
+                            href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"><i
+                                class="fab fa-instagram" aria-hidden="true"></i>Instagram</a><a
+                            href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"><i
+                                class="fab fa-tiktok" aria-hidden="true"></i>TikTok</a><a
+                            href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"><i
+                                class="fab fa-youtube" aria-hidden="true"></i>YouTube</a></nav>
+                </div>
+                <p class="sf-copy">&copy; 2026 Margaluyu Farm. Seluruh hak dilindungi. <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html">Kebijakan
+                        privasi</a></p>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="stok-badge.js"></script>
 </body>
 
 </html>

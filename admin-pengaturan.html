@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pengaturan Admin - Margaluyu Farm</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body{font-family:'Segoe UI',Roboto,sans-serif;background:#f0f9f2;color:#2c3e2f;margin:0;padding:24px 16px 80px}
+  .wrap{max-width:960px;margin:0 auto} h1{color:#0a3d38;font-size:1.5em;margin:0 0 4px}
+  h2{color:#0a3d38;font-size:1.15em;margin:0 0 10px} .sub{color:#5b6b5e;margin:0 0 18px;font-size:.92em}
+  .card{background:#fff;border-radius:12px;padding:16px;margin:0 0 18px;box-shadow:0 1px 6px rgba(10,61,56,.08)}
+  .login{max-width:360px;margin:80px auto} input,select,button{font:inherit}
+  input,select{padding:8px 10px;border:1px solid #cfd9d1;border-radius:8px;max-width:100%}
+  button{padding:8px 14px;border:0;border-radius:8px;background:#0a3d38;color:#fff;cursor:pointer}
+  button.sec{background:#e4eee6;color:#0a3d38} button.del{background:#b3261e}
+  button:disabled{opacity:.5} .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-top:1px solid #edf2ee}
+  .row:first-of-type{border-top:0} .row label{font-size:.82em;color:#5b6b5e;display:flex;flex-direction:column;gap:3px}
+  .err{color:#b3261e;font-size:.9em;margin:8px 0 0} .ok{color:#1b6b3a;font-size:.9em}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px} .tabs button{background:#e4eee6;color:#0a3d38}
+  .tabs button.on{background:#0a3d38;color:#fff} .pane{display:none} .pane.on{display:block}
+  .tag{font-size:.75em;padding:2px 8px;border-radius:10px;background:#fff3cd;color:#6b5200}
+  .quote{white-space:pre-wrap;margin:6px 0 0;color:#2c3e2f} a.back{color:#0a3d38}
+  #panel{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card login" id="loginBox">
+    <h1>Pengaturan Admin</h1>
+    <p class="sub">Masukkan kata sandi admin.</p>
+    <input type="password" id="pw" placeholder="Kata sandi admin" style="width:100%;box-sizing:border-box">
+    <div class="err" id="loginErr"></div>
+    <p><button id="loginBtn">Masuk</button></p>
+  </div>
+
+  <div id="panel">
+    <h1>Pengaturan</h1>
+    <p class="sub"><a class="back" href="admin-pesanan.html">&larr; Admin Pesanan</a> &middot; <a class="back" href="admin-analitik.html">Analitik</a></p>
+    <div class="tabs" id="tabs">
+      <button data-t="stok" class="on">Produk &amp; Stok</button>
+      <button data-t="area">Area &amp; Ongkir</button>
+      <button data-t="promo">Kode Promo</button>
+      <button data-t="testi">Moderasi Testimoni</button>
+    </div>
+    <div class="pane on" id="p-stok"><div class="card"><h2>Produk, harga &amp; stok</h2>
+      <p class="sub">Stok berkurang otomatis setiap ada pesanan. Saat stok 0, tombol pesan di halaman order tertutup otomatis.</p><div id="listStok"></div></div></div>
+    <div class="pane" id="p-area"><div class="card"><h2>Area pengiriman &amp; ongkir</h2>
+      <p class="sub">Pelanggan wajib memilih salah satu area. Isi ongkir 0 untuk gratis ongkir. Area yang dinonaktifkan tidak tampil.</p><div id="listArea"></div>
+      <h2 style="margin-top:16px">Tambah area</h2><div class="row" id="newArea"></div></div></div>
+    <div class="pane" id="p-promo"><div class="card"><h2>Kode promo</h2>
+      <p class="sub">Tipe <b>persen</b> (1-100) atau <b>nominal</b> (rupiah). Kuota kosong = tanpa batas. Pemakaian dihitung saat pesanan dibuat.</p><div id="listPromo"></div>
+      <h2 style="margin-top:16px">Tambah kode</h2><div class="row" id="newPromo"></div></div></div>
+    <div class="pane" id="p-testi"><div class="card"><h2>Moderasi testimoni</h2>
+      <p class="sub">Testimoni baru tampil di situs setelah Anda setujui.</p><div id="listTesti"></div></div></div>
+    <div class="err" id="globalErr"></div>
+  </div>
+</div>
+<script src="orders-config.js"></script>
+<script src="orders-store.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function hdr(){return OrdersStore.adminHeaders({'Content-Type':'application/json'})}
+  function err(m){$('globalErr').textContent=m||''}
+  async function api(url,opt){
+    var r=await fetch(url,Object.assign({headers:hdr(),cache:'no-store'},opt||{}));
+    var j=await r.json().catch(function(){return {}});
+    if(r.status===401){OrdersStore.logoutAdmin();location.reload();throw new Error('Sesi habis')}
+    if(!r.ok||j.success===false)throw new Error(j.error||('HTTP '+r.status));
+    return j;
+  }
+  function post(body){return api('/api/admin-settings',{method:'POST',headers:hdr(),body:JSON.stringify(body)})}
+  function val(root,n){var e=root.querySelector('[name="'+n+'"]');return e?(e.type==='checkbox'?e.checked:e.value):''}
+  function field(label,name,value,type,w){return '<label>'+label+'<input name="'+name+'" type="'+(type||'text')+'" value="'+esc(value)+'" style="width:'+(w||110)+'px"></label>'}
+  function check(label,name,on){return '<label>'+label+'<input name="'+name+'" type="checkbox"'+(on?' checked':'')+'></label>'}
+
+  $('loginBtn').onclick=async function(){
+    var b=this;b.disabled=true;$('loginErr').textContent='';
+    var r=await OrdersStore.verifyAdmin($('pw').value);
+    b.disabled=false;
+    if(!r.ok){$('loginErr').textContent=r.error||'Login gagal.';return}
+    $('loginBox').style.display='none';$('panel').style.display='block';loadAll();
+  };
+  $('pw').addEventListener('keydown',function(e){if(e.key==='Enter')$('loginBtn').click()});
+  $('tabs').onclick=function(e){var t=e.target.dataset&&e.target.dataset.t;if(!t)return;
+    document.querySelectorAll('#tabs button').forEach(function(b){b.classList.toggle('on',b===e.target)});
+    document.querySelectorAll('.pane').forEach(function(p){p.classList.toggle('on',p.id==='p-'+t)})};
+
+  async function loadAll(){err('');
+    try{var s=await api('/api/admin-settings');renderProducts(s.products);renderZones(s.zones);renderPromos(s.promos);}catch(e){err(e.message)}
+    try{var t=await api('/api/testimoni?all=1');renderTesti(t.data)}catch(e){err(e.message)}
+  }
+
+  function renderProducts(list){
+    $('listStok').innerHTML=list.map(function(p){return '<div class="row" data-nama="'+esc(p.nama)+'"><b style="min-width:180px">'+esc(p.nama)+'</b>'+
+      field('Harga (Rp)','harga',p.harga,'number')+field('Stok (botol)','stok',p.stok,'number',90)+field('Maks/pesanan','maksPerOrder',p.maks_per_order,'number',90)+
+      check('Aktif','aktif',p.aktif)+'<button data-a="saveP">Simpan</button></div>'}).join('')||'<p class="sub">Belum ada produk. Jalankan supabase/schema.sql.</p>';
+  }
+  function renderZones(list){
+    $('listArea').innerHTML=list.map(function(z){return '<div class="row" data-id="'+z.id+'">'+field('Nama area','nama',z.nama,'text',230)+
+      field('Ongkir (Rp)','biaya',z.biaya,'number',90)+field('Urutan','urutan',z.urutan,'number',60)+check('Aktif','aktif',z.aktif)+
+      '<button data-a="saveZ">Simpan</button><button class="del" data-a="delZ">Hapus</button></div>'}).join('')||'<p class="sub">Belum ada area.</p>';
+    $('newArea').innerHTML=field('Nama area','nama','','text',230)+field('Ongkir (Rp)','biaya','0','number',90)+field('Urutan','urutan','0','number',60)+check('Aktif','aktif',true)+'<button data-a="addZ">Tambah</button>';
+  }
+  function promoRow(p,isNew){
+    var tipe='<label>Tipe<select name="tipe"><option value="persen"'+(p.tipe==='persen'?' selected':'')+'>persen</option><option value="nominal"'+(p.tipe==='nominal'?' selected':'')+'>nominal</option></select></label>';
+    return (isNew?field('Kode','kode','','text',110):'<b style="min-width:100px">'+esc(p.kode)+'</b>')+tipe+field('Nilai','nilai',p.nilai||'','number',80)+
+      field('Min. belanja','minBelanja',p.min_belanja||0,'number',90)+field('Kuota','kuota',p.kuota==null?'':p.kuota,'number',70)+
+      field('Berlaku s/d','berlakuSampai',p.berlaku_sampai||'','date',130)+check('Aktif','aktif',p.aktif!==false)+
+      (isNew?'<button data-a="addPr">Tambah</button>':'<span class="tag">terpakai '+p.terpakai+'</span><button data-a="savePr">Simpan</button><button class="del" data-a="delPr">Hapus</button>');
+  }
+  function renderPromos(list){
+    $('listPromo').innerHTML=list.map(function(p){return '<div class="row" data-kode="'+esc(p.kode)+'">'+promoRow(p,false)+'</div>'}).join('')||'<p class="sub">Belum ada kode promo.</p>';
+    $('newPromo').innerHTML=promoRow({tipe:'persen'},true);
+  }
+  function renderTesti(list){
+    $('listTesti').innerHTML=list.map(function(t){var pending=t.status!=='approved';
+      return '<div class="row" data-id="'+t.id+'" style="align-items:flex-start"><div style="flex:1;min-width:240px"><b>'+esc(t.nama)+'</b> &middot; '+('&#9733;'.repeat(t.rating))+' &middot; '+esc(t.tanggal)+
+      (pending?' <span class="tag">menunggu</span>':' <span class="ok">tampil</span>')+'<div class="quote">'+esc(t.komentar)+'</div></div>'+
+      (pending?'<button data-a="appr">Setujui</button>':'<button class="sec" data-a="unappr">Sembunyikan</button>')+'<button class="del" data-a="delT">Hapus</button></div>'}).join('')||'<p class="sub">Belum ada testimoni.</p>';
+  }
+
+  document.addEventListener('click',async function(e){
+    var a=e.target.dataset&&e.target.dataset.a;if(!a)return;var row=e.target.closest('.row');err('');e.target.disabled=true;
+    try{
+      if(a==='saveP')await post({action:'product.save',nama:row.dataset.nama,harga:val(row,'harga'),stok:val(row,'stok'),maksPerOrder:val(row,'maksPerOrder'),aktif:val(row,'aktif')});
+      else if(a==='saveZ'||a==='addZ')await post({action:'zone.save',id:a==='saveZ'?row.dataset.id:undefined,nama:val(row,'nama'),biaya:val(row,'biaya'),urutan:val(row,'urutan'),aktif:val(row,'aktif')});
+      else if(a==='delZ'){if(!confirm('Hapus area ini?'))throw new Error('');await post({action:'zone.delete',id:row.dataset.id})}
+      else if(a==='savePr'||a==='addPr')await post({action:'promo.save',kode:a==='savePr'?row.dataset.kode:val(row,'kode'),tipe:val(row,'tipe'),nilai:val(row,'nilai'),minBelanja:val(row,'minBelanja'),kuota:val(row,'kuota'),berlakuSampai:val(row,'berlakuSampai'),aktif:val(row,'aktif')});
+      else if(a==='delPr'){if(!confirm('Hapus kode ini?'))throw new Error('');await post({action:'promo.delete',kode:row.dataset.kode})}
+      else if(a==='appr'||a==='unappr')await api('/api/testimoni',{method:'PUT',headers:hdr(),body:JSON.stringify({id:Number(row.dataset.id),status:a==='appr'?'approved':'pending'})});
+      else if(a==='delT'){if(!confirm('Hapus testimoni ini?'))throw new Error('');await api('/api/testimoni',{method:'DELETE',headers:hdr(),body:JSON.stringify({keys:['id:'+row.dataset.id]})})}
+      await loadAll();
+    }catch(x){if(x.message)err(x.message)}finally{e.target.disabled=false}
+  });
+})();
+</script>
+</body>
+</html>

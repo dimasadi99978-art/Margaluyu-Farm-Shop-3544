@@ -10,9 +10,7 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Tambah Google Fonts untuk kreativitas -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ---------- Palette & Base ---------- */
         :root {
@@ -25,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-body, 'Inter', sans-serif);
             background: radial-gradient(circle at 20% 20%, #fdf9ef 0%, #f6efdd 38%, #f0e6cd 70%);
             color: var(--green-deep);
             overflow-x: hidden;
@@ -159,7 +157,7 @@
             background: var(--paper);
             transition: all 0.22s ease;
             outline: none;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-body, 'Inter', sans-serif);
             width: 100%;
             box-sizing: border-box;
         }
@@ -289,9 +287,9 @@
 
         /* ---------- Metode Pembayaran ---------- */
         .payment-options {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
         }
 
         .payment-option {
@@ -300,10 +298,13 @@
             display: flex !important;
             align-items: center;
             gap: 10px;
-            padding: 14px 16px;
+            padding: 16px;
             border: 1.4px solid var(--line);
-            border-radius: var(--radius-sm);
-            background: var(--paper);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .78);
+            min-height: 76px;
+            position: relative;
+            overflow: hidden;
             cursor: pointer;
             font-weight: 600;
             color: var(--green-deep);
@@ -313,7 +314,40 @@
         .payment-option:has(input:checked) {
             border-color: var(--green-accent);
             background: var(--paper-alt);
-            box-shadow: 0 6px 14px rgba(179, 137, 63, 0.18);
+            box-shadow: 0 8px 20px rgba(10, 61, 56, .09);
+        }
+
+        .payment-option:has(input:checked)::after {
+            content: '✓';
+            position: absolute;
+            right: 12px;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--green-deep);
+            color: white;
+            font-size: 12px;
+        }
+
+        .payment-option span {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-right: 18px;
+        }
+
+        .payment-option small {
+            font-size: .78rem;
+            line-height: 1.4;
+            color: var(--ink-soft);
+            font-weight: 400;
+        }
+
+        .payment-option:has(input:checked) small {
+            color: var(--green-deep);
         }
 
         .payment-option input {
@@ -328,10 +362,108 @@
 
         .qris-box {
             text-align: center;
-            padding: 24px 18px;
-            background: var(--paper);
-            border: 1.4px dashed var(--green-accent);
-            border-radius: var(--radius-sm);
+            padding: 22px 18px;
+            margin-top: 14px;
+            background: linear-gradient(145deg, #fff 0%, #f4f8f1 100%);
+            border: 1px solid rgba(10, 61, 56, .12);
+            border-radius: 18px;
+            animation: paymentReveal .28s ease both;
+        }
+
+        .cod-box {
+            margin-top: 12px;
+            padding: 13px 15px;
+            border-radius: 13px;
+            background: rgba(10, 61, 56, .055);
+            color: var(--ink-soft);
+            font-size: .9rem;
+            line-height: 1.55;
+        }
+
+        .pay-steps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin: 0 auto 16px;
+            max-width: 480px;
+            text-align: left;
+        }
+
+        .pay-step {
+            padding: 10px;
+            border-radius: 11px;
+            background: rgba(10, 61, 56, .055);
+            font-size: .78rem;
+            line-height: 1.4;
+            color: var(--ink-soft);
+        }
+
+        .pay-step b {
+            display: block;
+            color: var(--green-deep);
+            margin-bottom: 3px;
+        }
+
+        .upload-label {
+            display: block;
+            font-weight: 700;
+            color: var(--green-deep);
+            margin-bottom: 7px;
+        }
+
+        .proof-preview {
+            display: none;
+            margin: 10px auto 0;
+            max-width: 160px;
+            max-height: 150px;
+            border-radius: 10px;
+            object-fit: contain;
+            border: 1px solid var(--line);
+        }
+
+        .proof-name {
+            font-size: .82rem;
+            color: var(--ink-soft);
+            margin: 6px 0 0;
+            overflow-wrap: anywhere;
+        }
+
+        @keyframes paymentReveal {
+            from {
+                opacity: 0;
+                transform: translateY(7px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width:520px) {
+            .payment-options {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+            .payment-option {
+                min-height: 64px;
+                padding: 13px 14px;
+            }
+
+            .pay-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .pay-step {
+                display: flex;
+                gap: 8px;
+                align-items: baseline;
+            }
+
+            .pay-step b {
+                min-width: 48px;
+            }
         }
 
         .qris-title {
@@ -392,17 +524,30 @@
             background: #fff;
             border: 1px solid rgba(46, 125, 50, .16);
             border-radius: 20px;
-            box-shadow: 0 18px 45px rgba(0,0,0,.12);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, .12);
             opacity: 0;
             transform: translateY(18px) scale(.96);
         }
+
         .order-confirm.is-visible {
-            animation: orderConfirmPop .58s cubic-bezier(.2,.8,.2,1) forwards;
+            animation: orderConfirmPop .58s cubic-bezier(.2, .8, .2, 1) forwards;
         }
+
         @keyframes orderConfirmPop {
-            0% { opacity: 0; transform: translateY(18px) scale(.96); }
-            70% { opacity: 1; transform: translateY(-4px) scale(1.01); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(.96);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(-4px) scale(1.01);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .order-confirm .icon-check {
@@ -610,140 +755,161 @@
         }
     </style>
     <link rel="stylesheet" href="mobile-responsive.css">
-    <link rel="stylesheet" href="justify.css">
     <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/receipt.css">
+    <script src="reveal.js"></script>
+    
+    <link rel="stylesheet" href="css/order-classic.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <meta name="description" content="Pesan susu kambing Saanen segar dari Margaluyu Farm. Bayar COD atau QRIS.">
+    <meta name="theme-color" content="#0a3d38">
+
+
+    
+    
+    
+    <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti __SITE__ dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://__SITE__/order%20sekarang.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://__SITE__/order%20sekarang.html">
+    <meta property="og:title" content="Order Sekarang - Margaluyu Farm">
+    <meta property="og:description" content="Pesan susu kambing Saanen segar dari Margaluyu Farm. Bayar COD atau QRIS.">
+    <meta property="og:image" content="https://__SITE__/img/banner-home-crop.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Order Sekarang - Margaluyu Farm">
+    <meta name="twitter:description" content="Pesan susu kambing Saanen segar dari Margaluyu Farm. Bayar COD atau QRIS.">
+    <meta name="twitter:image" content="https://__SITE__/img/banner-home-crop.jpg">
 </head>
 
 <body>
 
-    <!-- Medsos -->
-    <div class="medsos">
-        <div class="container">
-            <ul>
-                <li><a href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20produk%20Anda"
-                        target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
-                <li><a href="https://www.instagram.com/margaluyufarm354?igsh=ZmJzZHlpOG16aGs3" target="_blank"
-                        rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
-                <li><a href="https://www.tiktok.com/@margaluyu.farm.35?_r=1&amp;_t=ZS-93KMgz5gtDc" target="_blank"
-                        rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></li>
-                <li><a href="https://www.youtube.com/@margaluyufarm354?si=U-hasw-TVHG1HBd_" target="_blank"
-                        rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
-            </ul>
-        </div>
-    </div>
-
     <!-- header -->
     <header class="site-top">
         <div class="container">
-            <h1><a href="index.html">Margaluyu Farm</a></h1>
+            <h1 class="brand"><a href="index.html"><img class="brand-mark" src="img/logo-mark.png" alt="" width="34"
+                        height="34"><span class="brand-name">Margaluyu Farm</span></a></h1>
             <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
-            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
+            <label for="nav-toggle" class="nav-toggle-label"
+                aria-hidden="true"><span></span><span></span><span></span></label>
+            <label for="nav-toggle" class="menu-backdrop" aria-hidden="true"></label>
             <nav class="menu-panel" aria-label="Menu utama">
-                <div class="menu-cols">
-                    <div class="menu-group">
-                        <span class="menu-label">Utama</span>
-                        <a class="menu-link" href="index.html">Beranda</a>
-                        <a class="menu-link" href="product.html">Produk</a>
-                        <a class="menu-link" href="lacak-pesanan.html">Lacak Pesanan</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Informasi</span>
-                        <a class="menu-link" href="Pengenalan susu saanen.html">Informasi Susu Saanen</a>
-                        <a class="menu-link" href="Pengenalan Kambing Saanen.html">Kenal Kambing Saanen</a>
-                        <a class="menu-link" href="kandungan &amp; manfaat.html">Kandungan &amp; Manfaat</a>
-                        <a class="menu-link" href="penyajian.html">Cara Penyajian</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Ulasan</span>
-                        <a class="menu-link" href="testimoni.html">Testimoni</a>
-                        <a class="menu-link" href="rating.html">Rating &amp; Saran</a>
-                    </div>
-                    <div class="menu-group">
-                        <span class="menu-label">Lainnya</span>
-                        <a class="menu-link" href="contact.html">Hubungi Kami</a>
-                    </div>
+                <div class="menu-head"><a class="menu-brand" href="index.html"><img src="img/logo-mark.png" alt=""
+                            width="26" height="26">Margaluyu Farm</a><label for="nav-toggle" class="menu-close"
+                        aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg></label></div>
+                <a class="menu-link" style="--i:1" href="index.html"><span class="ml-t">Beranda</span><span
+                        class="ml-s">Susu Saanen segar</span></a>
+                <a class="menu-link" style="--i:2" href="product.html"><span class="ml-t">Produk</span><span
+                        class="ml-s">Harga dan detail</span></a>
+                <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak
+                        Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
+                <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span
+                        class="ml-s">WhatsApp dan kontak</span></a>
+                <div class="menu-foot">
+                    <a class="menu-cta" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20soal%20pesanan" target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
                 </div>
+                <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
             </nav>
         </div>
     </header>
-
     <!-- Konten utama: Formulir Pemesanan -->
     <section class="order-section">
         <div class="container">
             <div class="order-container">
-                <div class="order-header" id="orderHeader">
-                    <div class="icon-farm"><i class="fas fa-seedling"></i></div> <!-- Ikon unik untuk farm -->
+                <div class="order-header rv" id="orderHeader">
+                    <div class="icon-farm"><i class="fas fa-seedling" aria-hidden="true"></i></div>
                     <h2>Order Sekarang</h2>
                     <p>Isi formulir di bawah ini untuk memesan produk susu kambing Saanen kami. Setiap pesanan akan
                         mendapat nomor pesanan yang bisa dilacak statusnya kapan saja.</p>
                 </div>
-                <form id="orderForm">
-                    <div class="form-group" data-tooltip="Masukkan nama lengkap Anda">
+                <div id="stokBanner" role="status" style="display:none;margin:0 0 16px;padding:14px 16px;border-radius:8px;font-size:14px;line-height:1.55;"></div>
+                <form id="orderForm" novalidate data-stagger>
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"><label>Jangan diisi<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+                    <div class="form-group rv">
                         <label for="nama">Nama Lengkap</label>
                         <input type="text" id="nama" name="nama" placeholder="Contoh: Fulan" required>
                     </div>
-                    <div class="form-group" data-tooltip="Nomor untuk WhatsApp">
+                    <div class="form-group rv">
                         <label for="telepon">No. HP</label>
                         <input type="tel" id="telepon" name="telepon" placeholder="Contoh: 081234567890" required>
                     </div>
-                    <div class="form-group" data-tooltip="Alamat pengiriman lengkap">
-                        <label for="alamat">Alamat Lengkap</label>
+                    <div class="form-group rv">
+                        <label for="alamat">Alamat Pengiriman</label>
                         <input type="text" id="alamat" name="alamat"
                             placeholder="Contoh: Jl. Sudirman No. 354, Surabaya" required>
                     </div>
-                    <!-- Sementara disembunyikan karena baru ada 1 produk. Nanti kalau sudah ada beberapa
-                         pilihan (misalnya rasa/varian susu), hapus saja "style=display:none" di bawah ini
-                         dan tambahkan <option> baru (dengan data-price) di dalam <select> - form akan otomatis
-                         menampilkan pilihannya lagi tanpa perlu ubah kode lain. -->
-                    <div class="form-group" data-tooltip="Pilih produk yang diinginkan" style="display:none">
+                    <div class="form-group rv">
+                        <label for="zona">Area Pengiriman</label>
+                        <select id="zona" name="zona" required>
+                            <option value="">Memuat area...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display:none">
                         <label for="produk">Produk</label>
                         <select id="produk" name="produk" required>
                             <option value="">Pilih produk</option>
                             <option value="Susu Kambing Saanen 500ml" data-price="20000" selected>Susu Kambing Saanen
                                 500ml - Rp 20.000</option>
-                            <!-- Tambahkan produk lain jika ada, sertakan data-price agar total QRIS terhitung otomatis -->
                         </select>
                     </div>
-                    <div class="form-group" data-tooltip="Jumlah unit yang dipesan">
+                    <div class="form-group rv">
                         <label for="jumlah">Jumlah</label>
-                        <input type="number" id="jumlah" name="jumlah" placeholder="Contoh: 5" min="1" required>
+                        <input type="number" id="jumlah" name="jumlah" value="1" min="1" inputmode="numeric"
+                            placeholder="Contoh: 5" required>
                     </div>
-                    <div class="form-group" data-tooltip="Catatan tambahan (opsional)">
-                        <label for="pesan">Pesan Tambahan</label>
+                    <div class="form-group rv">
+                        <label for="kodePromo">Kode Promo <small>(opsional)</small></label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="text" id="kodePromo" name="kodePromo" maxlength="30" autocomplete="off"
+                                placeholder="Masukkan kode" style="text-transform:uppercase;flex:1;">
+                            <button type="button" id="promoBtn" class="btn-submit" style="width:auto;padding:0 18px;margin:0;">Pakai</button>
+                        </div>
+                        <p id="promoMsg" aria-live="polite" style="margin:6px 0 0;font-size:13px;"></p>
+                    </div>
+                    <div class="invoice-box" id="rincianHarga" style="margin:0 0 16px;">
+                        <div class="invoice-row"><span>Harga</span><span id="rcSubtotal">Rp 0</span></div>
+                        <div class="invoice-row"><span>Ongkir</span><span id="rcOngkir">-</span></div>
+                        <div class="invoice-row" id="rcDiskonRow" style="display:none;"><span>Diskon</span><span id="rcDiskon">-</span></div>
+                        <div class="invoice-row invoice-total"><span>Total</span><span id="rcTotal">Rp 0</span></div>
+                    </div>
+                    <div class="form-group rv">
+                        <label for="pesan">Catatan</label>
                         <textarea id="pesan" name="pesan"
                             placeholder="Misalnya: Kirim pagi hari, atau permintaan khusus"></textarea>
                     </div>
-
-                    <div class="form-group">
+                    <div class="form-group rv">
                         <label>Metode Pembayaran</label>
                         <div class="payment-options">
                             <label class="payment-option">
                                 <input type="radio" name="pembayaran" value="COD" checked>
-                                <span><i class="fas fa-hand-holding-usd"></i> COD (Bayar di Tempat)</span>
+                                <span><i class="fas fa-hand-holding-usd" aria-hidden="true"></i> COD (Bayar di
+                                    Tempat)</span>
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="pembayaran" value="QRIS">
-                                <span><i class="fas fa-qrcode"></i> QRIS</span>
+                                <span><i class="fas fa-qrcode" aria-hidden="true"></i> QRIS</span>
                             </label>
                         </div>
                     </div>
-
+                    <div class="cod-box" id="codBox" style="display:none"></div>
                     <div class="qris-box" id="qrisBox" style="display:none;">
                         <p class="qris-title">Pindai kode QRIS di bawah ini untuk membayar</p>
-                        <div class="qris-total" id="qrisTotal">Total: Rp 0</div>
+                        <div class="qris-total" id="qrisTotal">Total: Rp 20.000</div>
                         <img src="qris.jpg" alt="Kode QRIS Margaluyu Farm" class="qris-image">
-                        <div class="form-group" style="text-align:left;">
-                            <label for="buktiPembayaran">Unggah Bukti Pembayaran</label>
+                        <div class="form-group qris-upload">
+                            <label class="upload-label" for="buktiPembayaran">Unggah Bukti Pembayaran</label>
                             <input type="file" id="buktiPembayaran" name="buktiPembayaran" accept="image/*">
+                            <img id="proofPreview" class="proof-preview" alt="Pratinjau bukti pembayaran">
+                            <p id="proofName" class="proof-name" aria-live="polite"></p>
                         </div>
-                        <p class="qris-note"></p>
                     </div>
-
-                    <button type="submit" class="btn-submit"><i class="fas fa-check-circle"></i> Buat Pesanan</button>
+                    <button type="submit" class="btn-submit rv"><i class="fas fa-check-circle"></i> Buat Pesanan</button>
                 </form>
 
                 <div class="order-confirm" id="orderConfirm">
@@ -806,7 +972,9 @@
             </div>
         </div>
         <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved.</small>
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html"
+                    style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan
+                    Privasi</a></small>
         </div>
     </footer>
 
@@ -820,30 +988,128 @@
         const produkSelect = document.getElementById('produk');
         const jumlahInput = document.getElementById('jumlah');
         const qrisTotalEl = document.getElementById('qrisTotal');
+        const codBox = document.getElementById('codBox');
+        const proofPreview = document.getElementById('proofPreview');
+        const proofName = document.getElementById('proofName');
+        let proofPreviewUrl = null;
 
         function formatRupiah(n) {
             return 'Rp ' + n.toLocaleString('id-ID');
         }
 
-        function hitungTotal() {
+        // Harga, stok, dan area diambil dari server (/api/config). Nilai akhir SELALU dihitung ulang server saat pesanan dibuat.
+        const zonaSelect = document.getElementById('zona');
+        const promoInput = document.getElementById('kodePromo');
+        const promoMsg = document.getElementById('promoMsg');
+        const stokBanner = document.getElementById('stokBanner');
+        let CONFIG = { products: [], zones: [] };
+        let promo = { kode: '', diskon: 0 };
+
+        function hitungRincian() {
             const selectedOption = produkSelect.options[produkSelect.selectedIndex];
             const harga = selectedOption ? parseInt(selectedOption.dataset.price || '0', 10) : 0;
             const jumlah = parseInt(jumlahInput.value || '0', 10);
-            const total = (harga > 0 && jumlah > 0) ? harga * jumlah : 0;
-            qrisTotalEl.textContent = 'Total: ' + formatRupiah(total);
-            return total;
+            const zona = CONFIG.zones.find(z => String(z.id) === zonaSelect.value);
+            const subtotal = (harga > 0 && jumlah > 0) ? harga * jumlah : 0;
+            const ongkir = zona ? zona.biaya : 0;
+            const diskon = Math.min(promo.diskon || 0, subtotal);
+            return { subtotal, ongkir, diskon, total: subtotal + ongkir - diskon, zonaDipilih: !!zona };
+        }
+
+        function hitungTotal() {
+            const r = hitungRincian();
+            qrisTotalEl.textContent = 'Total: ' + formatRupiah(r.total);
+            document.getElementById('rcSubtotal').textContent = formatRupiah(r.subtotal);
+            document.getElementById('rcOngkir').textContent = !r.zonaDipilih ? '-' : (r.ongkir === 0 ? 'Gratis' : formatRupiah(r.ongkir));
+            document.getElementById('rcDiskonRow').style.display = r.diskon > 0 ? 'flex' : 'none';
+            document.getElementById('rcDiskon').textContent = '- ' + formatRupiah(r.diskon);
+            document.getElementById('rcTotal').textContent = formatRupiah(r.total);
+            return r.total;
+        }
+
+        function setPromoMsg(text, ok) {
+            promoMsg.textContent = text || '';
+            promoMsg.style.color = ok ? '#1b6b3a' : '#b3261e';
+        }
+
+        async function terapkanPromo(silent) {
+            const kode = promoInput.value.trim().toUpperCase();
+            promo = { kode: '', diskon: 0 };
+            if (!kode) { setPromoMsg(''); hitungTotal(); return; }
+            if (!zonaSelect.value) { setPromoMsg('Pilih area pengiriman dulu, lalu pakai kode.', false); hitungTotal(); return; }
+            try {
+                const res = await fetch('/api/promo', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ produk: produkSelect.value, jumlah: parseInt(jumlahInput.value || '0', 10), zonaId: Number(zonaSelect.value), kodePromo: kode })
+                });
+                const j = await res.json().catch(() => ({}));
+                if (!res.ok) { setPromoMsg(j.error || 'Kode promo tidak dapat dipakai.', false); }
+                else { promo = { kode: j.kodePromo || kode, diskon: j.diskon || 0 }; setPromoMsg('Kode dipakai: hemat ' + formatRupiah(promo.diskon), true); }
+            } catch (e) { setPromoMsg('Gagal memeriksa kode. Coba lagi.', false); }
+            hitungTotal();
+        }
+
+        function tampilkanStok() {
+            const prod = CONFIG.products.find(p => p.nama === produkSelect.value) || CONFIG.products[0];
+            const submit = document.querySelector('#orderForm .btn-submit');
+            if (!prod) return;
+            if (!prod.tersedia) {
+                stokBanner.style.cssText += ';display:block;background:#fdf0ee;border:1px solid #e3b4ae;color:#8a1f18;';
+                stokBanner.textContent = 'Maaf, stok sedang habis. Silakan hubungi kami lewat WhatsApp untuk jadwal berikutnya.';
+                if (submit) submit.disabled = true;
+            } else if (prod.sisa) {
+                stokBanner.style.cssText += ';display:block;background:#fff8e6;border:1px solid #ecd9a0;color:#6b5200;';
+                stokBanner.textContent = 'Stok tinggal ' + prod.sisa + ' botol. Segera pesan sebelum habis.';
+            }
+            if (prod.tersedia) jumlahInput.max = String(prod.maks);
+        }
+
+        async function muatKonfigurasi() {
+            try {
+                const res = await fetch('/api/config', { cache: 'no-store' });
+                const j = await res.json();
+                if (!res.ok || !j.success) throw new Error(j.error || 'gagal');
+                CONFIG = j;
+                const opt = produkSelect.options[produkSelect.selectedIndex];
+                const prod = j.products.find(p => p.nama === produkSelect.value);
+                if (opt && prod) { opt.dataset.price = String(prod.harga); opt.textContent = prod.nama + ' - ' + formatRupiah(prod.harga); }
+                zonaSelect.innerHTML = '<option value="">Pilih area pengiriman</option>' +
+                    j.zones.map(z => '<option value="' + z.id + '">' + z.nama.replace(/</g, '&lt;') + ' - ' + (z.biaya === 0 ? 'Gratis ongkir' : formatRupiah(z.biaya)) + '</option>').join('');
+                tampilkanStok();
+            } catch (e) {
+                zonaSelect.innerHTML = '<option value="">Area belum dapat dimuat, muat ulang halaman</option>';
+            }
+            hitungTotal();
         }
 
         function toggleQris() {
             const selected = document.querySelector('input[name="pembayaran"]:checked').value;
-            qrisBox.style.display = (selected === 'QRIS') ? 'block' : 'none';
-            buktiInput.required = (selected === 'QRIS');
-            if (selected === 'QRIS') hitungTotal();
+            const useQris = selected === 'QRIS';
+            qrisBox.style.display = useQris ? 'block' : 'none';
+            codBox.style.display = useQris ? 'none' : 'block';
+            buktiInput.required = useQris;
+            if (useQris) hitungTotal();
         }
         paymentRadios.forEach(r => r.addEventListener('change', toggleQris));
         produkSelect.addEventListener('change', hitungTotal);
-        jumlahInput.addEventListener('input', hitungTotal);
+        jumlahInput.addEventListener('input', function () { hitungTotal(); if (promo.kode) terapkanPromo(true); });
+        zonaSelect.addEventListener('change', function () { hitungTotal(); if (promoInput.value.trim()) terapkanPromo(true); });
+        document.getElementById('promoBtn').addEventListener('click', function () { terapkanPromo(false); });
+        muatKonfigurasi();
         toggleQris();
+        buktiInput.addEventListener('change', function () {
+            const file = this.files && this.files[0];
+            if (proofPreviewUrl) URL.revokeObjectURL(proofPreviewUrl);
+            proofPreviewUrl = null;
+            proofPreview.style.display = 'none';
+            proofPreview.removeAttribute('src');
+            if (!file) { proofName.textContent = ''; return; }
+            if (!file.type.startsWith('image/')) { proofName.textContent = 'Pilih file berupa gambar.'; this.value = ''; return; }
+            proofName.textContent = file.name;
+            proofPreviewUrl = URL.createObjectURL(file);
+            proofPreview.src = proofPreviewUrl;
+            proofPreview.style.display = 'block';
+        });
 
         // Kompres gambar bukti pembayaran di browser secara bertahap sampai ukurannya cukup kecil,
         // agar tidak melebihi batas ukuran penyimpanan gratis di jsonbin (±100KB per data).
@@ -853,7 +1119,7 @@
                 reader.onload = function (e) {
                     const img = new Image();
                     img.onload = function () {
-                        let {width, height} = img;
+                        let { width, height } = img;
                         if (width > height && width > maxDimension) {
                             height = Math.round(height * (maxDimension / width));
                             width = maxDimension;
@@ -879,11 +1145,11 @@
             // Target maksimal ±35KB (dalam base64) per foto, dicoba bertahap dari kualitas terbaik.
             const targetChars = 35 * 1024 * 1.37; // perkiraan panjang string base64 untuk ±35KB biner
             const attempts = [
-                {maxDimension: 700, quality: 0.55},
-                {maxDimension: 500, quality: 0.45},
-                {maxDimension: 400, quality: 0.35},
-                {maxDimension: 320, quality: 0.3},
-                {maxDimension: 260, quality: 0.25}
+                { maxDimension: 700, quality: 0.55 },
+                { maxDimension: 500, quality: 0.45 },
+                { maxDimension: 400, quality: 0.35 },
+                { maxDimension: 320, quality: 0.3 },
+                { maxDimension: 260, quality: 0.25 }
             ];
             let result = null;
             for (const attempt of attempts) {
@@ -907,6 +1173,10 @@
             const pembayaran = document.querySelector('input[name="pembayaran"]:checked').value;
 
             // Validasi sederhana
+            if (!zonaSelect.value) {
+                alert('Pilih area pengiriman terlebih dahulu.');
+                return;
+            }
             if (!nama || !telepon || !alamat || !produk || !jumlah) {
                 alert('Harap isi semua field yang wajib!');
                 return;
@@ -950,7 +1220,8 @@
                 result = await OrdersStore.add({
                     nama, telepon, alamat, produk, jumlah, pesan,
                     metodePembayaran: pembayaran,
-                    totalHarga: totalHarga,
+                    zonaId: Number(zonaSelect.value),
+                    kodePromo: promo.kode || '',
                     buktiPembayaran: buktiPembayaran
                 });
             } catch (e) {
@@ -1004,7 +1275,7 @@
                     small.textContent = 'Rincian teknis: ' + result.error;
                     box.appendChild(small);
                 }
-                box.scrollIntoView({behavior: 'smooth', block: 'center'});
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Buat Pesanan';
                 return;
@@ -1017,13 +1288,14 @@
 
             // Isi struk/invoice
             document.getElementById('invOrderId').textContent = orderId;
-            document.getElementById('invTanggal').textContent = new Date().toLocaleDateString('id-ID', {year: 'numeric', month: 'long', day: 'numeric'});
+            document.getElementById('invTanggal').textContent = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('invNama').textContent = nama;
             document.getElementById('invTelepon').textContent = telepon;
             document.getElementById('invAlamat').textContent = alamat;
             document.getElementById('invProdukNama').textContent = produk;
             document.getElementById('invJumlah').textContent = 'x' + jumlah;
-            document.getElementById('invTotal').textContent = totalHarga > 0 ? formatRupiah(totalHarga) : '-';
+            const totalFinal = (result.order && result.order.totalHarga) || totalHarga;
+            document.getElementById('invTotal').textContent = totalFinal > 0 ? formatRupiah(totalFinal) : '-';
             document.getElementById('invPembayaran').textContent = pembayaran;
 
             const noteEl = document.getElementById('confirmPaymentNote');
@@ -1038,29 +1310,18 @@
                 noteText = 'Pesanan Anda akan kami konfirmasi dan siapkan. Pembayaran dilakukan saat barang sampai (COD).';
             }
 
+            noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
+
             if (!result.online) {
                 console.warn('Detail kegagalan sinkronisasi ke server bersama:', result.error);
-                noteText = window.location.protocol === 'file:'
-                    ? 'Mode uji lokal: halaman ini dibuka dari file di komputer, jadi pesanan hanya tersimpan di browser ini dan belum terkirim ke server. Setelah situs online (Vercel), pesanan akan masuk otomatis.'
-                    : '';
-                const wa = document.createElement('a');
-                wa.href = 'https://wa.me/62895635067289?text=' + encodeURIComponent('Halo Margaluyu Farm, nomor pesanan saya ' + orderId + '. Mohon dibantu diproses.');
-                wa.target = '_blank';
-                wa.rel = 'noopener';
-                wa.textContent = 'Bantuan Pesanan via WhatsApp';
-                wa.style.cssText = 'display:inline-block;margin-top:8px;font-weight:700;text-decoration:underline;';
                 noteEl.textContent = noteText;
-                noteEl.appendChild(document.createElement('br'));
-                noteEl.appendChild(wa);
                 const confirmCard = document.getElementById('orderConfirm');
                 confirmCard.style.display = 'block';
                 confirmCard.classList.remove('is-visible');
                 void confirmCard.offsetWidth;
                 confirmCard.classList.add('is-visible');
-                confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
+                confirmCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
-            } else {
-                noteText += ' Untuk mencetak struk pesanan, silakan buka halaman Lacak Pesanan.';
             }
             noteEl.textContent = noteText;
 
@@ -1069,11 +1330,35 @@
             confirmCard.classList.remove('is-visible');
             void confirmCard.offsetWidth;
             confirmCard.classList.add('is-visible');
-            confirmCard.scrollIntoView({behavior: 'smooth', block: 'center'});
+            confirmCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
     </script>
 
+    <script>
+        // Pengatur jumlah dan total di ringkasan.
+        (function () {
+            var q = document.getElementById('jumlah');
+            var out = document.getElementById('odTotal');
+            if (!q || !out) return;
+            var HARGA = 20000;
+            function rp(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+            function hitung() {
+                var n = parseInt(q.value, 10);
+                out.textContent = rp((isNaN(n) || n < 1 ? 1 : n) * HARGA);
+            }
+            Array.prototype.forEach.call(document.querySelectorAll('.qty-btn'), function (b) {
+                b.addEventListener('click', function () {
+                    var n = parseInt(q.value, 10); if (isNaN(n)) n = 1;
+                    n = Math.max(1, Math.min(999, n + parseInt(b.getAttribute('data-d'), 10)));
+                    q.value = n;
+                    q.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            });
+            q.addEventListener('input', hitung);
+            hitung();
+        })();
+    </script>
 </body>
 
 </html>
