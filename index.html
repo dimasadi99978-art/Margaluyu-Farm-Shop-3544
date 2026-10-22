@@ -11,7 +11,7 @@
     <meta property="og:title" content="Margaluyu Farm 354 - Susu Kambing Saanen Segar">
     <meta property="og:description"
         content="Botol 500 ml Rp 20.000, dijaga tetap dingin, gratis ongkir Surabaya Timur.">
-    <meta property="og:image" content="img/banner-home-crop.jpg">
+    <meta property="og:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -65,6 +65,19 @@
     <link rel="stylesheet" href="css/landing-pro.css">
     
     <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti susukambingsaanensegar354.vercel.app dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://susukambingsaanensegar354.vercel.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://susukambingsaanensegar354.vercel.app/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Margaluyu Farm 354 - Susu Saanen Segar">
+    <meta name="twitter:description" content="Susu kambing Saanen segar dari Margaluyu Farm. Botol 500 ml Rp 20.000, dijaga tetap dingin, gratis ongkir Surabaya Timur.">
+    <meta name="twitter:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0a3d38">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 </head>
 
 <body class="home">
@@ -208,7 +221,7 @@
                 <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span
                         class="ml-s">WhatsApp dan kontak</span></a>
                 <div class="menu-foot">
-                    <a class="menu-cta" href="order sekarang.html">Pesan sekarang</a>
+                    <a class="menu-cta" href="order-sekarang.html">Pesan sekarang</a>
                     <a class="menu-wa"
                         href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
                         target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
@@ -242,14 +255,14 @@
                         baru pertama kali mencoba susu kambing. Susu dikirim dalam keadaan segar agar kualitasnya tetap
                         terjaga.</p>
                     <div class="lp-actions">
-                        <a class="lp-btn" href="order sekarang.html">Pesan sekarang</a>
+                        <a class="lp-btn" href="order-sekarang.html">Pesan sekarang</a>
                         <a class="lp-btn-ghost" href="product.html">Lihat produk</a>
                     </div>
                 </div>
                 <div class="lp-hero-photo">
                     <img src="img/banner-home-web.jpg"
                         alt="Tiga botol dan segelas susu kambing Saanen segar di meja kayu" width="1100" height="572">
-                    <a class="lp-badge" href="order sekarang.html"><span class="lp-badge-p"><small>Harga</small><b>Rp 20.000 <em>/ botol 500 ml</em></b></span><span class="lp-badge-s"><i></i>Stok tersedia</span></a>
+                    <a class="lp-badge" href="order-sekarang.html"><span class="lp-badge-p"><small>Harga</small><b>Rp 20.000 <em>/ botol 500 ml</em></b></span><span class="lp-badge-s"><i></i>Stok tersedia</span></a>
                 </div>
                 <ul class="lp-strip" data-stagger>
                     <li class="rv"><b>Manis & Creamy</b><span>Memiliki rasa manis alami tanpa aroma prengus yang menyengat.</span></li>
@@ -444,9 +457,16 @@
         <!-- FAQ -->
         <section class="lp-sec" id="faq">
             <div class="container">
-                <div class="lp-head rv">
+                <aside class="lp-faq-side rv">
                     <h3>Pertanyaan yang sering ditanyakan</h3>
-                </div>
+                    <p class="lp-faq-intro">Seputar produk, pemesanan, pembayaran, dan voucher apresiasi.</p>
+                    <div class="lp-faq-more">
+                        <span>Masih ada pertanyaan?</span>
+                        <a class="lp-btn-ghost"
+                            href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
+                            target="_blank" rel="noopener">Hubungi Kami</a>
+                    </div>
+                </aside>
                 <div class="lp-faq" data-stagger>
                     <details class="rv">
                         <summary>Apakah susu Saanen berbau prengus?</summary>
@@ -472,6 +492,16 @@
                         <p>COD (bayar saat susu diterima) atau QRIS. Untuk QRIS, unggah bukti pembayaran di formulir
                             pesanan.</p>
                     </details>
+                    <details class="rv" id="faq-voucher">
+                        <summary>Bagaimana cara mendapatkan voucher apresiasi pelanggan?</summary>
+                        <p>Voucher apresiasi senilai Rp5.000 diberikan kepada pelanggan yang pesanannya telah berstatus
+                            Selesai dan mengirimkan ulasan melalui halaman <a href="rating.html">Tulis Ulasan</a>.
+                            Verifikasi cukup menggunakan nomor WhatsApp yang dipakai saat memesan; sistem mencocokkan
+                            pesanan Anda secara otomatis sehingga nomor pesanan tidak perlu diketik.</p>
+                        <p>Ketentuan: berlaku 45 hari sejak diterbitkan, minimal belanja Rp50.000, dapat digunakan satu
+                            kali, dan tidak dapat digabung dengan diskon jumlah belanja. Ulasan dengan rating berapa pun
+                            tetap kami hargai.</p>
+                    </details>
                     <details class="rv">
                         <summary>Apakah susu ini aman untuk bayi?</summary>
                         <p>Tidak untuk bayi di bawah 12 bulan. Penderita alergi susu atau intoleransi laktosa sebaiknya
@@ -482,12 +512,6 @@
                         <p>Bisa. Panaskan susu dengan api kecil sambil diaduk perlahan agar tidak menggumpal. Cukup
                             panaskan hingga muncul buih-buih kecil dan hindari merebus susu hingga mendidih.</p>
                     </details>
-                </div>
-                <div class="lp-faq-more rv">
-                    <span>Masih ada pertanyaan?</span>
-                    <a class="lp-btn-ghost"
-                        href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya"
-                        target="_blank" rel="noopener">Hubungi Kami</a>
                 </div>
             </div>
         </section>
@@ -514,14 +538,14 @@
                             href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"><i
                                 class="fab fa-youtube" aria-hidden="true"></i>YouTube</a></nav>
                 </div>
-                <p class="sf-copy">&copy; 2026 Margaluyu Farm. Seluruh hak dilindungi. <a href="privasi.html">Kebijakan
+                <p class="sf-copy">&copy; 2026 Margaluyu Farm. Seluruh hak dilindungi. <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html">Kebijakan
                         privasi</a></p>
             </div>
         </footer>
     </div>
 
     <div class="lp-sticky" id="lpSticky" aria-hidden="true">
-        <a class="lp-btn" href="order sekarang.html" tabindex="-1">Pesan sekarang &middot; Rp 20.000</a>
+        <a class="lp-btn" href="order-sekarang.html" tabindex="-1">Pesan sekarang &middot; Rp 20.000</a>
         <a class="wa"
             href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya%20tentang%20susu%20Saanen"
             target="_blank" rel="noopener" aria-label="Tanya lewat WhatsApp" tabindex="-1"><svg class="ic"
@@ -681,6 +705,10 @@
             document.addEventListener('DOMContentLoaded', bukaFaq);
         })();
     </script>
+    <script src="stok-badge.js"></script>
+    <script src="/analytics-config.js"></script>
+    <script src="/analytics.js"></script>
+    <script src="/pwa.js"></script>
 </body>
 
 </html>

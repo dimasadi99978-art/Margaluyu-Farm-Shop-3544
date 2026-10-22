@@ -11,25 +11,33 @@ const OrdersStore = (function () {
         : '/api/orders';
     const IS_LOCAL_FILE = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
     const STATUS_STEPS = ['Dikonfirmasi', 'Dikemas', 'Dikirim', 'Selesai'];
-    const ADMIN_KEY_STORAGE = 'mfAdminKey';
+    const PAYMENT_STEPS = ['Menunggu verifikasi', 'Lunas', 'Ditolak'];
+    const ADMIN_KEY_STORAGE = 'mfAdminToken';
 
-    // Kata sandi admin (hanya dipakai halaman admin) disimpan di sessionStorage dan dikirim
-    // sebagai header X-Admin-Key. Server hanya memeriksanya jika ORDERS_ADMIN_KEY diaktifkan.
+    // Token sesi admin (kedaluwarsa 8 jam, ditandatangani server) disimpan di sessionStorage.
+    // Kata sandi mentah TIDAK pernah disimpan di browser.
     function getAdminKey() {
-        try { return sessionStorage.getItem(ADMIN_KEY_STORAGE) || ''; } catch (e) { return ''; }
+        try {
+            const raw = sessionStorage.getItem(ADMIN_KEY_STORAGE);
+            if (!raw) return '';
+            const t = JSON.parse(raw);
+            if (t && t.token && t.expiresAt > Date.now()) return t.token;
+            sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+            return '';
+        } catch (e) { return ''; }
     }
 
-    function setAdminKey(key) {
+    function setAdminKey(token, expiresAt) {
         try {
-            if (key) sessionStorage.setItem(ADMIN_KEY_STORAGE, key);
+            if (token) sessionStorage.setItem(ADMIN_KEY_STORAGE, JSON.stringify({ token, expiresAt: expiresAt || (Date.now() + 8 * 3600 * 1000) }));
             else sessionStorage.removeItem(ADMIN_KEY_STORAGE);
         } catch (e) { /* sessionStorage tidak tersedia */ }
     }
 
     function adminHeaders(extra) {
         const headers = Object.assign({ 'Accept': 'application/json' }, extra || {});
-        const key = getAdminKey();
-        if (key) headers['X-Admin-Key'] = key;
+        const token = getAdminKey();
+        if (token) headers['Authorization'] = 'Bearer ' + token;
         return headers;
     }
 
@@ -97,6 +105,7 @@ const OrdersStore = (function () {
             const text = await res.text();
             let json = {};
             try { json = text ? JSON.parse(text) : {}; } catch (_) {}
+            if (res.status === 401) setAdminKey('');
             if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
 
             const data = Array.isArray(json.data) ? json.data : [];
@@ -122,7 +131,7 @@ const OrdersStore = (function () {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ order })
+                body: JSON.stringify({ order, website: honeypotValue(), captcha: captchaToken() })
             });
             const text = await res.text();
             let json = {};
@@ -161,6 +170,23 @@ const OrdersStore = (function () {
         }
     }
 
+    // Token CAPTCHA (hanya ada bila Turnstile diaktifkan). Token sekali pakai, jadi di-reset setelah dikirim.
+    function captchaToken() {
+        try { return typeof window.MF_captchaToken === 'function' ? window.MF_captchaToken() : ''; } catch (e) { return ''; }
+    }
+    function captchaReset() {
+        try { if (typeof window.MF_captchaReset === 'function') window.MF_captchaReset(); } catch (e) { /* abaikan */ }
+    }
+
+    // Kolom jebakan (tersembunyi) untuk bot. Orang asli tidak pernah mengisinya.
+    function honeypotValue() {
+        try {
+            const el = document.querySelector('input[name="website"]');
+            return el ? String(el.value || '') : '';
+        } catch (e) { return ''; }
+    }
+
+    // HANYA untuk label sementara bila server tidak terjangkau. Nomor pesanan resmi dibuat server.
     function generateOrderId() {
         const now = new Date();
         const y = String(now.getFullYear()).slice(2);
@@ -183,39 +209,25 @@ const OrdersStore = (function () {
     }
 
     async function add(orderData) {
-        const orderId = generateOrderId();
-        const entry = Object.assign({
-            orderId,
-            status: 'Dikonfirmasi',
-            tanggal: new Date().toLocaleDateString('id-ID', {
-                year: 'numeric', month: 'long', day: 'numeric'
-            }),
-            updatedAt: new Date().toISOString()
-        }, orderData);
+        // Nomor pesanan resmi, harga, dan status dibuat/dihitung di SERVER. Browser hanya mengirim isian form.
+        const draft = Object.assign({}, orderData);
+        delete draft.orderId; delete draft.status; delete draft.totalHarga;
 
-        // Tampilkan/simpan lokal segera agar struk langsung muncul.
-        setLocal(mergeOrders(getLocal(), [entry]));
-
-        const saved = await postRemote(entry);
+        const saved = await postRemote(draft);
+        captchaReset();
         if (!saved.success) {
-            // Tandai pending agar bisa dicoba lagi dari perangkat yang sama.
-            const pending = Object.assign({}, entry, { syncStatus: 'pending' });
-            setLocal(mergeOrders(getLocal(), [pending]));
-            return {
-                success: true,
-                online: false,
-                orderId,
-                error: saved.error
-            };
+            const orderId = generateOrderId();
+            return { success: true, online: false, orderId, error: saved.error };
         }
 
         const synced = Object.assign({}, saved.order);
         delete synced.syncStatus;
-        setLocal(mergeOrders(getLocal(), [synced]));
+        if (synced.orderId) setLocal(mergeOrders(getLocal(), [synced]));
         return {
             success: true,
             online: true,
-            orderId,
+            orderId: synced.orderId,
+            order: synced,
             email: saved.email || { sent: false, reason: 'unknown' },
             error: null
         };
@@ -328,13 +340,35 @@ const OrdersStore = (function () {
         };
     }
 
-    // Dipakai halaman admin: memastikan kata sandi diterima server.
+    // Login admin: kata sandi dikirim sekali ke server, balasannya token sesi 8 jam.
     // Hasil: { ok, protectedByServer, error }
-    async function verifyAdmin(key) {
-        setAdminKey(key);
-        const r = await fetchRemote(null);
-        if (r.online) return { ok: true, protectedByServer: r.protectedByServer === true, error: null };
-        return { ok: false, protectedByServer: false, error: r.error };
+    async function verifyAdmin(password, code) {
+        if (IS_LOCAL_FILE) return { ok: false, protectedByServer: false, error: 'Buka lewat alamat online (Vercel), bukan file di komputer.' };
+        try {
+            const res = await fetch('/api/admin-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ password, code: code || '' })
+            });
+            const json = await res.json().catch(() => ({}));
+            if (!res.ok || !json.token) return { ok: false, needCode: json.needCode === true, protectedByServer: true, error: json.error || ('Server mengembalikan ' + res.status) };
+            setAdminKey(json.token, json.expiresAt);
+            const r = await fetchRemote(null);
+            if (r.online) return { ok: true, protectedByServer: true, error: null };
+            return { ok: false, protectedByServer: true, error: r.error };
+        } catch (e) {
+            return { ok: false, protectedByServer: false, error: e && e.message ? e.message : String(e) };
+        }
+    }
+
+    function logoutAdmin() { setAdminKey(''); }
+
+    // Ubah status pembayaran (Menunggu verifikasi / Lunas / Ditolak). Khusus admin.
+    async function updatePayment(orderId, statusPembayaran) {
+        if (IS_LOCAL_FILE) return { success: false, error: 'Buka lewat alamat online (Vercel).' };
+        const r = await putRemote({ orderId, statusPembayaran });
+        if (r.success) setLocal(mergeOrders(getLocal(), [r.order]));
+        return r;
     }
 
     async function updateStatus(orderId, newStatus, orderHint) {
@@ -370,7 +404,7 @@ const OrdersStore = (function () {
 
         // Saat online, perubahan harus disimpan ke server. Header admin dikirim
         // agar endpoint dapat membedakan perubahan admin dari pelacakan publik.
-        const result = await putRemote(updated);
+        const result = await putRemote({ orderId: updated.orderId, status: validStatus });
         if (result.success) {
             setLocal(mergeOrders(getLocal(), [result.order || updated]));
             return { success: true, online: true, local: false, order: result.order || updated, error: null };
@@ -415,6 +449,10 @@ const OrdersStore = (function () {
         normalizePhone,
         setAdminKey,
         verifyAdmin,
-        STATUS_STEPS
+        logoutAdmin,
+        adminHeaders,
+        updatePayment,
+        STATUS_STEPS,
+        PAYMENT_STEPS
     };
 })();

@@ -19,6 +19,14 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://challenges.cloudflare.com https://plausible.io https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://res.cloudinary.com https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://api.cloudinary.com https://challenges.cloudflare.com https://plausible.io https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me; object-src 'none'"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
         }
       ]
     },
@@ -41,11 +49,20 @@
       ]
     },
     {
-      "source": "/setup-testimoni.html",
+      "source": "/admin-pengaturan.html",
       "headers": [
         {
           "key": "X-Robots-Tag",
           "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
         }
       ]
     }
@@ -58,6 +75,63 @@
     {
       "source": "/robots.txt",
       "destination": "/api/robots"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/order sekarang.html",
+      "destination": "/order-sekarang.html",
+      "permanent": true
+    },
+    {
+      "source": "/order%20sekarang.html",
+      "destination": "/order-sekarang.html",
+      "permanent": true
+    },
+    {
+      "source": "/kandungan & manfaat.html",
+      "destination": "/kandungan-manfaat.html",
+      "permanent": true
+    },
+    {
+      "source": "/kandungan%20&%20manfaat.html",
+      "destination": "/kandungan-manfaat.html",
+      "permanent": true
+    },
+    {
+      "source": "/kandungan%20%26%20manfaat.html",
+      "destination": "/kandungan-manfaat.html",
+      "permanent": true
+    },
+    {
+      "source": "/media library.html",
+      "destination": "/media-library.html",
+      "permanent": true
+    },
+    {
+      "source": "/media%20library.html",
+      "destination": "/media-library.html",
+      "permanent": true
+    },
+    {
+      "source": "/Pengenalan Kambing Saanen.html",
+      "destination": "/pengenalan-kambing-saanen.html",
+      "permanent": true
+    },
+    {
+      "source": "/Pengenalan%20Kambing%20Saanen.html",
+      "destination": "/pengenalan-kambing-saanen.html",
+      "permanent": true
+    },
+    {
+      "source": "/Pengenalan susu saanen.html",
+      "destination": "/pengenalan-susu-saanen.html",
+      "permanent": true
+    },
+    {
+      "source": "/Pengenalan%20susu%20saanen.html",
+      "destination": "/pengenalan-susu-saanen.html",
+      "permanent": true
     }
   ]
 }

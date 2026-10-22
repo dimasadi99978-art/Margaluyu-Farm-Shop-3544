@@ -93,6 +93,22 @@
             if (idx >= 0 && i < idx) node.classList.add('done');
             else if (i === idx) { node.classList.add('current'); node.setAttribute('aria-current', 'step'); }
         });
+        // Jam tiap tahap (dari riwayat di server). Pesanan lama tanpa riwayat tidak menampilkan jam.
+        var waktu = {};
+        (Array.isArray(order.riwayat) ? order.riwayat : []).forEach(function (h) {
+            if (h && h.tipe === 'status' && h.at) waktu[h.nilai] = h.at;
+        });
+        document.querySelectorAll('#stepper .step').forEach(function (node, i) {
+            var lama = node.querySelector('.step-time');
+            if (lama) lama.remove();
+            var at = waktu[steps[i]];
+            if (!at) return;
+            var d = new Date(at);
+            if (isNaN(d)) return;
+            var t = el('div', 'step-time', d.toLocaleString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }));
+            t.style.cssText = 'font-size:11px;opacity:.75;margin-top:2px;';
+            node.appendChild(t);
+        });
         var pct = idx <= 0 ? 0 : (idx / (steps.length - 1)) * 75;
         document.getElementById('progressLine').style.width = pct + '%';
 
@@ -110,11 +126,28 @@
         sum.appendChild(el('hr'));
         sum.appendChild(row(order.produk || '-', order.jumlah ? 'x' + order.jumlah : '-'));
         sum.appendChild(el('hr'));
+        if (order.subtotal != null && order.ongkir != null) {
+            sum.appendChild(row('Ongkir', Number(order.ongkir) === 0 ? 'Gratis' : rupiah(order.ongkir)));
+            if (Number(order.diskon) > 0) sum.appendChild(row('Diskon' + (order.kodePromo ? ' (' + order.kodePromo + ')' : ''), '- ' + rupiah(order.diskon)));
+        }
         sum.appendChild(row('Total', order.totalHarga ? rupiah(order.totalHarga) : 'Rp 0', 'invoice-total'));
-        sum.appendChild(row('Pembayaran', order.metodePembayaran || '-'));
+        sum.appendChild(row('Pembayaran', (order.metodePembayaran || '-') + (order.statusPembayaran ? ' (' + order.statusPembayaran + ')' : '')));
+        if (order.tanggalKirim || order.jamKirim) {
+            var jd = order.tanggalKirim ? new Date(order.tanggalKirim + 'T00:00:00').toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+            sum.appendChild(row('Jadwal kirim', [jd, order.jamKirim].filter(Boolean).join(', ')));
+        }
         sum.appendChild(row('Status', order.status || 'Dikonfirmasi'));
 
         document.getElementById('statusNote').textContent = STATUS_LABELS[order.status] || order.status || '';
+        if (typeof MyOrders !== 'undefined' && order.orderId) MyOrders.add({ id: order.orderId, telepon: phoneInput.value.trim(), nama: order.nama, selesai: order.status === 'Selesai' });
+        var lamaCta = document.getElementById('reviewCta'); if (lamaCta) lamaCta.remove();
+        if (order.status === 'Selesai' && order.orderId) {
+            var cta = el('a', 'btn', 'Beri ulasan & ambil voucher Rp5.000');
+            cta.id = 'reviewCta';
+            cta.href = 'rating.html?order=' + encodeURIComponent(order.orderId) + '&nama=' + encodeURIComponent(String(order.nama || '').split(' ')[0]);
+            cta.style.cssText = 'display:block;margin-top:14px;text-align:center;';
+            document.getElementById('statusNote').insertAdjacentElement('afterend', cta);
+        }
         resultBox.hidden = false;
     }
 
@@ -255,18 +288,30 @@
     // Unduh struk sebagai gambar JPG (rancangan struk ada di receipt-image.js).
     document.getElementById('saveImgBtn').addEventListener('click', function () {
         var sum = document.getElementById('orderSummary'); if (!sum) return;
-        var m = {}, produk = '', qty = 1, known = ['Tanggal', 'Nama', 'No. HP', 'Alamat', 'Total', 'Pembayaran', 'Status'];
+        var m = {}, produk = '', qty = 1, known = ['Tanggal', 'Nama', 'No. HP', 'Alamat', 'Total', 'Pembayaran', 'Status', 'Ongkir', 'Jadwal kirim'];
         Array.prototype.forEach.call(sum.querySelectorAll('.invoice-row'), function (r) {
             var l = r.children[0].textContent.trim(), v = r.children[1].textContent.trim();
-            if (known.indexOf(l) > -1) m[l] = v; else { produk = l; qty = parseInt(String(v).replace(/\D/g, ''), 10) || 1; }
+            if (l.indexOf('Diskon') === 0) m['Diskon'] = v; else if (known.indexOf(l) > -1) m[l] = v; else { produk = l; qty = parseInt(String(v).replace(/\D/g, ''), 10) || 1; }
         });
         var idEl = sum.querySelector('.invoice-id'), total = parseInt(String(m['Total'] || '').replace(/\D/g, ''), 10) || 0;
-        MFReceipt.download({ id: idEl ? idEl.textContent.trim() : 'pesanan', tanggal: m['Tanggal'] || '-', nama: m['Nama'] || '-', hp: m['No. HP'] || '-', alamat: m['Alamat'] || '-', produk: produk || '-', qty: qty, unit: qty ? Math.round(total / qty) : total, total: total, bayar: m['Pembayaran'] || '-', status: m['Status'] || 'Dikonfirmasi' });
+        MFReceipt.download({ id: idEl ? idEl.textContent.trim() : 'pesanan', tanggal: m['Tanggal'] || '-', nama: m['Nama'] || '-', hp: m['No. HP'] || '-', alamat: m['Alamat'] || '-', produk: produk || '-', qty: qty, unit: qty ? Math.round(((total - (parseInt(String(m['Ongkir'] || '').replace(/\D/g, ''), 10) || 0) + (parseInt(String(m['Diskon'] || '').replace(/\D/g, ''), 10) || 0))) / qty) : total, total: total, bayar: m['Pembayaran'] || '-', status: m['Status'] || 'Dikonfirmasi' });
     });
     forgotOrderBtn.addEventListener('click', function () { setPhoneOnlyMode(!phoneOnlyMode); });
 
     // Dibuka dari link konfirmasi pesanan (?id=...): isi nomor pesanan saja.
     // Tetap meminta nomor HP sebelum data ditampilkan.
     var idFromUrl = new URLSearchParams(window.location.search).get('id');
-    if (idFromUrl) { input.value = idFromUrl; phoneInput.focus(); }
+    // Isi otomatis dari perangkat ini: nomor pesanan & nomor HP terakhir (atau yang cocok dengan ?id=).
+    if (typeof MyOrders !== 'undefined') {
+        var dl = document.getElementById('myOrderList');
+        MyOrders.all().forEach(function (o) { var op = document.createElement('option'); op.value = o.id; op.label = o.id + (o.nama ? ' (' + o.nama + ')' : ''); if (dl) dl.appendChild(op); });
+        var saved = idFromUrl ? MyOrders.find(idFromUrl) : MyOrders.latest();
+        if (saved) { input.value = saved.id; if (saved.telepon) phoneInput.value = saved.telepon; }
+        input.addEventListener('change', function () {
+            var m = MyOrders.find(input.value);
+            if (m && m.telepon) phoneInput.value = m.telepon;
+        });
+    }
+    if (idFromUrl && !input.value) input.value = idFromUrl;
+    if (idFromUrl && !phoneInput.value) phoneInput.focus();
 })();

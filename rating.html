@@ -29,6 +29,21 @@
         .ct-list a { color: var(--ink); text-decoration: underline; text-decoration-color: #b8c9b8; text-underline-offset: 4px; }
         .ct-list a:hover { color: var(--forest); text-decoration-color: var(--forest); }
         .ct-form .form-card { max-width: none; margin: 0; padding: 24px; }
+        .reward-box { padding: 14px; border: 1px solid #d9e4d8; border-radius: 12px; background: #f7faf6; }
+        .reward-box strong { color: var(--forest, #0a3d38); }
+        .reward-desc { margin: 6px 0 12px; font-size: 13px; line-height: 1.55; color: #52645a; }
+        .reward-order { margin: 0 0 10px; padding: 8px 10px; border-radius: 8px; background: #e8f3ea; font-size: 13px; color: #1b5e36; }
+        .reward-order[hidden] { display: none; }
+        .rsc-body { min-width: 0; flex: 1; }
+        .rsc-note { font-weight: 600; }
+        .voucher-ticket { margin: 12px 0; padding: 16px; border: 2px dashed #1b6b3a; border-radius: 12px; background: #fff; text-align: center; }
+        .voucher-ticket[hidden] { display: none; }
+        .vt-label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #52645a; }
+        .vt-code { margin: 6px 0 2px; font: 800 1.45rem/1.2 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .06em; color: #0a3d38; word-break: break-all; user-select: all; }
+        .vt-meta { font-size: 13px; color: #3b4a42; line-height: 1.5; }
+        .vt-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0 8px; }
+        .vt-use { display: inline-block; margin: 2px 0 6px; font-weight: 700; color: #1b6b3a; }
+        .vt-help { margin: 0; font-size: 12px; line-height: 1.5; color: #6b776f; }
         .anon-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--ink-soft); cursor: pointer; }
         .anon-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--forest); flex: 0 0 auto; }
         .anon-row small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
@@ -47,6 +62,22 @@
     
     
     <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti susukambingsaanensegar354.vercel.app dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://susukambingsaanensegar354.vercel.app/rating.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://susukambingsaanensegar354.vercel.app/rating.html">
+    <meta property="og:title" content="Tulis Ulasan - Margaluyu Farm">
+    <meta property="og:description" content="Tulis ulasan dan saran Anda tentang susu Saanen Margaluyu Farm.">
+    <meta property="og:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tulis Ulasan - Margaluyu Farm">
+    <meta name="twitter:description" content="Tulis ulasan dan saran Anda tentang susu Saanen Margaluyu Farm.">
+    <meta name="twitter:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0a3d38">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 </head>
 
 <body>
@@ -64,7 +95,7 @@
                 <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
                 <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span class="ml-s">WhatsApp dan kontak</span></a>
                 <div class="menu-foot">
-                    <a class="menu-cta" href="order sekarang.html">Pesan sekarang</a>
+                    <a class="menu-cta" href="order-sekarang.html">Pesan sekarang</a>
                     <a class="menu-wa" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
                 </div>
                 <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
@@ -88,6 +119,7 @@
             <div class="form-card">
 
                 <form id="ratingForm" novalidate>
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"><label>Jangan diisi<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
                     <div class="field">
                         <label for="nama">Nama</label>
                         <input class="input" type="text" id="nama" name="nama" placeholder="Contoh: Fulan"
@@ -95,7 +127,7 @@
                         <div class="error" id="namaError" role="alert"></div>
                         <label class="anon-row" for="anonim">
                             <input type="checkbox" id="anonim" name="anonim">
-                            <span>Kirim sebagai anonim<small>Nama tidak ditampilkan; ulasan tampil sebagai &ldquo;Anonim&rdquo;.</small></span>
+                            <span>Samarkan nama saya<small id="anonPreview">Nama ditampilkan sebagian saja, mis. &ldquo;Budi S.&rdquo;. Nama lengkap tidak disimpan.</small></span>
                         </label>
                     </div>
 
@@ -120,6 +152,15 @@
                         </div>
                         <div class="star-hint" id="starHint" aria-live="polite">Ketuk bintang untuk memberi nilai</div>
                     </fieldset>
+
+                    <div class="field reward-box">
+                        <strong><i class="fas fa-gift" aria-hidden="true"></i> Voucher apresiasi Rp5.000 <span class="opt">(opsional)</span></strong>
+                        <p class="reward-desc">Verifikasi cukup dengan nomor WhatsApp yang digunakan saat memesan. <a href="index.html#faq-voucher">Lihat syarat &amp; ketentuan</a></p>
+                        <div class="reward-order" id="rewardOrder" hidden>Pesanan <b id="rewardOrderText"></b> terhubung otomatis <button type="button" class="link-btn" id="rewardOrderClear">Ubah</button></div>
+                        <label for="phoneReward">Nomor WhatsApp saat memesan</label>
+                        <input class="input" type="tel" id="phoneReward" name="phoneReward" maxlength="20" placeholder="Contoh: 081234567890" autocomplete="tel" inputmode="tel">
+                        <input type="hidden" id="orderIdReward" name="orderIdReward">
+                    </div>
 
                     <div class="field">
                         <label for="komentar">Ulasan <span class="opt">(opsional)</span></label>
@@ -148,12 +189,26 @@
                     <div class="form-msg" id="formMsg" role="status" aria-live="polite" hidden></div>
                     <div class="rating-success-card" id="ratingSuccessCard" hidden role="status" aria-live="polite">
                         <div class="rating-success-icon" aria-hidden="true"><i class="fas fa-check"></i></div>
-                        <div>
+                        <div class="rsc-body">
                             <strong>Terima kasih!</strong>
                             <p>Rating dan masukan Anda berhasil diberikan.</p>
+                            <p id="voucherRewardText" class="rsc-note"></p>
+                            <div class="voucher-ticket" id="voucherTicket" hidden>
+                                <div class="vt-label">Voucher apresiasi</div>
+                                <div class="vt-code" id="vtCode">-</div>
+                                <div class="vt-meta" id="vtMeta"></div>
+                                <div class="vt-actions">
+                                    <button type="button" class="btn btn--sm" id="vtCopy"><i class="fas fa-copy" aria-hidden="true"></i> Salin kode</button>
+                                    <button type="button" class="btn btn--sm btn--ghost" id="vtImage"><i class="fas fa-image" aria-hidden="true"></i> Simpan gambar</button>
+                                    <a class="btn btn--sm btn--ghost" id="vtWa" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> Kirim ke WhatsApp saya</a>
+                                </div>
+                                <a class="vt-use" id="vtUse" href="order-sekarang.html">Pakai voucher sekarang &rarr;</a>
+                                <p class="vt-help">Kode juga tersimpan otomatis di browser ini dan terisi sendiri saat Anda memesan lagi. Voucher berlaku satu kali dan hanya untuk nomor WhatsApp Anda.</p>
+                            </div>
                             <a href="index.html#testimoni" class="btn btn--sm">Lihat Ulasan</a>
                         </div>
                     </div>
+                <div id="cfTurnstile" style="margin:0 0 14px;"></div>
                     <button type="submit" class="btn" id="submitBtn">Kirim</button>
                 </form>
             </div>
@@ -171,7 +226,7 @@
             </div>
             <div class="footer-col">
                 <h4 class="footer-heading">Menu</h4>
-                <div class="footer-links"><a href="index.html">Beranda</a><a href="product.html">Produk</a><a href="order sekarang.html">Pesan Sekarang</a><a href="lacak-pesanan.html">Lacak Pesanan</a><a href="contact.html">Hubungi Kami</a></div>
+                <div class="footer-links"><a href="index.html">Beranda</a><a href="product.html">Produk</a><a href="order-sekarang.html">Pesan Sekarang</a><a href="lacak-pesanan.html">Lacak Pesanan</a><a href="contact.html">Hubungi Kami</a></div>
             </div>
             <div class="footer-col">
                 <h4 class="footer-heading">Ikuti Kami</h4>
@@ -184,7 +239,7 @@
             </div>
         </div>
         <div class="container">
-            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="privasi.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan Privasi</a></small>
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan Privasi</a></small>
         </div>
     </footer>
     <script src="nav-fix.js" defer></script>
@@ -209,7 +264,13 @@
         </div>
     </dialog>
 
+    <script src="my-orders.js"></script>
     <script src="rating.js"></script>
+    <script src="/analytics-config.js"></script>
+    <script src="/analytics.js"></script>
+    <script src="/pwa.js"></script>
+    <script src="/turnstile-config.js"></script>
+    <script src="/captcha.js"></script>
 </body>
 
 </html>

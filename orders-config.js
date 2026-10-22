@@ -1,10 +1,5 @@
 // Konfigurasi pesanan.
-// Penyimpanan pesanan sekarang melewati /api/orders sehingga Master Key
-// JSONBin tidak lagi dikirim ke browser.
-//
-// ORDERS_MASTER_KEY dan ORDERS_BIN_ID WAJIB disimpan sebagai Environment Variables
-// di Vercel Production. Jangan menaruh Master Key di file frontend.
+// Semua penyimpanan pesanan lewat /api/orders. Kunci JSONBin dan kata sandi admin
+// HANYA ada di Environment Variables Vercel (ORDERS_MASTER_KEY, ORDERS_ADMIN_KEY).
+// Jangan pernah menaruh kunci atau kata sandi di file frontend ini.
 const ORDERS_API_URL = '/api/orders';
-
-// Kata sandi admin untuk login halaman admin-pesanan.
-const ADMIN_PASSWORD = "354005";

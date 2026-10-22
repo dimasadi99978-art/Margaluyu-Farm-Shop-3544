@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Media Library - Margaluyu Farm</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="mobile-responsive.css">
+    <script src="nav-fix.js" defer></script>
+    <link rel="stylesheet" href="css/menu.css">
+    
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <meta name="theme-color" content="#0a3d38">
+    
+    <link rel="stylesheet" href="css/fonts.css">
+    <!-- SEO: ganti susukambingsaanensegar354.vercel.app dengan domain Anda (lihat PANDUAN-SUPABASE.md langkah 1) -->
+    <link rel="canonical" href="https://susukambingsaanensegar354.vercel.app/media-library.html">
+    <meta name="description" content="Susu kambing Saanen segar dari Margaluyu Farm. Dijaga tetap dingin dan diantar ke rumah Anda di Surabaya.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Margaluyu Farm">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://susukambingsaanensegar354.vercel.app/media-library.html">
+    <meta property="og:title" content="Media Library - Margaluyu Farm">
+    <meta property="og:description" content="Susu kambing Saanen segar dari Margaluyu Farm. Dijaga tetap dingin dan diantar ke rumah Anda di Surabaya.">
+    <meta property="og:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Media Library - Margaluyu Farm">
+    <meta name="twitter:description" content="Susu kambing Saanen segar dari Margaluyu Farm. Dijaga tetap dingin dan diantar ke rumah Anda di Surabaya.">
+    <meta name="twitter:image" content="https://susukambingsaanensegar354.vercel.app/img/banner-home-crop.jpg">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0a3d38">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+
+<body>
+    <!-- header -->
+    <header class="site-top">
+        <div class="container">
+            <h1 class="brand"><a href="index.html"><img class="brand-mark" src="img/logo-mark.png" alt="" width="34" height="34"><span class="brand-name">Margaluyu Farm</span></a></h1>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Buka atau tutup menu">
+            <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true"><span></span><span></span><span></span></label>
+            <label for="nav-toggle" class="menu-backdrop" aria-hidden="true"></label>
+            <nav class="menu-panel" aria-label="Menu utama">
+                <div class="menu-head"><a class="menu-brand" href="index.html"><img src="img/logo-mark.png" alt="" width="26" height="26">Margaluyu Farm</a><label for="nav-toggle" class="menu-close" aria-label="Tutup menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></label></div>
+                <a class="menu-link" style="--i:1" href="index.html"><span class="ml-t">Beranda</span><span class="ml-s">Susu Saanen segar</span></a>
+                <a class="menu-link" style="--i:2" href="product.html"><span class="ml-t">Produk</span><span class="ml-s">Harga dan detail</span></a>
+                <a class="menu-link" style="--i:3" href="lacak-pesanan.html"><span class="ml-t">Lacak Pesanan</span><span class="ml-s">Cek status pesanan</span></a>
+                <a class="menu-link" style="--i:4" href="contact.html"><span class="ml-t">Hubungi Kami</span><span class="ml-s">WhatsApp dan kontak</span></a>
+                <div class="menu-foot">
+                    <a class="menu-cta" href="order-sekarang.html">Pesan sekarang</a>
+                    <a class="menu-wa" href="https://wa.me/62895635067289?text=Halo%20Margaluyu%20Farm%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">Tanya lewat WhatsApp</a>
+                </div>
+                <p class="menu-note">0895-6350-67289<br>Surabaya, Jawa Timur</p>
+            </nav>
+        </div>
+    </header>
+<section class="page-hero page-hero--photo"
+        style="background-image: linear-gradient(180deg, rgba(5, 38, 35, 0.72) 0%, rgba(5, 38, 35, 0.62) 45%, rgba(5, 38, 35, 0.88) 100%), url('kambing saanen.jpg')">
+        <div class="container">
+            <h2>Media Library</h2>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div class="filter-buttons" role="group" aria-label="Filter kategori">
+                <button type="button" class="filter-btn active" data-filter="all">Semua</button>
+                <button type="button" class="filter-btn" data-filter="produk">Produk</button>
+                <button type="button" class="filter-btn" data-filter="kemasan">Kemasan &amp; Pengiriman</button>
+                <button type="button" class="filter-btn" data-filter="peternakan">Peternakan</button>
+            </div>
+
+            <!-- CARA MENAMBAH FOTO: 1) taruh file foto di folder img/galeri/  2) salin satu blok <figure class="media-item"> di bawah
+                 3) ganti data-category (produk / kemasan / peternakan), alamat gambar, judul, dan keterangannya. -->
+            <div class="gallery-grid" id="galleryGrid">
+                <figure class="media-item" data-category="produk">
+                    <button type="button" class="media-thumb" aria-label="Perbesar foto: Susu Saanen Segar">
+                        <img src="img/foto-produk-susu.jpg" alt="Botol susu kambing Saanen segar" loading="lazy">
+                    </button>
+                    <figcaption>
+                        <h4>Susu Saanen Segar</h4>
+                        <p>Susu kambing Saanen dalam kemasan botol 500 ml.</p>
+                    </figcaption>
+                </figure>
+                <figure class="media-item" data-category="produk">
+                    <button type="button" class="media-thumb" aria-label="Perbesar foto: Susu Saanen 500 ml">
+                        <img src="SUSU DALAM FREEZER.jpeg" alt="Botol susu Saanen di dalam pendingin" loading="lazy">
+                    </button>
+                    <figcaption>
+                        <h4>Penyimpanan Susu</h4>
+                        <p>Susu Saanen disimpan di freezer dalam kondisi dingin sebelum diantar kepada pelanggan.</p>
+                    </figcaption>
+                </figure>
+                <figure class="media-item" data-category="kemasan">
+                    <button type="button" class="media-thumb" aria-label="Perbesar foto: Susu Siap Antar">
+                        <img src="proses pengiriman susu.jpeg" alt="Susu dalam boks pendingin siap antar"
+                            loading="lazy">
+                    </button>
+                    <figcaption>
+                        <h4>Susu Siap Antar</h4>
+                        <p>Dikemas dalam boks pendingin sebelum dikirim.</p>
+                    </figcaption>
+                </figure>
+                <figure class="media-item" data-category="peternakan">
+                    <button type="button" class="media-thumb" aria-label="Perbesar foto: Kambing Saanen">
+                        <img src="kambing saanen.jpg" alt="Kambing Saanen di kandang" loading="lazy">
+                    </button>
+                    <figcaption>
+                        <h4>Kambing Saanen</h4>
+                        <p>Ras kambing penghasil susu di peternakan kami.</p>
+                    </figcaption>
+                </figure>
+            </div>
+            <p class="gallery-empty" id="galleryEmpty" hidden>Belum ada foto di kategori ini.</p>
+        </div>
+    </main>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Tampilan foto">
+        <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Tutup"><i class="fas fa-times"
+                aria-hidden="true"></i></button>
+        <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Sebelumnya"><i class="fas fa-chevron-left"
+                aria-hidden="true"></i></button>
+        <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"
+                aria-hidden="true"></i></button>
+        <div class="lightbox-stage" id="lbStage">
+            <img id="lbImg" alt="" hidden>
+            <video id="lbVideo" controls playsinline hidden></video>
+            <div class="lightbox-caption" id="lbCaption"></div>
+        </div>
+    </dialog>
+
+    <!-- footer -->
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-col footer-brand">
+                <strong>Margaluyu Farm</strong>
+                <p>Peternakan sapi dan kambing yang menyediakan susu kambing Saanen segar serta hewan untuk kebutuhan
+                    kurban dan akikah.</p>
+                <a class="footer-contact" href="https://wa.me/62895635067289" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 0895-6350-67289
+                </a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Ikuti Kami</h4>
+                <div class="footer-social">
+                    <a href="https://wa.me/62895635067289" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@margaluyu.farm.35" target="_blank" rel="noopener"
+                        aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@margaluyufarm354" target="_blank" rel="noopener"
+                        aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <small>Copyright &copy; 2026 - MARGALUYU FARM, All Rights Reserved. &middot; <a href="faq.html">Pertanyaan Umum</a> &middot; <a href="privasi.html" style="color:inherit;text-decoration:underline;text-underline-offset:3px">Kebijakan Privasi</a></small>
+        </div>
+    </footer>
+
+    <script src="media-library.js"></script>
+    <script src="/analytics-config.js"></script>
+    <script src="/analytics.js"></script>
+    <script src="/pwa.js"></script>
+</body>
+
+</html>

@@ -94,6 +94,7 @@
             <h1 style="font-size:1.3em">Admin Analitik</h1>
             <p style="color:#6b6d64;font-size:0.9em">Masukkan kata sandi admin untuk melihat data.</p>
             <input type="password" id="passwordInput" placeholder="Kata sandi">
+            <input type="text" id="codeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Kode 2FA (isi bila diaktifkan)" style="margin-top:8px;">
             <div class="error-text" id="loginError"></div>
             <button id="loginBtn">Masuk</button>
         </div>
@@ -203,16 +204,9 @@
                 errEl.textContent = '';
                 btn.disabled = true;
                 try {
-                    var check = await OrdersStore.verifyAdmin(val);
-                    if (check.ok && check.protectedByServer) return enterPanel();
-                    if (!check.ok && /Tidak diizinkan/i.test(check.error || '')) {
-                        OrdersStore.setAdminKey('');
-                        errEl.textContent = 'Kata sandi salah.';
-                        return;
-                    }
-                    if (val === ADMIN_PASSWORD) return enterPanel();
-                    OrdersStore.setAdminKey('');
-                    errEl.textContent = 'Kata sandi salah.';
+                    var check = await OrdersStore.verifyAdmin(val, (document.getElementById('codeInput')||{}).value);
+                    if (check.ok) return enterPanel();
+                    errEl.textContent = check.error || 'Login gagal.';
                 } finally { btn.disabled = false; }
             });
             $('passwordInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('loginBtn').click(); });

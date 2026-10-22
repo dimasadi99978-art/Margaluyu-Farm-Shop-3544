@@ -1,211 +1,117 @@
 // ============================================================
 // TESTIMONI STORE
-// Menyimpan & mengambil data testimoni dari penyimpanan bersama
-// (jsonbin.io) jika sudah dikonfigurasi di testimoni-config.js.
-// Jika belum dikonfigurasi, atau jika koneksi gagal, otomatis
-// menggunakan localStorage (mode lokal) sebagai cadangan supaya
-// website tetap berjalan normal.
-//
-// Aturan keselamatan data (penting):
-//  - Menyimpan = baca data terbaru -> tambahkan -> tulis -> BACA ULANG untuk memastikan masuk.
-//  - Jika pembacaan gagal, penulisan TIDAK dilakukan (dulu bisa menimpa seluruh testimoni).
-//  - Testimoni yang gagal terkirim ditandai _pending dan dikirim ulang otomatis saat halaman dibuka.
+// Semua baca/tulis testimoni lewat /api/testimoni (server Vercel).
+// Master Key JSONBin hanya ada di Environment Variables Vercel, TIDAK di browser.
+// Jika server gagal dihubungi saat mengirim, testimoni disimpan sementara di perangkat
+// (ditandai _pending) dan dikirim ulang otomatis saat halaman dibuka lagi.
 // ============================================================
 
 const TestimoniStore = (function () {
-    const LOCAL_KEY = 'testimoni';          // testimoni yang BELUM terkirim ke server (ditandai _pending)
-    const CACHE_KEY = 'testimoniCache';     // salinan terakhir dari server, untuk tampilan saat offline
-    const MAX_BIN_CHARS = 90000;            // JSONBin gratis membatasi satu bin sekitar 100KB
-    const API_ROOT = 'https://api.jsonbin.io/v3/b';
+    const LOCAL_KEY = 'testimoni';        // testimoni yang BELUM terkirim (_pending)
+    const CACHE_KEY = 'testimoniCache';   // salinan terakhir dari server untuk tampilan offline
+    const API_URL = '/api/testimoni';
+    const TOKEN_KEY = 'mfAdminToken';
 
-    function isConfigured() {
-        return typeof TESTIMONI_MASTER_KEY === 'string' && TESTIMONI_MASTER_KEY.trim() !== '' &&
-            typeof TESTIMONI_BIN_ID === 'string' && TESTIMONI_BIN_ID.trim() !== '';
+    function isConfigured() { return true; } // konfigurasi ada di server
+
+    function getLocal() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY)) || []; } catch (e) { return []; } }
+    function setLocal(list) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(list)); } catch (e) { /* abaikan */ } }
+    function getCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || []; } catch (e) { return []; } }
+    function setCache(list) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(list)); } catch (e) { /* abaikan */ } }
+
+    function keyOf(t) {
+        if (t && t.id != null) return 'id:' + t.id; // testimoni dari server dikenali lewat ID
+        const clean = v => String(v == null ? '' : v).trim();
+        return [clean(t && t.nama), clean(t && t.tanggal), clean(t && t.komentar)].join('|');
     }
 
-    function getLocal() {
+    function honeypotValue() {
+        try { const el = document.querySelector('input[name="website"]'); return el ? String(el.value || '') : ''; } catch (e) { return ''; }
+    }
+
+    function captchaToken() {
+        try { return typeof window.MF_captchaToken === 'function' ? window.MF_captchaToken() : ''; } catch (e) { return ''; }
+    }
+    function captchaReset() {
+        try { if (typeof window.MF_captchaReset === 'function') window.MF_captchaReset(); } catch (e) { /* abaikan */ }
+    }
+
+    function adminToken() {
         try {
-            return JSON.parse(localStorage.getItem(LOCAL_KEY)) || [];
-        } catch (e) {
-            return [];
-        }
+            const t = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || 'null');
+            return t && t.token && t.expiresAt > Date.now() ? t.token : '';
+        } catch (e) { return ''; }
     }
 
-    function setLocal(list) {
-        try {
-            localStorage.setItem(LOCAL_KEY, JSON.stringify(list));
-        } catch (e) {
-            console.warn('Tidak bisa menyimpan cadangan lokal:', e);
-        }
-    }
-
-    // jsonbin menolak data yang akar datanya berupa array, sehingga data selalu
-    // dibungkus menjadi { items: [...] }. Fungsi ini membaca kedua format
-    // (format lama berupa array, maupun format baru yang dibungkus objek).
-    function unwrap(record) {
-        if (Array.isArray(record)) return record;
-        if (record && Array.isArray(record.items)) return record.items;
-        return [];
-    }
-
-    function wrap(list) {
-        return { items: list };
-    }
-
-    function getCache() {
-        try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || []; } catch (e) { return []; }
-    }
-    function setCache(list) {
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify(list)); } catch (e) { /* abaikan */ }
-    }
-
-    function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-
-    function stripFlags(entry) {
-        const copy = Object.assign({}, entry);
-        delete copy._pending;
-        return copy;
+    function adminHeaders(extra) {
+        const h = Object.assign({ 'Accept': 'application/json' }, extra || {});
+        const t = adminToken();
+        if (t) h['Authorization'] = 'Bearer ' + t;
+        return h;
     }
 
     async function remoteGet() {
-        const res = await fetch(`${API_ROOT}/${TESTIMONI_BIN_ID}/latest`, {
-            headers: { 'X-Master-Key': TESTIMONI_MASTER_KEY },
-            cache: 'no-store'
-        });
-        if (!res.ok) throw new Error('Gagal membaca server testimoni (HTTP ' + res.status + ')');
-        const json = await res.json();
-        return unwrap(json.record);
+        const res = await fetch(API_URL, { headers: { 'Accept': 'application/json' }, cache: 'no-store' });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || ('Gagal membaca testimoni (HTTP ' + res.status + ')'));
+        return Array.isArray(json.data) ? json.data : [];
     }
 
-    async function remotePut(list) {
-        const res = await fetch(`${API_ROOT}/${TESTIMONI_BIN_ID}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': TESTIMONI_MASTER_KEY },
-            body: JSON.stringify(wrap(list))
+    async function remotePost(entry) {
+        const clean = Object.assign({}, entry); delete clean._pending;
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ testimoni: clean, website: honeypotValue(), captcha: captchaToken() })
         });
+        const json = await res.json().catch(() => ({}));
+        captchaReset();
         if (!res.ok) {
-            let detail = '';
-            try { detail = (await res.json()).message || ''; } catch (_) {}
-            const err = new Error('Gagal menyimpan ke server testimoni (HTTP ' + res.status + (detail ? ': ' + detail : '') + ')');
-            if (res.status === 413 || /size/i.test(detail)) err.code = 'SIZE';
+            const err = new Error(json.error || ('Gagal mengirim testimoni (HTTP ' + res.status + ')'));
+            err.status = res.status; // 4xx = ditolak server, jangan dikirim ulang terus-menerus
             throw err;
         }
+        return json;
     }
 
-    // Tambahkan entri ke server dengan aman: selalu mulai dari data terbaru, dan verifikasi hasilnya.
-    async function appendRemote(entries) {
-        const wanted = entries.map(stripFlags);
-        let lastErr = null;
-        for (let attempt = 0; attempt < 3; attempt++) {
-            try {
-                const current = await remoteGet();            // gagal baca -> lompat ke catch, TIDAK menulis
-                const have = new Set(current.map(keyOf));
-                const toAdd = wanted.filter(e => !have.has(keyOf(e)));
-                if (!toAdd.length) return current;            // sudah ada di server
-                const next = current.concat(toAdd);
-                if (JSON.stringify(wrap(next)).length > MAX_BIN_CHARS) {
-                    const err = new Error('Penyimpanan testimoni di server penuh. Hapus testimoni lama lewat admin, atau gunakan Cloudinary untuk foto.');
-                    err.code = 'SIZE';
-                    throw err;
-                }
-                await remotePut(next);
-                const after = await remoteGet();              // verifikasi: pastikan benar-benar tersimpan
-                const seen = new Set(after.map(keyOf));
-                if (wanted.every(e => seen.has(keyOf(e)))) return after;
-                lastErr = new Error('Data belum terverifikasi di server (kemungkinan tertimpa pengiriman lain).');
-            } catch (e) {
-                lastErr = e;
-                if (e && e.code === 'SIZE') throw e;
-            }
-            await sleep(600 * (attempt + 1) + Math.random() * 400);
-        }
-        throw lastErr || new Error('Gagal menyimpan ke server testimoni.');
-    }
+    function pendingList() { return getLocal().filter(x => x && x._pending); }
 
-    function pendingList() {
-        return getLocal().filter(function (x) { return x && x._pending; });
-    }
-
-    // Kirim ulang testimoni yang sebelumnya gagal terkirim. Aman dipanggil berkali-kali.
     async function syncPending() {
-        if (!isConfigured()) return { synced: 0, remaining: 0 };
         const pending = pendingList();
         if (!pending.length) return { synced: 0, remaining: 0 };
-        try {
-            const after = await appendRemote(pending);
-            const have = new Set(after.map(keyOf));
-            const still = pending.filter(p => !have.has(keyOf(p)));
-            setLocal(still);
-            setCache(after);
-            return { synced: pending.length - still.length, remaining: still.length };
-        } catch (e) {
-            console.warn('Kirim ulang testimoni tertunda belum berhasil:', e);
-            return { synced: 0, remaining: pending.length, error: e && e.message ? e.message : String(e) };
+        let synced = 0;
+        const still = [];
+        for (const p of pending) {
+            try { await remotePost(p); synced++; }
+            catch (e) { if (!(e && e.status >= 400 && e.status < 500 && e.status !== 429)) still.push(p); }
         }
+        setLocal(still);
+        return { synced, remaining: still.length };
     }
 
-    // Ambil seluruh data testimoni.
-    // Mengembalikan { data, online, error } — online=true jika berhasil ambil dari server bersama.
     async function load() {
-        if (!isConfigured()) {
-            return { data: getLocal(), online: false };
-        }
-
         try {
-            let serverList = await remoteGet();
-
-            // Kirim ulang testimoni yang tertunda (jika ada), lalu muat ulang daftar dari server.
-            if (pendingList().length) {
-                await syncPending();
-                try { serverList = await remoteGet(); } catch (_) { /* pakai daftar sebelumnya */ }
-            }
-
-            // Tampilkan data server + testimoni tertunda milik perangkat ini yang belum ada di server.
-            // Testimoni lain yang sudah dihapus admin TIDAK dimunculkan kembali dari cadangan lokal.
+            if (pendingList().length) await syncPending();
+            const serverList = await remoteGet();
             const have = new Set(serverList.map(keyOf));
             const stillPending = pendingList().filter(p => !have.has(keyOf(p)));
             setLocal(stillPending);
             setCache(serverList);
             return { data: serverList.concat(stillPending), online: true, pending: stillPending.length };
         } catch (e) {
-            console.warn('Gagal mengambil data dari server bersama, memakai salinan terakhir:', e);
-            return {
-                data: getCache().concat(pendingList()),
-                online: false,
-                error: e && e.message ? e.message : String(e)
-            };
+            console.warn('Gagal mengambil testimoni dari server:', e);
+            return { data: getCache().concat(pendingList()), online: false, error: e && e.message ? e.message : String(e) };
         }
     }
 
-    // Tambahkan satu entri testimoni baru.
-    // Mengembalikan { success, online, error }. online=false berarti BELUM terlihat oleh pengunjung lain.
     async function add(entry) {
-        if (!isConfigured()) {
-            const list = getLocal();
-            list.push(entry);
-            setLocal(list);
-            return { success: true, online: false };
-        }
-
         try {
-            let after;
-            let fotoDibuang = false;
-            try {
-                after = await appendRemote([entry]);
-            } catch (e) {
-                // Penyimpanan gratis penuh karena foto: simpan teks ulasannya saja, jangan gagal total.
-                if (e && e.code === 'SIZE' && typeof entry.foto === 'string' && entry.foto.indexOf('data:image/') === 0) {
-                    after = await appendRemote([Object.assign({}, entry, { foto: '' })]);
-                    fotoDibuang = true;
-                } else {
-                    throw e;
-                }
-            }
-            setCache(after);
-            return { success: true, online: true, fotoDibuang: fotoDibuang };
+            const r = await remotePost(entry);
+            return { success: true, online: true, moderasi: r.moderasi === true, fotoDibuang: false, voucher: r.voucher || null, voucherInfo: r.voucherInfo || '' };
         } catch (e) {
-            console.warn('Gagal menyimpan ke server bersama, disimpan sementara di perangkat ini:', e);
-            // Simpan sementara dan tandai agar dikirim ulang otomatis.
+            console.warn('Gagal mengirim testimoni ke server:', e);
+            // Ditolak server (data tidak valid / spam): jangan disimpan ulang.
+            if (e && e.status >= 400 && e.status < 500 && e.status !== 429) throw e;
             const list = getLocal();
             list.push(Object.assign({}, entry, { _pending: true }));
             setLocal(list);
@@ -214,27 +120,10 @@ const TestimoniStore = (function () {
     }
 
     // ---------- Khusus admin ----------
-    // Kunci unik testimoni (harus sama dengan api/testimoni.js).
-    function keyOf(t) {
-        const clean = v => String(v == null ? '' : v).trim();
-        return [clean(t && t.nama), clean(t && t.tanggal), clean(t && t.komentar)].join('|');
-    }
-
-    function adminHeaders(extra) {
-        const headers = Object.assign({ 'Accept': 'application/json' }, extra || {});
-        try {
-            const k = sessionStorage.getItem('mfAdminKey');
-            if (k) headers['X-Admin-Key'] = k;
-        } catch (e) { /* sessionStorage tidak tersedia */ }
-        return headers;
-    }
-
-    // true hanya bila server menerima kata sandi admin yang tersimpan di sesi ini.
     async function isAdmin() {
+        if (!adminToken()) return false;
         try {
-            const k = sessionStorage.getItem('mfAdminKey');
-            if (!k) return false;
-            const res = await fetch('/api/testimoni?check=1', { headers: adminHeaders(), cache: 'no-store' });
+            const res = await fetch(API_URL + '?check=1', { headers: adminHeaders(), cache: 'no-store' });
             return res.ok;
         } catch (e) { return false; }
     }
@@ -243,15 +132,13 @@ const TestimoniStore = (function () {
         const list = (Array.isArray(keys) ? keys : []).filter(Boolean);
         if (!list.length) return { success: false, removed: 0, error: 'Pilih minimal satu testimoni.' };
         try {
-            const res = await fetch('/api/testimoni', {
+            const res = await fetch(API_URL, {
                 method: 'DELETE',
                 headers: adminHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ keys: list })
             });
-            const text = await res.text();
-            let json = {};
-            try { json = text ? JSON.parse(text) : {}; } catch (_) {}
-            if (!res.ok) throw new Error(json.error || json.message || `Server mengembalikan ${res.status}`);
+            const json = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(json.error || `Server mengembalikan ${res.status}`);
             const gone = new Set(list);
             setLocal(getLocal().filter(t => !gone.has(keyOf(t))));
             setCache(getCache().filter(t => !gone.has(keyOf(t))));

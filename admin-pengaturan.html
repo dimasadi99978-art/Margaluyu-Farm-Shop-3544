@@ -30,6 +30,7 @@
     <h1>Pengaturan Admin</h1>
     <p class="sub">Masukkan kata sandi admin.</p>
     <input type="password" id="pw" placeholder="Kata sandi admin" style="width:100%;box-sizing:border-box">
+    <input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Kode 2FA (isi bila diaktifkan)" style="width:100%;box-sizing:border-box;margin-top:8px">
     <div class="err" id="loginErr"></div>
     <p><button id="loginBtn">Masuk</button></p>
   </div>
@@ -42,17 +43,22 @@
       <button data-t="area">Area &amp; Ongkir</button>
       <button data-t="promo">Kode Promo</button>
       <button data-t="testi">Moderasi Testimoni</button>
+      <button data-t="voucher">Voucher Rating</button>
+      <button data-t="pel">Pelanggan</button>
     </div>
     <div class="pane on" id="p-stok"><div class="card"><h2>Produk, harga &amp; stok</h2>
       <p class="sub">Stok berkurang otomatis setiap ada pesanan. Saat stok 0, tombol pesan di halaman order tertutup otomatis.</p><div id="listStok"></div></div></div>
     <div class="pane" id="p-area"><div class="card"><h2>Area pengiriman &amp; ongkir</h2>
-      <p class="sub">Pelanggan wajib memilih salah satu area. Isi ongkir 0 untuk gratis ongkir. Area yang dinonaktifkan tidak tampil.</p><div id="listArea"></div>
+      <p class="sub">Checkout menghitung ongkir otomatis dari area aktif. Buat satu baris untuk tiap wilayah/kecamatan dengan tarif yang sudah ditetapkan. Aturan Surabaya Timur tetap gratis; Surabaya lainnya Rp3.000 untuk 1–3 botol dan gratis mulai 4 botol. Untuk wilayah luar Surabaya, isi tarif yang benar sebelum mengaktifkan area. Jangan aktifkan tarif yang belum dipastikan. Anda dapat menambahkan area “Wilayah lain (tarif standar)” setelah menetapkan nominal standar; area ini menjadi fallback untuk lokasi yang belum tercantum.</p><div id="listArea"></div>
       <h2 style="margin-top:16px">Tambah area</h2><div class="row" id="newArea"></div></div></div>
     <div class="pane" id="p-promo"><div class="card"><h2>Kode promo</h2>
-      <p class="sub">Tipe <b>persen</b> (1-100) atau <b>nominal</b> (rupiah). Kuota kosong = tanpa batas. Pemakaian dihitung saat pesanan dibuat.</p><div id="listPromo"></div>
-      <h2 style="margin-top:16px">Tambah kode</h2><div class="row" id="newPromo"></div></div></div>
+      <p class="sub">Promo jumlah otomatis sudah tersedia: beli 3–5 botol hemat 5% (maks. Rp10.000), beli 6 botol atau lebih hemat 10% (maks. Rp20.000). Promo jumlah tidak digabung dengan voucher kode. Kode voucher khusus tetap bisa dibuat dan dibagikan melalui WhatsApp/Instagram. Voucher apresiasi ulasan diterbitkan otomatis setelah pesanan berstatus Selesai dan nomor pesanan serta WhatsApp cocok. Promo <b>OTOMATIS</b> dari admin menjadi fallback untuk pesanan di bawah 3 botol. Tipe <b>persen</b> (1-100) atau <b>nominal</b> (rupiah); kuota kosong = tanpa batas.</p><div id="listPromo"></div>
+      <h2 style="margin-top:16px">Tambah kode promo</h2><div class="row" id="newPromo"></div></div></div>
     <div class="pane" id="p-testi"><div class="card"><h2>Moderasi testimoni</h2>
       <p class="sub">Testimoni baru tampil di situs setelah Anda setujui.</p><div id="listTesti"></div></div></div>
+    <div class="pane" id="p-voucher"><div class="card"><h2>Voucher apresiasi ulasan</h2><p class="sub">Voucher Rp5.000, minimal belanja Rp50.000, berlaku 45 hari. Satu voucher untuk satu pesanan selesai; voucher hanya dapat digunakan sekali dan harus dipakai dengan nomor WhatsApp yang cocok.</p><div id="listVoucher"></div></div></div>
+    <div class="pane" id="p-pel"><div class="card"><h2>Daftar pelanggan</h2>
+      <p class="sub">Dikelompokkan dari nomor HP. Diurutkan dari yang paling sering memesan.</p><div id="listPel"></div></div></div>
     <div class="err" id="globalErr"></div>
   </div>
 </div>
@@ -78,7 +84,7 @@
 
   $('loginBtn').onclick=async function(){
     var b=this;b.disabled=true;$('loginErr').textContent='';
-    var r=await OrdersStore.verifyAdmin($('pw').value);
+    var r=await OrdersStore.verifyAdmin($('pw').value, $('code').value);
     b.disabled=false;
     if(!r.ok){$('loginErr').textContent=r.error||'Login gagal.';return}
     $('loginBox').style.display='none';$('panel').style.display='block';loadAll();
@@ -91,6 +97,8 @@
   async function loadAll(){err('');
     try{var s=await api('/api/admin-settings');renderProducts(s.products);renderZones(s.zones);renderPromos(s.promos);}catch(e){err(e.message)}
     try{var t=await api('/api/testimoni?all=1');renderTesti(t.data)}catch(e){err(e.message)}
+    try{var pl=await api('/api/admin-settings?pelanggan=1');renderPel(pl.pelanggan)}catch(e){err(e.message)}
+    try{var v=await api('/api/admin-settings?voucher=1');renderVouchers(v.vouchers)}catch(e){err(e.message)}
   }
 
   function renderProducts(list){
@@ -102,7 +110,7 @@
     $('listArea').innerHTML=list.map(function(z){return '<div class="row" data-id="'+z.id+'">'+field('Nama area','nama',z.nama,'text',230)+
       field('Ongkir (Rp)','biaya',z.biaya,'number',90)+field('Urutan','urutan',z.urutan,'number',60)+check('Aktif','aktif',z.aktif)+
       '<button data-a="saveZ">Simpan</button><button class="del" data-a="delZ">Hapus</button></div>'}).join('')||'<p class="sub">Belum ada area.</p>';
-    $('newArea').innerHTML=field('Nama area','nama','','text',230)+field('Ongkir (Rp)','biaya','0','number',90)+field('Urutan','urutan','0','number',60)+check('Aktif','aktif',true)+'<button data-a="addZ">Tambah</button>';
+    $('newArea').innerHTML=field('Nama area','nama','','text',230)+field('Ongkir (Rp)','biaya','','number',90)+field('Urutan','urutan','0','number',60)+check('Aktif','aktif',false)+'<button data-a="addZ">Tambah</button>';
   }
   function promoRow(p,isNew){
     var tipe='<label>Tipe<select name="tipe"><option value="persen"'+(p.tipe==='persen'?' selected':'')+'>persen</option><option value="nominal"'+(p.tipe==='nominal'?' selected':'')+'>nominal</option></select></label>';
@@ -114,6 +122,16 @@
   function renderPromos(list){
     $('listPromo').innerHTML=list.map(function(p){return '<div class="row" data-kode="'+esc(p.kode)+'">'+promoRow(p,false)+'</div>'}).join('')||'<p class="sub">Belum ada kode promo.</p>';
     $('newPromo').innerHTML=promoRow({tipe:'persen'},true);
+  }
+  function renderVouchers(list){
+    $('listVoucher').innerHTML=list.map(function(v){return '<div class="row"><div style="flex:1;min-width:220px"><b>'+esc(v.kode)+'</b><div class="sub" style="margin:2px 0 0">Pesanan '+esc(v.order_id)+' · WhatsApp '+esc(v.telepon)+' · berlaku s/d '+esc(v.berlaku_sampai)+'</div></div><span>Rp '+Number(v.nilai).toLocaleString('id-ID')+'</span><span class="tag">'+(v.digunakan_at?'Sudah digunakan':'Belum digunakan')+'</span></div>'}).join('')||'<p class="sub">Belum ada voucher rating yang diterbitkan.</p>';
+  }
+  function rp(n){return 'Rp '+Number(n||0).toLocaleString('id-ID')}
+  function renderPel(list){
+    $('listPel').innerHTML=list.map(function(c,i){
+      return '<div class="row"><b style="min-width:28px">'+(i+1)+'.</b><div style="flex:1;min-width:200px"><b>'+esc(c.nama)+'</b><div class="sub" style="margin:2px 0 0">'+esc(c.telepon)+' &middot; terakhir pesan '+esc(c.terakhir)+'</div></div>'+
+      '<span class="tag">'+c.jumlahPesanan+' pesanan</span><span>'+rp(c.totalBelanja)+'</span>'+
+      '<a href="https://wa.me/'+encodeURIComponent(c.telepon)+'" target="_blank" rel="noopener"><button class="sec" type="button">WhatsApp</button></a></div>'}).join('')||'<p class="sub">Belum ada pelanggan.</p>';
   }
   function renderTesti(list){
     $('listTesti').innerHTML=list.map(function(t){var pending=t.status!=='approved';

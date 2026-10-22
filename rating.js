@@ -12,17 +12,13 @@
     var namaEl = document.getElementById('nama');
     var namaError = document.getElementById('namaError');
     var anonEl = document.getElementById('anonim');
+    var orderIdRewardEl = document.getElementById('orderIdReward');
+    var phoneRewardEl = document.getElementById('phoneReward');
+    var voucherRewardText = document.getElementById('voucherRewardText');
 
-    // Opsi anonim: nama tidak diisi dan ulasan tampil sebagai "Anonim".
-    function syncAnon() {
-        if (!anonEl) return;
-        namaEl.disabled = anonEl.checked;
-        if (anonEl.checked) {
-            namaEl.value = '';
-            namaEl.classList.remove('is-invalid');
-            namaError.textContent = '';
-        }
-    }
+    // Opsi samarkan nama: nama tetap diisi, tetapi hanya sebagian yang ditampilkan (mis. "Budi S.").
+    // Pembuatan nama samaran dilakukan di server, sehingga nama lengkap tidak pernah disimpan.
+    function syncAnon() {}
     if (anonEl) anonEl.addEventListener('change', syncAnon);
     var komentarEl = document.getElementById('komentar');
     var kritikSaranEl = document.getElementById('kritiksaran');
@@ -215,6 +211,25 @@
                     radio.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
+            var ord = (q.get('order') || '').trim().toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 30);
+            if (/^MF-[A-Z0-9-]{6,24}$/.test(ord) && orderIdRewardEl) {
+                orderIdRewardEl.value = ord;
+                var ro = document.getElementById('rewardOrder'); document.getElementById('rewardOrderText').textContent = ord; ro.hidden = false;
+                document.getElementById('rewardOrderClear').addEventListener('click', function () { orderIdRewardEl.value = ''; ro.hidden = true; });
+            }
+            // Tanpa tautan: pakai pesanan selesai terakhir yang diingat perangkat ini.
+            if (typeof MyOrders !== 'undefined') {
+                var mine = (orderIdRewardEl && orderIdRewardEl.value && MyOrders.find(orderIdRewardEl.value)) || MyOrders.latestDone() || MyOrders.latest();
+                if (mine) {
+                    if (phoneRewardEl && !phoneRewardEl.value && mine.telepon) phoneRewardEl.value = mine.telepon;
+                    if (mine.selesai && orderIdRewardEl && !orderIdRewardEl.value) {
+                        orderIdRewardEl.value = mine.id;
+                        var ro2 = document.getElementById('rewardOrder'); document.getElementById('rewardOrderText').textContent = mine.id; ro2.hidden = false;
+                        document.getElementById('rewardOrderClear').addEventListener('click', function () { orderIdRewardEl.value = ''; ro2.hidden = true; });
+                    }
+                    if (!q.get('nama') && mine.nama && !namaEl.value) namaEl.value = mine.nama;
+                }
+            }
             var nm = (q.get('nama') || '').trim().slice(0, 60);
             if (nm && !namaEl.value) namaEl.value = nm;
         } catch (e) { /* abaikan: form tetap bisa diisi manual */ }
@@ -225,6 +240,50 @@
         namaError.textContent = '';
     });
 
+    function rp(n) { return 'Rp' + Number(n).toLocaleString('id-ID'); }
+    function tglIndo(iso) {
+        var d = new Date(String(iso) + 'T00:00:00');
+        return isNaN(d) ? String(iso) : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    function voucherImage(v) {
+        var c = document.createElement('canvas'); c.width = 900; c.height = 480;
+        var g = c.getContext('2d');
+        g.fillStyle = '#f6eee0'; g.fillRect(0, 0, 900, 480);
+        g.fillStyle = '#fff'; g.fillRect(30, 30, 840, 420);
+        g.setLineDash([14, 10]); g.strokeStyle = '#1b6b3a'; g.lineWidth = 4; g.strokeRect(30, 30, 840, 420); g.setLineDash([]);
+        g.textAlign = 'center'; g.fillStyle = '#0a3d38';
+        g.font = '700 34px sans-serif'; g.fillText('Margaluyu Farm', 450, 100);
+        g.fillStyle = '#52645a'; g.font = '24px sans-serif'; g.fillText('VOUCHER APRESIASI ULASAN', 450, 145);
+        g.fillStyle = '#0a3d38'; g.font = '800 64px monospace'; g.fillText(v.kode, 450, 255);
+        g.fillStyle = '#1b6b3a'; g.font = '700 40px sans-serif'; g.fillText('Potongan ' + rp(v.nilai), 450, 320);
+        g.fillStyle = '#3b4a42'; g.font = '24px sans-serif';
+        g.fillText('Minimal belanja ' + rp(v.min_belanja) + ' \u2022 Berlaku sampai ' + tglIndo(v.berlaku_sampai), 450, 372);
+        g.font = '20px sans-serif'; g.fillStyle = '#6b776f';
+        g.fillText('Berlaku satu kali, hanya untuk nomor WhatsApp pemilik voucher.', 450, 418);
+        return c.toDataURL('image/png');
+    }
+    function showVoucher(v, telepon) {
+        var t = document.getElementById('voucherTicket'); if (!t) return;
+        document.getElementById('vtCode').textContent = v.kode;
+        document.getElementById('vtMeta').textContent = 'Potongan ' + rp(v.nilai) + ' \u2022 minimal belanja ' + rp(v.min_belanja) + ' \u2022 berlaku sampai ' + tglIndo(v.berlaku_sampai);
+        document.getElementById('vtUse').href = 'order-sekarang.html?voucher=' + encodeURIComponent(v.kode);
+        var wa = String(telepon || '').replace(/[^0-9]/g, '').replace(/^0/, '62');
+        var pesan = 'Voucher Margaluyu Farm: ' + v.kode + '\nPotongan ' + rp(v.nilai) + ', min. belanja ' + rp(v.min_belanja) + ', berlaku sampai ' + tglIndo(v.berlaku_sampai) + '.\nPakai di: ' + location.origin + '/order-sekarang.html?voucher=' + encodeURIComponent(v.kode);
+        document.getElementById('vtWa').href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(pesan);
+        var copyBtn = document.getElementById('vtCopy');
+        copyBtn.onclick = function () {
+            var done = function () { copyBtn.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i> Tersalin'; };
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v.kode).then(done, function () {});
+            else { var r = document.createRange(); r.selectNodeContents(document.getElementById('vtCode')); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
+        };
+        document.getElementById('vtImage').onclick = function () {
+            var a = document.createElement('a'); a.href = voucherImage(v); a.download = 'voucher-' + v.kode + '.png';
+            document.body.appendChild(a); a.click(); a.remove();
+        };
+        try { localStorage.setItem('mf_voucher', JSON.stringify({ kode: v.kode, nilai: v.nilai, min_belanja: v.min_belanja, berlaku_sampai: v.berlaku_sampai })); } catch (e) { /* penyimpanan browser dinonaktifkan */ }
+        t.hidden = false;
+    }
+
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
         if (busy) return;
@@ -232,7 +291,7 @@
         if (successCard) successCard.hidden = true;
 
         var anon = !!(anonEl && anonEl.checked);
-        var nama = anon ? 'Anonim' : namaEl.value.trim();
+        var nama = namaEl.value.trim();
         var rating = selectedRating();
         var komentar = komentarEl.value.trim();
         var kritikSaran = kritikSaranEl.value.trim();
@@ -264,7 +323,10 @@
             rating: rating,
             komentar: bagian.length ? bagian.join(' | ') : '(Tidak ada catatan tambahan)',
             tanggal: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
-            foto: fotoData || ''
+            foto: fotoData || '',
+            anonim: anon,
+            orderId: orderIdRewardEl ? orderIdRewardEl.value.trim().toUpperCase() : '',
+            telepon: phoneRewardEl ? phoneRewardEl.value.trim() : ''
         };
 
         // Jika Cloudinary dikonfigurasi, foto diunggah ke sana dan hanya alamatnya yang disimpan.
@@ -290,18 +352,6 @@
             return;
         }
 
-        // Notifikasi email ke admin (tidak menggagalkan alur ini bila gagal).
-        try {
-            fetch('/api/notify-testimoni', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(Object.assign({}, dataBaru, {
-                    foto: (typeof dataBaru.foto === 'string' && dataBaru.foto.indexOf('data:image/') === 0) ? dataBaru.foto.slice(0, 40) : dataBaru.foto,
-                    tersimpan: !!(result && result.online), fotoDibuang: !!(result && result.fotoDibuang)
-                }))
-            }).catch(function () { /* notifikasi bersifat best-effort */ });
-        } catch (e) { /* abaikan */ }
-
         // Berhasil tersimpan di server bersama (terlihat oleh semua pengunjung) -> kartu sukses.
         // Jika tidak: jujur ke pengguna bahwa baru tersimpan di perangkat ini, dan akan dikirim ulang otomatis.
         form.reset();
@@ -310,6 +360,16 @@
         hint.textContent = 'Ketuk bintang untuk memberi nilai';
         setBusy(false);
 
+        var rewardOrderBox = document.getElementById('rewardOrder'); if (rewardOrderBox) rewardOrderBox.hidden = true;
+        var ticket = document.getElementById('voucherTicket');
+        if (ticket) ticket.hidden = true;
+        if (voucherRewardText) {
+            if (result && result.voucher && result.voucher.kode) {
+                voucherRewardText.textContent = 'Voucher apresiasi sudah terbit. Simpan kodenya sekarang:';
+                showVoucher(result.voucher, dataBaru.telepon);
+            } else if (dataBaru.orderId || dataBaru.telepon) voucherRewardText.textContent = (result && result.voucherInfo) || 'Ulasan diterima. Voucher hanya dapat diberikan untuk pesanan yang sudah selesai dan nomor WhatsApp yang cocok.';
+            else voucherRewardText.textContent = '';
+        }
         if (result && !result.online && TestimoniStore.isConfigured()) {
             showMsg('warn', 'Masukan Anda sudah kami simpan di perangkat ini, tetapi BELUM terkirim ke server sehingga belum tampil untuk umum. ' +
                 'Jangan hapus data browser; kami akan mencoba mengirim ulang otomatis saat Anda membuka halaman Rating atau beranda lagi dengan koneksi yang baik.');
@@ -318,6 +378,9 @@
             return;
         }
 
+        if (result && result.moderasi) {
+            showMsg('warn', 'Terima kasih! Ulasan Anda sudah kami terima dan akan tampil di halaman Testimoni setelah kami periksa.');
+        }
         if (result && result.fotoDibuang) {
             showMsg('warn', 'Ulasan Anda sudah terkirim dan tampil di beranda, tetapi fotonya tidak muat di penyimpanan gratis sehingga tidak ikut tampil.');
         }
